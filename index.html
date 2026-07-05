@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths Genius - Belajar Matematik Jadi Mudah, Seronok & Genius!</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-blue: #4A90E2;
+            --light-blue: #D6EAF8;
+            --accent-yellow: #FFD700;
+            --soft-purple: #D7BDE2;
+            --bg-white: #FFFFFF;
+            --text-dark: #2C3E50;
+            --success-green: #2ECC71;
+            --danger-red: #E74C3C;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--light-blue);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* App Container (Mobile Feel) */
+        #app-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--bg-white);
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-family: 'Fredoka', sans-serif; }
+        .text-center { text-align: center; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mt-2 { margin-top: 1rem; }
+
+        /* Header */
+        header {
+            background-color: var(--primary-blue);
+            color: var(--bg-white);
+            padding: 20px;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 50px; height: 50px; background-color: var(--accent-yellow); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 3px solid white;}
+        .stats { display: flex; gap: 15px; font-weight: bold; }
+        .stat-item { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; }
+
+        /* Screens */
+        .screen { display: none; padding: 20px; flex-grow: 1; padding-bottom: 80px; animation: fadeIn 0.3s ease-in-out; }
+        .screen.active { display: block; }
+
+        /* Cards & Buttons */
+        .card {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border: 2px solid var(--soft-purple);
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 4px 0 #3a76bd;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #3a76bd;
+        }
+
+        .btn-yellow { background-color: var(--accent-yellow); color: #B7950B; box-shadow: 0 4px 0 #D4AC0D; }
+        .btn-purple { background-color: var(--soft-purple); color: #5B2C6F; box-shadow: 0 4px 0 #AF7AC5; }
+        .btn-green { background-color: var(--success-green); color: white; box-shadow: 0 4px 0 #27AE60; }
+        .btn-outline { background-color: transparent; border: 2px solid var(--primary-blue); color: var(--primary-blue); box-shadow: none; }
+
+        /* Level Selector */
+        .level-group { margin-bottom: 25px; }
+        .level-title { font-family: 'Fredoka'; color: var(--primary-blue); margin-bottom: 10px; font-size: 1.4rem;}
+
+        /* Quiz UI */
+        .question-box {
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Fredoka';
+            margin: 30px 0;
+            color: var(--primary-blue);
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .option-btn {
+            font-size: 1.5rem;
+            padding: 20px;
+            border-radius: 20px;
+            background: white;
+            border: 3px solid var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option-btn:hover { background: var(--light-blue); }
+
+        /* Mascot & AI Tutor Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: none; justify-content: center; align-items: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background: white; width: 90%; max-width: 400px;
+            border-radius: 25px; padding: 30px; text-align: center;
+            position: relative;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 5px solid var(--primary-blue);
+        }
+        .mascot-img {
+            width: 100px; height: 100px;
+            background: var(--accent-yellow);
+            border-radius: 50%;
+            margin: -80px auto 20px auto;
+            border: 5px solid white;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: absolute; bottom: 0; width: 100%;
+            background: white; display: flex; justify-content: space-around;
+            padding: 15px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: #95A5A6; text-decoration: none; font-size: 0.9rem; gap: 5px;
+            cursor: pointer;
+        }
+        .nav-item.active { color: var(--primary-blue); font-weight: bold; }
+        .nav-item i { font-size: 1.5rem; }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes starPop { 0% { transform: scale(0); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
+
+        .star-anim { color: var(--accent-yellow); font-size: 3rem; animation: starPop 0.5s ease; display: none; margin: 10px auto; }
+
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    
+    <!-- HEADER -->
+    <header id="main-header">
+        <div class="header-top">
+            <div class="user-info">
+                <div class="avatar">👦🏻</div>
+                <div>
+                    <h2 style="font-size: 1.2rem;">Hai, Ammar!</h2>
+                    <p style="font-size: 0.8rem; opacity: 0.9;">Tahap: Genius Beginner</p>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat-item"><i class="fas fa-star" style="color:var(--accent-yellow)"></i> <span id="star-count">120</span></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SCREEN: HOME -->
+    <main id="screen-home" class="screen active">
+        <div class="card" style="background: linear-gradient(135deg, var(--primary-blue), #8E44AD); color: white; border:none;">
+            <h2>Misi Harian <i class="fas fa-rocket"></i></h2>
+            <p>Jawab 10 soalan untuk dapatkan 1 lencana!</p>
+            <div style="background: rgba(255,255,255,0.3); border-radius: 10px; height: 10px; margin-top: 10px;">
+                <div style="background: var(--accent-yellow); width: 40%; height: 100%; border-radius: 10px;"></div>
+            </div>
+            <p style="text-align: right; font-size: 0.8rem; margin-top: 5px;">4/10 Siap</p>
+        </div>
+
+        <h3 class="level-title mb-1">Pilih Tahun Anda</h3>
+        
+        <div class="level-group">
+            <h4 style="color: #7F8C8D; margin-bottom: 10px;">Tahap 1 (Asas)</h4>
+            <div class="grid-2">
+                <button class="btn btn-yellow" onclick="goToTopicSelection('Tahun 1')">Tahun 1</button>
+                <button class="btn btn-yellow" onclick="goToTopicSelection('Tahun 2')">Tahun 2</button>
+                <button class="btn btn-yellow" onclick="goToTopicSelection('Tahun 3')">Tahun 3</button>
+            </div>
+        </div>
+
+        <div class="level-group">
+            <h4 style="color: #7F8C8D; margin-bottom: 10px;">Tahap 2 (Mencabar)</h4>
+            <div class="grid-2">
+                <button class="btn btn-purple" onclick="goToTopicSelection('Tahun 4')">Tahun 4</button>
+                <button class="btn btn-purple" onclick="goToTopicSelection('Tahun 5')">Tahun 5</button>
+                <button class="btn btn-purple" onclick="goToTopicSelection('Tahun 6')">Tahun 6</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- SCREEN: TOPIC SELECTION -->
+    <main id="screen-topics" class="screen">
+        <button class="btn btn-outline mb-2" onclick="switchScreen('screen-home')" style="width: auto; padding: 5px 15px;"><i class="fas fa-arrow-left"></i> Kembali</button>
+        <h2 id="topic-year-title" class="mb-2" style="color: var(--primary-blue);">Tahun 1</h2>
+        
+        <div class="card" onclick="startQuiz('tambah')" style="cursor: pointer; text-align: center;">
+            <i class="fas fa-plus-circle" style="font-size: 3rem; color: var(--success-green); margin-bottom: 10px;"></i>
+            <h3>Tambah Asas</h3>
+            <p style="color: #7F8C8D; font-size: 0.9rem;">Mari belajar campur nombor!</p>
+        </div>
+
+        <div class="card" onclick="startQuiz('tolak')" style="cursor: pointer; text-align: center;">
+            <i class="fas fa-minus-circle" style="font-size: 3rem; color: var(--danger-red); margin-bottom: 10px;"></i>
+            <h3>Tolak Asas</h3>
+            <p style="color: #7F8C8D; font-size: 0.9rem;">Berapa baki yang tinggal?</p>
+        </div>
+    </main>
+
+    <!-- SCREEN: QUIZ -->
+    <main id="screen-quiz" class="screen">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <button class="btn btn-outline" onclick="switchScreen('screen-topics')" style="width: auto; padding: 5px 15px;"><i class="fas fa-times"></i></button>
+            <div style="font-weight: bold; color: var(--primary-blue);">Soalan <span id="q-current">1</span>/5</div>
+            <div style="font-weight: bold; color: var(--accent-yellow);"><i class="fas fa-star"></i> <span id="q-score">0</span></div>
+        </div>
+
+        <div class="card text-center" style="border: 4px dashed var(--soft-purple); padding: 40px 20px;">
+            <p id="q-instruction" style="color: #7F8C8D; font-size: 1.1rem;">Kira jumlah ini:</p>
+            <div id="q-text" class="question-box">2 + 3 = ?</div>
+            <div class="star-anim" id="correct-star"><i class="fas fa-star"></i></div>
+        </div>
+
+        <div class="options-grid" id="q-options">
+            <button class="option-btn" onclick="checkAnswer(4)">4</button>
+            <button class="option-btn" onclick="checkAnswer(5)">5</button>
+            <button class="option-btn" onclick="checkAnswer(6)">6</button>
+            <button class="option-btn" onclick="checkAnswer(7)">7</button>
+        </div>
+    </main>
+
+    <!-- SCREEN: PARENT DASHBOARD -->
+    <main id="screen-parents" class="screen">
+        <h2 class="mb-2 text-center" style="color: var(--primary-blue);">Laporan Ibu Bapa</h2>
+        <div class="card">
+            <h3>Prestasi Ammar</h3>
+            <p>Tahap: Tahun 1</p>
+            <hr style="margin: 10px 0; border: 0; border-top: 1px solid #eee;">
+            <p><strong>Topik Kuat:</strong> Tambah Asas (90%)</p>
+            <p><strong>Topik Lemah:</strong> Tolak Asas (40%)</p>
+            <button class="btn btn-purple mt-2"><i class="fas fa-download"></i> Muat Turun Laporan (PDF)</button>
+        </div>
+        
+        <div class="card">
+            <h3>Cadangan Cikgu Geni 🤖</h3>
+            <p style="font-size: 0.95rem; line-height: 1.5; color: #555;">
+                "Ammar menunjukkan peningkatan yang baik dalam operasi tambah. Walau bagaimanapun, Ammar perlukan sedikit bimbingan dalam operasi tolak. Disarankan buat latihan 10 minit setiap hari di bahagian 'Tolak Asas'."
+            </p>
+        </div>
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('screen-home', this)">
+            <i class="fas fa-home"></i>
+            <span>Utama</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('screen-topics', this)">
+            <i class="fas fa-gamepad"></i>
+            <span>Latihan</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('screen-parents', this)">
+            <i class="fas fa-chart-pie"></i>
+            <span>Ibu Bapa</span>
+        </div>
+    </nav>
+
+    <!-- AI TUTOR MODAL (CIKGU GENI) -->
+    <div class="modal-overlay" id="ai-modal">
+        <div class="modal-content">
+            <div class="mascot-img">🦉</div>
+            <h2 style="color: var(--primary-blue); margin-bottom: 10px;">Cikgu Geni</h2>
+            <p id="ai-message" style="font-size: 1.1rem; color: #555; margin-bottom: 20px;">
+                Oops! Jawapan hampir tepat. 
+                <br><br>Mari Cikgu Geni tunjukkan: Jika kamu ada 2 biji epal 🍎🍎, dan tambah 3 biji epal 🍎🍎🍎, jumlahnya ialah 5!
+            </p>
+            <button class="btn btn-yellow" onclick="closeModal()">Cuba Lagi</button>
+        </div>
+    </div>
+
+    <!-- SUCCESS MODAL -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal-content" style="border-color: var(--success-green);">
+            <div class="mascot-img" style="background: var(--success-green);">🌟</div>
+            <h2 style="color: var(--success-green); margin-bottom: 10px;">Tahniah!</h2>
+            <p style="font-size: 1.1rem; color: #555; margin-bottom: 20px;">
+                Hebat! Anda berjaya habiskan latihan ini dengan cemerlang. Anda semakin genius!
+            </p>
+            <button class="btn btn-green" onclick="finishQuiz()">Kembali ke Menu</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Firebase SDK Module -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    // Firebase Configuration (From Prompt)
+    const firebaseConfig = {
+        apiKey: "AIzaSyBnzVeU918yE1N86CfSOVEH_7za_Ubvjc0",
+        authDomain: "maths-genius-1b171.firebaseapp.com",
+        databaseURL: "https://maths-genius-1b171-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "maths-genius-1b171",
+        storageBucket: "maths-genius-1b171.firebasestorage.app",
+        messagingSenderId: "721438989994",
+        appId: "1:721438989994:web:e911e4fb1244bba9953ad3"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Make db available globally for simple tracking (prototype use)
+    window.firebaseDb = db;
+    window.firebaseSet = set;
+    window.firebaseRef = ref;
+</script>
+
+<!-- Application Logic -->
+<script>
+    // --- STATE MANAGEMENT ---
+    let currentUserData = {
+        name: "Ammar",
+        stars: 120,
+        currentYear: "Tahun 1"
+    };
+
+    // Sample Question Bank (Tahun 1 - As requested in prompt)
+    const questionBank = {
+        "tambah": [
+            { q: "2 + 3 =", options: [4, 5, 6, 7], answer: 5, aiDesc: "Jika kamu ada 2 biji epal, dan tambah 3 biji epal, jumlahnya ialah 5." },
+            { q: "5 + 4 =", options: [8, 9, 10, 7], answer: 9, aiDesc: "Cuba kira guna jari. Buka 5 jari, tambah lagi 4 jari. Semuanya 9!" },
+            { q: "Ada 4 epal. Tambah 2 epal lagi. Berapa semua?", options: [5, 6, 7, 8], answer: 6, aiDesc: "4 epal tambah 2 epal = 6 epal." }
+        ],
+        "tolak": [
+            { q: "8 - 3 =", options: [4, 5, 6, 7], answer: 5, aiDesc: "Buka 8 jari, tutup 3 jari. Tinggal 5 jari." },
+            { q: "10 - 5 =", options: [3, 4, 5, 6], answer: 5, aiDesc: "10 tolak 5 bermaksud separuh. Jadi tinggal 5." }
+        ]
+    };
+
+    let currentQuiz = [];
+    let currentQuestionIndex = 0;
+    let tempScore = 0;
+    let selectedTopic = "";
+
+    // --- NAVIGATION LOGIC ---
+    function switchScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        
+        // Hide header on quiz
+        if(screenId === 'screen-quiz') {
+            document.getElementById('main-header').style.display = 'none';
+        } else {
+            document.getElementById('main-header').style.display = 'block';
+        }
+    }
+
+    function switchTab(screenId, element) {
+        switchScreen(screenId);
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        if(element) element.classList.add('active');
+    }
+
+    function goToTopicSelection(year) {
+        currentUserData.currentYear = year;
+        document.getElementById('topic-year-title').innerText = year;
+        switchScreen('screen-topics');
+    }
+
+    // --- QUIZ LOGIC ---
+    function startQuiz(topic) {
+        selectedTopic = topic;
+        currentQuiz = questionBank[topic];
+        currentQuestionIndex = 0;
+        tempScore = 0;
+        document.getElementById('q-score').innerText = tempScore;
+        loadQuestion();
+        switchScreen('screen-quiz');
+    }
+
+    function loadQuestion() {
+        if (currentQuestionIndex >= currentQuiz.length) {
+            showSuccessModal();
+            return;
+        }
+
+        const q = currentQuiz[currentQuestionIndex];
+        document.getElementById('q-current').innerText = currentQuestionIndex + 1;
+        document.getElementById('q-text').innerText = q.q;
+        
+        const optionsDiv = document.getElementById('q-options');
+        optionsDiv.innerHTML = '';
+        
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedOption) {
+        const q = currentQuiz[currentQuestionIndex];
+        
+        if (selectedOption === q.answer) {
+            // Correct Answer
+            tempScore += 10;
+            document.getElementById('q-score').innerText = tempScore;
+            
+            // Animation
+            const star = document.getElementById('correct-star');
+            star.style.display = 'block';
+            setTimeout(() => { star.style.display = 'none'; }, 500);
+
+            // Next Question
+            currentQuestionIndex++;
+            setTimeout(loadQuestion, 600);
+        } else {
+            // Wrong Answer - Trigger AI Tutor
+            showAiModal(`Tidak mengapa, mari kita cuba sama-sama.<br><br>Soalan ini ialah <b>${q.q}</b>.<br><br>${q.aiDesc}`);
+        }
+    }
+
+    // --- MODALS (AI TUTOR & SUCCESS) ---
+    function showAiModal(msg) {
+        document.getElementById('ai-message').innerHTML = msg;
+        document.getElementById('ai-modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('ai-modal').style.display = 'none';
+    }
+
+    function showSuccessModal() {
+        document.getElementById('success-modal').style.display = 'flex';
+        updateUserStars(tempScore);
+        
+        // Simpan Data Ke Firebase (Jika connected)
+        try {
+            if(window.firebaseDb && window.firebaseSet && window.firebaseRef) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'users/ammar/score'), {
+                    stars: currentUserData.stars,
+                    lastTopic: selectedTopic,
+                    lastScore: tempScore
+                });
+            }
+        } catch (e) {
+            console.log("Firebase not configured for write yet:", e);
+        }
+    }
+
+    function finishQuiz() {
+        document.getElementById('success-modal').style.display = 'none';
+        switchScreen('screen-topics');
+    }
+
+    function updateUserStars(addedScore) {
+        currentUserData.stars += addedScore;
+        document.getElementById('star-count').innerText = currentUserData.stars;
+    }
+
+</script>
+</body>
+</html>
