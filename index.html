@@ -61,7 +61,6 @@
         .card { background: var(--card-white); border-radius: 20px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid rgba(108, 52, 131, 0.1); }
         .card-premium { background: linear-gradient(135deg, var(--gs-yellow), var(--gs-yellow-dark)); color: white; border: none; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 
         /* Buttons */
         .btn {
@@ -105,20 +104,18 @@
         .child-card:hover { border-color: var(--gs-purple); background: white; }
         .child-avatar { width: 50px; height: 50px; background: var(--gs-yellow); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 25px; border: 2px solid white; }
 
-        /* Utilities */
         .badge { background: var(--gs-yellow); color: #7A6608; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
-        .progress-bar-bg { width: 100%; height: 10px; background: var(--gs-purple-soft); border-radius: 10px; overflow: hidden; margin-top: 5px; }
-        .progress-bar-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.5s; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes starPop { 0% { transform: scale(0); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
+        .star-anim { color: var(--gs-yellow); font-size: 3rem; animation: starPop 0.5s ease; display: none; margin: 10px auto; }
     </style>
 </head>
 <body>
 
 <div id="app-container">
 
-    <!-- HEADER DINAMIK -->
     <header id="main-header" style="display: none;">
         <div class="header-top">
             <div class="logo-placeholder">[Logo Genius Solihin]</div>
@@ -129,9 +126,7 @@
         </div>
     </header>
 
-    <!-- ==========================================
-         SKRIN 1: LANDING PAGE
-    =========================================== -->
+    <!-- LANDING PAGE -->
     <main id="screen-landing" class="screen active">
         <div class="text-center" style="margin-top: 20px;">
             <div class="logo-placeholder" style="display: inline-block; background: var(--gs-purple); color: white; margin-bottom: 20px; font-size: 1.5rem; padding: 10px 20px;">[Logo Genius Solihin]</div>
@@ -140,8 +135,8 @@
             <p style="color: var(--text-gray); margin-bottom: 20px; font-style: italic;">“Melahirkan Anak-anak yang Bijaksana & Soleh.”</p>
             
             <div class="card card-premium text-left mb-3">
-                <h3 class="mb-1"><i class="fas fa-star"></i> Belajar Matematik Tahun 1–6</h3>
-                <p style="font-size: 0.95rem;">Lengkap dengan latihan mengikut tahun, aras soalan, Cikgu Geni Tutor AI, sistem ganjaran dan laporan ibu bapa yang terperinci.</p>
+                <h3 class="mb-1"><i class="fas fa-star"></i> Belajar Matematik KSSR</h3>
+                <p style="font-size: 0.95rem;">Lengkap dengan enjin soalan dinamik, Cikgu Geni Tutor AI, sistem ganjaran dan laporan ibu bapa.</p>
             </div>
 
             <button class="btn btn-yellow mb-1" onclick="switchScreen('screen-register')">Mula Percubaan Percuma</button>
@@ -150,14 +145,10 @@
         </div>
     </main>
 
-    <!-- ==========================================
-         SKRIN 2: LOGIN IBU BAPA
-    =========================================== -->
+    <!-- LOGIN -->
     <main id="screen-login" class="screen">
         <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-landing')"><i class="fas fa-arrow-left"></i></button>
         <h2 class="text-purple mb-1">Log Masuk Ibu Bapa</h2>
-        <p class="mb-3 text-gray">Pantau prestasi anak anda hari ini.</p>
-        
         <div class="card">
             <div class="input-group">
                 <label>E-mel</label>
@@ -168,20 +159,16 @@
                 <input type="password" id="login-password" class="input-field" placeholder="********">
             </div>
             <button class="btn" onclick="prosesLogin()">Log Masuk</button>
-            <p class="text-center mt-2" style="font-size: 0.9rem;">Belum ada akaun? <a href="#" onclick="switchScreen('screen-register')" style="color: var(--gs-purple); font-weight: bold;">Daftar di sini</a></p>
         </div>
     </main>
 
-    <!-- ==========================================
-         SKRIN 3: DAFTAR IBU BAPA
-    =========================================== -->
+    <!-- REGISTER -->
     <main id="screen-register" class="screen">
         <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-landing')"><i class="fas fa-arrow-left"></i></button>
         <h2 class="text-purple mb-1">Daftar Akaun Baru</h2>
-        
         <div class="card">
             <div class="input-group">
-                <label>Nama Penuh (Ibu/Bapa)</label>
+                <label>Nama Penuh</label>
                 <input type="text" id="reg-name" class="input-field" placeholder="Nama anda">
             </div>
             <div class="input-group">
@@ -190,15 +177,13 @@
             </div>
             <div class="input-group">
                 <label>Kata Laluan</label>
-                <input type="password" id="reg-password" class="input-field" placeholder="Pencipta kata laluan">
+                <input type="password" id="reg-password" class="input-field" placeholder="Cipta kata laluan">
             </div>
             <button class="btn btn-yellow" onclick="prosesRegister()">Daftar Sekarang</button>
         </div>
     </main>
 
-    <!-- ==========================================
-         SKRIN 4: DASHBOARD IBU BAPA
-    =========================================== -->
+    <!-- DASHBOARD IBU BAPA -->
     <main id="screen-parent-dashboard" class="screen">
         <h2 class="text-purple mb-1">Selamat Datang, <span id="pd-parent-name">Ibu Bapa</span></h2>
         <div class="card card-premium mb-2" style="padding: 15px; display: flex; justify-content: space-between; align-items: center;">
@@ -214,22 +199,17 @@
             <button class="btn btn-small btn-yellow" style="width: auto;" onclick="switchScreen('screen-add-child')"><i class="fas fa-plus"></i> Tambah</button>
         </div>
 
-        <!-- Senarai Anak Akan Dirender Di Sini -->
         <div id="children-list-container"></div>
-        
         <button class="btn btn-outline mt-2" onclick="logKeluar()"><i class="fas fa-sign-out-alt"></i> Log Keluar</button>
     </main>
 
-    <!-- ==========================================
-         SKRIN 5: TAMBAH ANAK
-    =========================================== -->
+    <!-- TAMBAH ANAK -->
     <main id="screen-add-child" class="screen">
         <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-parent-dashboard')"><i class="fas fa-arrow-left"></i></button>
         <h2 class="text-purple mb-1">Tambah Profil Anak</h2>
-        
         <div class="card">
             <div class="input-group">
-                <label>Nama Panggilan Anak</label>
+                <label>Nama Anak</label>
                 <input type="text" id="child-name" class="input-field" placeholder="Cth: Aisyah">
             </div>
             <div class="input-group">
@@ -247,12 +227,10 @@
         </div>
     </main>
 
-    <!-- ==========================================
-         SKRIN 6: DASHBOARD ANAK (PELAJAR)
-    =========================================== -->
+    <!-- DASHBOARD ANAK -->
     <main id="screen-child-dashboard" class="screen">
         <div class="card card-premium text-center">
-            <div class="child-avatar" style="margin: 0 auto 10px auto; width: 60px; height: 60px; font-size: 30px;" id="cd-avatar">👦🏻</div>
+            <div class="child-avatar" style="margin: 0 auto 10px auto; width: 60px; height: 60px; font-size: 30px;">👦🏻</div>
             <h2>Hai, <span id="cd-name">Pelajar</span>!</h2>
             <p class="badge" style="background: white; margin-top: 5px; display: inline-block;"><span id="cd-level">Genius Beginner</span></p>
             
@@ -269,72 +247,54 @@
                 <h4 class="text-purple">Modul Belajar</h4>
                 <p style="font-size: 0.8rem;" id="cd-year-tag">Tahun 1</p>
             </div>
-            <div class="card text-center" style="cursor: pointer; border-color: var(--gs-yellow-dark);" onclick="alert('Daily 10: Dalam Pembinaan')">
-                <i class="fas fa-bolt" style="font-size: 2.5rem; color: var(--gs-yellow-dark); margin-bottom: 10px;"></i>
-                <h4 style="color: var(--gs-yellow-dark);">Daily 10</h4>
-                <p style="font-size: 0.8rem;">Misi Harian</p>
-            </div>
-            <div class="card text-center" style="cursor: pointer; border-color: var(--danger); grid-column: span 2;" onclick="bukaBukuSalah()">
-                <i class="fas fa-book-medical" style="font-size: 2rem; color: var(--danger); margin-bottom: 10px;"></i>
-                <h4 style="color: var(--danger);">Buku Salah Saya</h4>
-                <p style="font-size: 0.8rem;">Ulang kaji kesilapan lepas dengan Cikgu Geni</p>
+            <div class="card text-center" style="cursor: pointer; border-color: var(--danger);" onclick="bukaBukuSalah()">
+                <i class="fas fa-book-medical" style="font-size: 2.5rem; color: var(--danger); margin-bottom: 10px;"></i>
+                <h4 style="color: var(--danger);">Buku Salah</h4>
+                <p style="font-size: 0.8rem;">Ulang kaji</p>
             </div>
         </div>
     </main>
 
-    <!-- ==========================================
-         SKRIN 7: PILIH TOPIK & ARAS
-    =========================================== -->
+    <!-- PILIH TOPIK & ARAS -->
     <main id="screen-topics" class="screen">
         <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-child-dashboard')"><i class="fas fa-arrow-left"></i></button>
         <h2 class="text-purple mb-1" id="topic-title">Topik Tahun 1</h2>
         
         <div id="topic-list-container" class="grid-2 mb-2"></div>
 
-        <!-- Modals Aras (Hidden by default, shown via JS) -->
         <div id="difficulty-selector" style="display: none;" class="card">
             <h3 class="text-center text-purple mb-1">Pilih Aras Kesukaran</h3>
+            <p class="text-center text-gray mb-2" style="font-size:0.85rem;">Enjin akan menjana 30 soalan baru bagi setiap sesi.</p>
             <button class="btn btn-outline mb-1" style="border-color: var(--success); color: var(--success);" onclick="mulaKuiz('Senang')">Senang</button>
             <button class="btn btn-outline mb-1" style="border-color: var(--gs-yellow-dark); color: var(--gs-yellow-dark);" onclick="mulaKuiz('Sederhana')">Sederhana</button>
             <button class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);" onclick="mulaKuiz('Susah')">Susah</button>
         </div>
     </main>
 
-    <!-- ==========================================
-         SKRIN 8: KUIZ
-    =========================================== -->
+    <!-- KUIZ -->
     <main id="screen-quiz" class="screen">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <button class="btn btn-outline" style="width: auto; padding: 5px 15px;" onclick="switchScreen('screen-topics')"><i class="fas fa-times"></i></button>
-            <div style="font-weight: bold; color: var(--text-gray);">Soalan <span id="q-current">1</span>/<span id="q-total">10</span></div>
+            <div style="font-weight: bold; color: var(--text-gray);">Soalan <span id="q-current">1</span>/30</div>
             <div style="font-weight: bold; color: var(--gs-yellow-dark);"><i class="fas fa-star"></i> <span id="q-score">0</span></div>
         </div>
 
         <div class="card text-center" style="border: 4px dashed var(--gs-purple-soft); padding: 30px 15px;">
-            <p id="q-skill" class="badge mb-1">Tambah Asas</p>
+            <p id="q-skill" class="badge mb-1">Topik</p>
             <div id="q-text" class="question-box">Soalan dipaparkan di sini.</div>
             <div class="star-anim" id="correct-star"><i class="fas fa-star"></i></div>
         </div>
-
         <div class="options-grid" id="q-options"></div>
     </main>
 
-    <!-- ==========================================
-         SKRIN 9: BUKU SALAH SAYA
-    =========================================== -->
+    <!-- BUKU SALAH SAYA -->
     <main id="screen-wrong-book" class="screen">
         <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-child-dashboard')"><i class="fas fa-arrow-left"></i></button>
         <h2 class="text-purple mb-1">Buku Salah Saya</h2>
-        <p class="text-gray mb-2">Mari kita perbaiki kelemahan bersama Cikgu Geni!</p>
-        
-        <div id="wrong-book-list">
-            <!-- Render via JS -->
-        </div>
+        <div id="wrong-book-list"></div>
     </main>
 
-    <!-- ==========================================
-         SKRIN 10: LAPORAN IBU BAPA (PDF)
-    =========================================== -->
+    <!-- LAPORAN PDF -->
     <main id="screen-report" class="screen">
         <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-parent-dashboard')"><i class="fas fa-arrow-left"></i></button>
         <h2 class="text-purple mb-1">Laporan Prestasi</h2>
@@ -342,8 +302,8 @@
         <div id="bahagian-pdf" style="background-color: var(--bg-white); padding: 10px; border-radius: 10px; margin-bottom: 15px;">
             <div class="card text-center" style="border-color: var(--gs-purple);">
                 <div class="logo-placeholder" style="display: inline-block; background: var(--gs-purple); color: white; margin-bottom: 10px; font-size: 1rem; padding: 5px 10px;">[Logo Genius Solihin]</div>
-                <h3 class="text-purple" id="rep-name">Laporan Aisyah</h3>
-                <p id="rep-year">Tahun 1</p>
+                <h3 class="text-purple" id="rep-name">Laporan</h3>
+                <p id="rep-year">Tahun</p>
                 <hr style="margin: 15px 0; border: 0; border-top: 1px dashed var(--gs-purple-soft);">
                 
                 <div class="grid-2 text-left mb-2">
@@ -356,82 +316,60 @@
                         <h4 id="rep-accuracy">0%</h4>
                     </div>
                 </div>
-                
-                <div class="text-left mb-2">
-                    <p><strong>Topik Kuat:</strong> <span id="rep-strong" class="text-success">Tiada Data</span></p>
-                    <p><strong>Topik Lemah:</strong> <span id="rep-weak" class="text-danger">Tiada Data</span></p>
-                </div>
-                
                 <div class="text-left" style="background: var(--gs-purple-soft); padding: 15px; border-radius: 10px;">
                     <h4 class="text-purple mb-1"><i class="fas fa-robot"></i> Cadangan Cikgu Geni</h4>
-                    <p style="font-size: 0.9rem;" id="rep-ai-advice">Sila lakukan latihan dahulu untuk menjana laporan.</p>
+                    <p style="font-size: 0.9rem;" id="rep-ai-advice">Sila lakukan latihan.</p>
                 </div>
             </div>
         </div>
-        
         <button class="btn btn-yellow" onclick="muatTurunPDF()"><i class="fas fa-download"></i> Muat Turun Laporan (PDF)</button>
     </main>
 
-    <!-- ==========================================
-         SKRIN 11: PRICING / LANGGANAN
-    =========================================== -->
+    <!-- PRICING -->
     <main id="screen-pricing" class="screen">
         <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="kembaliDariPricing()"><i class="fas fa-arrow-left"></i></button>
         <h2 class="text-purple mb-1 text-center">Pelan Langganan</h2>
-        <p class="text-center text-gray mb-2">Pilih pelan terbaik untuk pendidikan anak anda.</p>
-
-        <div class="card text-center" style="border: 2px solid var(--text-gray);">
-            <h3>Free Trial</h3>
-            <h2 class="mb-1">Percuma</h2>
-            <p class="text-gray mb-1">Akses 7 hari, 1 Profil Anak, Latihan Asas.</p>
-            <button class="btn btn-outline" disabled>Pelan Semasa</button>
-        </div>
-
-        <div class="card text-center" style="border: 2px solid var(--gs-purple); position: relative;">
-            <div class="badge" style="position: absolute; top: -10px; right: 20px; background: var(--gs-purple); color: white;">Paling Popular</div>
+        <div class="card text-center" style="border: 2px solid var(--gs-purple);">
+            <div class="badge" style="position: absolute; top: -10px; right: 20px; background: var(--gs-purple); color: white;">Premium</div>
             <h3 class="text-purple">Monthly Plan</h3>
             <h2 class="mb-1 text-purple">RM 19.90 <span style="font-size: 1rem; color: var(--text-gray);">/bulan</span></h2>
-            <ul style="text-align: left; font-size: 0.9rem; margin-bottom: 15px; padding-left: 20px; color: var(--text-dark);">
+            <ul style="text-align: left; font-size: 0.9rem; margin-bottom: 15px; padding-left: 20px;">
                 <li>Hingga 3 Profil Anak</li>
-                <li>Akses Penuh Tahun 1-6 (Semua Aras)</li>
+                <li>Akses Enjin Penjana Ribuan Soalan</li>
                 <li>Tutor AI Cikgu Geni Unlocked</li>
-                <li>Akses 'Buku Salah Saya'</li>
                 <li>Laporan PDF Terperinci</li>
             </ul>
-            <button class="btn btn-yellow" onclick="alert('Integrasi Payment Gateway (Billplz/Stripe) akan disambungkan di sini.')">Langgan Sekarang</button>
+            <button class="btn btn-yellow" onclick="alert('Integrasi Payment Gateway di sini.')">Langgan Sekarang</button>
         </div>
     </main>
 
-    <!-- ==========================================
-         BOTTOM NAVIGATION & MODALS
-    =========================================== -->
+    <!-- NAVIGASI BAWAH -->
     <nav id="bottom-nav-parent" class="bottom-nav" style="display: none;">
         <div class="nav-item" onclick="switchScreen('screen-parent-dashboard')"><i class="fas fa-users"></i><span>Anak</span></div>
-        <div class="nav-item" onclick="alert('Admin Panel Mockup')"><i class="fas fa-cog"></i><span>Tetapan</span></div>
+        <div class="nav-item" onclick="alert('Admin Panel')"><i class="fas fa-cog"></i><span>Tetapan</span></div>
     </nav>
-
     <nav id="bottom-nav-child" class="bottom-nav" style="display: none;">
         <div class="nav-item" onclick="switchScreen('screen-child-dashboard')"><i class="fas fa-home"></i><span>Utama</span></div>
         <div class="nav-item" onclick="bukaPilihanTopik()"><i class="fas fa-gamepad"></i><span>Latihan</span></div>
         <div class="nav-item" onclick="switchScreen('screen-parent-dashboard')"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></div>
     </nav>
 
-    <!-- Cikgu Geni Modal -->
+    <!-- MODAL CIKGU GENI -->
     <div class="modal-overlay" id="ai-modal">
         <div class="modal-content">
             <div class="mascot-img">🦉</div>
             <h2 class="text-purple mb-1">Cikgu Geni</h2>
-            <p id="ai-message" style="font-size: 1.1rem; color: var(--text-dark); margin-bottom: 20px; line-height: 1.5;"></p>
+            <p id="ai-message" style="font-size: 1.1rem; margin-bottom: 20px; line-height: 1.5;"></p>
             <button class="btn btn-yellow" onclick="closeModal()">Faham, Cikgu!</button>
         </div>
     </div>
 
-    <!-- Success Modal -->
+    <!-- MODAL SUCCESS -->
     <div class="modal-overlay" id="success-modal">
         <div class="modal-content" style="border-color: var(--success);">
             <div class="mascot-img" style="background: var(--success);">🌟</div>
             <h2 style="color: var(--success); margin-bottom: 10px;">Tahniah!</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 20px;">Latihan selesai. Anda mendapat <strong id="modal-score-earned">0</strong> bintang!</p>
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">Anda telah melengkapkan 30 soalan dan mendapat <strong id="modal-score-earned">0</strong> bintang!</p>
             <button class="btn btn-green" onclick="tamatKuiz()">Teruskan</button>
         </div>
     </div>
@@ -439,63 +377,26 @@
 </div>
 
 <!-- ==========================================
-     JAVASCRIPT LOGIC (MOCK BACKEND & APP LOGIC)
+     JAVASCRIPT: ENJIN PENJANA SOALAN DINAMIK & LOGIK APP
 =========================================== -->
 <script>
-    // --- 1. MOCK DATABASE (LocalStorage Setup) ---
-    // Struktur JSON yang dicadangkan dalam prompt dipetakan ke localStorage
-    
-    // Bank Soalan (Sampel minimum yang diminta untuk menguji sistem)
-    const questionsDB = [
-        // Tahun 1 - Senang
-        { id: "y1-add-e-1", year: 1, topic: "Tambah", diff: "Senang", q: "2 + 3 = ?", o: ["4", "5", "6", "7"], a: "5", exp: "2 + 3 bermaksud kita tambah 2 dengan 3. Jadi jumlahnya ialah 5.", tag: "Tambah Asas" },
-        { id: "y1-add-e-2", year: 1, topic: "Tambah", diff: "Senang", q: "4 + 5 = ?", o: ["8", "9", "10", "11"], a: "9", exp: "Empat tambah lima ialah sembilan.", tag: "Tambah Asas" },
-        { id: "y1-sub-e-1", year: 1, topic: "Tolak", diff: "Senang", q: "5 - 2 = ?", o: ["2", "3", "4", "5"], a: "3", exp: "Ada 5, buang 2, baki tinggal 3.", tag: "Tolak Asas" },
-        { id: "y1-sub-e-2", year: 1, topic: "Tolak", diff: "Senang", q: "Ali ada 3 epal. Ibu beri 2 epal lagi. Berapa jumlah?", o: ["4", "5", "6", "7"], a: "5", exp: "3 epal ditambah 2 epal = 5 epal.", tag: "Soalan Cerita Mudah" },
-        
-        // Tahun 2 - Darab (Senang)
-        { id: "y2-mul-e-1", year: 2, topic: "Darab", diff: "Senang", q: "2 × 3 = ?", o: ["5", "6", "7", "8"], a: "6", exp: "Sifir 2: Dua didarab tiga ialah enam.", tag: "Sifir 2" },
-        { id: "y2-mul-e-2", year: 2, topic: "Darab", diff: "Senang", q: "5 × 4 = ?", o: ["15", "20", "25", "30"], a: "20", exp: "Sifir 5: Lima kumpulan empat ialah 20.", tag: "Sifir 5" },
-        
-        // Tahun 3 - Bahagi (Sederhana)
-        { id: "y3-div-m-1", year: 3, topic: "Bahagi", diff: "Sederhana", q: "24 ÷ 4 = ?", o: ["5", "6", "7", "8"], a: "6", exp: "24 dibahagi kepada 4 kumpulan sama banyak, setiap satu dapat 6.", tag: "Sifir 4" },
-        { id: "y3-div-m-2", year: 3, topic: "Bahagi", diff: "Sederhana", q: "60 gula-gula dibahagi 10 murid. Seorang dapat?", o: ["5", "6", "7", "8"], a: "6", exp: "Potong sifar belakang. 6 bahagi 1 ialah 6.", tag: "Sifir 10" },
-
-        // Tahun 4 - Perpuluhan (Sederhana)
-        { id: "y4-dec-m-1", year: 4, topic: "Perpuluhan", diff: "Sederhana", q: "2.5 + 3.4 = ?", o: ["5.8", "5.9", "6.0", "6.1"], a: "5.9", exp: "Tambah lurus. Sa: 2+3=5. Perpuluhan: 5+4=9. Jawapan 5.9", tag: "Tambah Perpuluhan" },
-        
-        // Tahun 5 - Peratus (Sederhana)
-        { id: "y5-pct-m-1", year: 5, topic: "Peratus", diff: "Sederhana", q: "10% daripada 100 = ?", o: ["1", "10", "20", "50"], a: "10", exp: "10/100 didarab 100 potong atas bawah, tinggal 10.", tag: "Peratus Asas" },
-        { id: "y5-pct-m-2", year: 5, topic: "Peratus", diff: "Sederhana", q: "Harga buku RM100. Diskaun 20%. Harga baru?", o: ["RM20", "RM80", "RM120", "RM100"], a: "RM80", exp: "Diskaun 20% = RM20. RM100 tolak RM20 ialah RM80.", tag: "Diskaun" },
-
-        // Tahun 6 - Penyelesaian Masalah (Susah)
-        { id: "y6-kbat-h-1", year: 6, topic: "Penyelesaian Masalah", diff: "Susah", q: "Ali ada RM150. Beli buku RM45.50 & beg RM79.90. Baki?", o: ["RM24.60", "RM25.60", "RM125.40", "RM34.60"], a: "RM24.60", exp: "Jumlah belanja: 45.50 + 79.90 = 125.40. Baki: 150 - 125.40 = 24.60.", tag: "Wang KBAT" },
-        { id: "y6-kbat-h-2", year: 6, topic: "Penyelesaian Masalah", diff: "Susah", q: "84,000 risalah diagih 24 cawangan. Setiap satu dapat?", o: ["3000", "3200", "3400", "3500"], a: "3500", exp: "Guna bentuk lazim bahagi. 84000 ÷ 24 = 3500.", tag: "Operasi Besar" }
-    ];
-
-    // State Pengguna Semasa
-    let currentParent = null; // object
-    let currentChild = null;  // object
+    let currentParent = null;
+    let currentChild = null;
     let activeQuiz = [];
     let qIndex = 0;
     let tempScore = 0;
     let selectedTopicName = "";
 
-    // Inisialisasi Apps
     window.onload = () => {
         const loggedInEmail = localStorage.getItem('mg_loggedIn');
         if(loggedInEmail) {
             const parents = JSON.parse(localStorage.getItem('mg_parents') || '[]');
             currentParent = parents.find(p => p.email === loggedInEmail);
-            if(currentParent) {
-                renderParentDashboard();
-                return;
-            }
+            if(currentParent) { renderParentDashboard(); return; }
         }
         switchScreen('screen-landing');
     };
 
-    // --- 2. FUNGSI NAVIGASI ---
     function switchScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
@@ -505,84 +406,57 @@
         const navParent = document.getElementById('bottom-nav-parent');
         const navChild = document.getElementById('bottom-nav-child');
 
-        // Hide UI elements by default
-        header.style.display = 'none';
-        navParent.style.display = 'none';
-        navChild.style.display = 'none';
+        header.style.display = 'none'; navParent.style.display = 'none'; navChild.style.display = 'none';
 
-        // Show conditionally
         if(screenId === 'screen-parent-dashboard' || screenId === 'screen-report') {
-            header.style.display = 'block';
-            document.getElementById('header-role').innerText = "Ibu Bapa";
+            header.style.display = 'block'; document.getElementById('header-role').innerText = "Ibu Bapa";
             document.getElementById('header-name').innerText = currentParent ? currentParent.name : "";
             navParent.style.display = 'flex';
-        } 
-        else if (screenId === 'screen-child-dashboard' || screenId === 'screen-topics' || screenId === 'screen-wrong-book') {
-            header.style.display = 'block';
-            document.getElementById('header-role').innerText = "Pelajar";
+        } else if (screenId === 'screen-child-dashboard' || screenId === 'screen-topics' || screenId === 'screen-wrong-book') {
+            header.style.display = 'block'; document.getElementById('header-role').innerText = "Pelajar";
             document.getElementById('header-name').innerText = currentChild ? currentChild.name : "";
             navChild.style.display = 'flex';
         }
     }
 
-    function kembaliDariPricing() {
-        if(currentParent) switchScreen('screen-parent-dashboard');
-        else switchScreen('screen-landing');
-    }
+    function kembaliDariPricing() { currentParent ? switchScreen('screen-parent-dashboard') : switchScreen('screen-landing'); }
 
-    // --- 3. SISTEM AUTHENTICATION (IBU BAPA) ---
+    // AUTH
     function prosesRegister() {
         const name = document.getElementById('reg-name').value.trim();
         const email = document.getElementById('reg-email').value.trim();
         const pwd = document.getElementById('reg-password').value.trim();
-
         if(!name || !email || !pwd) return alert("Sila isi semua maklumat.");
 
         let parents = JSON.parse(localStorage.getItem('mg_parents') || '[]');
         if(parents.find(p => p.email === email)) return alert("E-mel ini telah didaftarkan.");
 
-        const newParent = { id: 'P_'+Date.now(), name, email, pwd, plan: 'Free Trial' };
-        parents.push(newParent);
+        parents.push({ id: 'P_'+Date.now(), name, email, pwd, plan: 'Free Trial' });
         localStorage.setItem('mg_parents', JSON.stringify(parents));
-        
-        alert("Pendaftaran berjaya! Sila log masuk.");
-        switchScreen('screen-login');
+        alert("Pendaftaran berjaya! Sila log masuk."); switchScreen('screen-login');
     }
 
     function prosesLogin() {
         const email = document.getElementById('login-email').value.trim();
         const pwd = document.getElementById('login-password').value.trim();
         let parents = JSON.parse(localStorage.getItem('mg_parents') || '[]');
-        
         let p = parents.find(x => x.email === email && x.pwd === pwd);
-        if(p) {
-            currentParent = p;
-            localStorage.setItem('mg_loggedIn', p.email);
-            renderParentDashboard();
-        } else {
-            alert("E-mel atau kata laluan salah.");
-        }
+        if(p) { currentParent = p; localStorage.setItem('mg_loggedIn', p.email); renderParentDashboard(); } 
+        else { alert("E-mel atau kata laluan salah."); }
     }
 
-    function logKeluar() {
-        localStorage.removeItem('mg_loggedIn');
-        currentParent = null; currentChild = null;
-        switchScreen('screen-landing');
-    }
+    function logKeluar() { localStorage.removeItem('mg_loggedIn'); currentParent = null; currentChild = null; switchScreen('screen-landing'); }
 
-    // --- 4. SISTEM PROFIL ANAK & DASHBOARD IBU BAPA ---
+    // PARENT DASHBOARD & CHILD PROFILES
     function renderParentDashboard() {
         document.getElementById('pd-parent-name').innerText = currentParent.name;
-        document.getElementById('pd-plan-status').innerText = currentParent.plan;
-        
         let children = JSON.parse(localStorage.getItem('mg_children') || '[]');
         let myChildren = children.filter(c => c.parentId === currentParent.id);
-        
         const container = document.getElementById('children-list-container');
         container.innerHTML = '';
 
         if(myChildren.length === 0) {
-            container.innerHTML = `<p class="text-center text-gray" style="font-style:italic;">Tiada profil anak lagi. Sila klik butang Tambah.</p>`;
+            container.innerHTML = `<p class="text-center text-gray">Sila klik butang Tambah.</p>`;
         } else {
             myChildren.forEach(child => {
                 const div = document.createElement('div');
@@ -596,7 +470,6 @@
                     </div>
                     <div>
                         <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); lihatLaporan('${child.id}')"><i class="fas fa-chart-pie"></i></button>
-                        <button class="btn btn-small btn-yellow" style="margin-left: 5px;"><i class="fas fa-play"></i></button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -609,117 +482,127 @@
         const name = document.getElementById('child-name').value.trim();
         const year = document.getElementById('child-year').value;
         if(!name) return alert("Sila masukkan nama anak.");
-
         let children = JSON.parse(localStorage.getItem('mg_children') || '[]');
-        
-        // Cek limit pelan
-        let myChildrenCount = children.filter(c => c.parentId === currentParent.id).length;
-        if(currentParent.plan === 'Free Trial' && myChildrenCount >= 1) {
-            alert("Pelan Free Trial terhad kepada 1 profil anak. Sila naik taraf.");
-            return switchScreen('screen-pricing');
-        }
-
-        const newChild = {
-            id: 'C_'+Date.now(), parentId: currentParent.id,
-            name, year: parseInt(year), avatar: '👦🏻',
-            stars: 0, streak: 0, level: 'Genius Beginner'
-        };
-        children.push(newChild);
+        children.push({ id: 'C_'+Date.now(), parentId: currentParent.id, name, year: parseInt(year), avatar: '👦🏻', stars: 0, streak: 0, level: 'Genius Beginner' });
         localStorage.setItem('mg_children', JSON.stringify(children));
-        
-        document.getElementById('child-name').value = '';
-        renderParentDashboard();
+        document.getElementById('child-name').value = ''; renderParentDashboard();
     }
 
     function pilihAnak(child) {
         currentChild = child;
-        
-        // Kemas kini UI Dashboard Anak
         document.getElementById('cd-name').innerText = child.name;
         document.getElementById('cd-level').innerText = child.level;
         document.getElementById('cd-stars').innerText = child.stars;
-        document.getElementById('cd-streak').innerText = child.streak;
         document.getElementById('cd-year-tag').innerText = "Tahun " + child.year;
-        
         switchScreen('screen-child-dashboard');
     }
 
-    // --- 5. LOGIK PEMBELAJARAN (TOPIK & KUIZ) ---
     function bukaPilihanTopik() {
         document.getElementById('topic-title').innerText = "Topik Tahun " + currentChild.year;
         const container = document.getElementById('topic-list-container');
         document.getElementById('difficulty-selector').style.display = 'none';
-        container.innerHTML = '';
-        container.style.display = 'grid';
+        container.innerHTML = ''; container.style.display = 'grid';
 
-        // Hardcode topik ikut silibus
-        let topics = [];
-        if(currentChild.year === 1) {
-            topics = ['Tambah', 'Tolak'];
-        } else if(currentChild.year >= 2 && currentChild.year <= 5) {
-            topics = ['Tambah', 'Tolak', 'Darab', 'Bahagi', 'Perpuluhan', 'Peratus'];
-        } else {
-            topics = ['Operasi Bergabung', 'Penyelesaian Masalah'];
-        }
-
+        let topics = (currentChild.year === 1) ? ['Tambah', 'Tolak'] : ['Tambah', 'Tolak', 'Darab', 'Bahagi'];
         topics.forEach(t => {
             const btn = document.createElement('button');
-            btn.className = 'btn btn-outline';
-            btn.innerText = t;
-            btn.onclick = () => pilihAras(t);
+            btn.className = 'btn btn-outline'; btn.innerText = t;
+            btn.onclick = () => { selectedTopicName = t; container.style.display = 'none'; document.getElementById('difficulty-selector').style.display = 'block'; };
             container.appendChild(btn);
         });
-
         switchScreen('screen-topics');
     }
 
-    function pilihAras(topic) {
-        selectedTopicName = topic;
-        document.getElementById('topic-list-container').style.display = 'none';
-        document.getElementById('difficulty-selector').style.display = 'block';
+    // ====================================================================
+    // ENJIN PENJANA SOALAN MATEMATIK KSSR (DINAMIK)
+    // Menjana tepat 30 soalan baru bagi setiap sesi mengikut had KPM.
+    // ====================================================================
+    function rawakInteger(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+    function janaPilihanSalah(jawapanBetul) {
+        let pilihan = [jawapanBetul];
+        while(pilihan.length < 4) {
+            let salah = jawapanBetul + rawakInteger(-5, 5);
+            if(salah !== jawapanBetul && salah >= 0 && !pilihan.includes(salah)) pilihan.push(salah);
+        }
+        return pilihan.sort(() => Math.random() - 0.5); // Shuffle
+    }
+
+    function generateMathSession(year, topic, diff) {
+        let generatedQuestions = [];
+        // Had KSSR: Y1(100), Y2(1000), Y3(10000), Y4(100000), Y5(1000000)
+        let maxVal;
+        if(year === 1) maxVal = (diff === 'Senang') ? 10 : (diff === 'Sederhana') ? 50 : 100;
+        else if(year === 2) maxVal = (diff === 'Senang') ? 100 : (diff === 'Sederhana') ? 500 : 1000;
+        else if(year === 3) maxVal = (diff === 'Senang') ? 1000 : (diff === 'Sederhana') ? 5000 : 10000;
+        else if(year === 4) maxVal = (diff === 'Senang') ? 10000 : (diff === 'Sederhana') ? 50000 : 100000;
+        else maxVal = (diff === 'Senang') ? 100000 : (diff === 'Sederhana') ? 500000 : 1000000;
+
+        // Jana genap 30 soalan
+        for(let i = 0; i < 30; i++) {
+            let num1, num2, answer, qText, explanation;
+            
+            if(topic === 'Tambah') {
+                num1 = rawakInteger(1, maxVal / 2);
+                num2 = rawakInteger(1, maxVal / 2);
+                answer = num1 + num2;
+                qText = `${num1} + ${num2} = ?`;
+                explanation = `Gunakan bentuk lazim. Tambahkan nilai sa dahulu, kemudian puluh dan seterusnya. Jawapannya ialah ${answer}.`;
+            } 
+            else if (topic === 'Tolak') {
+                num1 = rawakInteger(maxVal / 2, maxVal);
+                num2 = rawakInteger(1, num1); // pastikan tiada negatif
+                answer = num1 - num2;
+                qText = `${num1} - ${num2} = ?`;
+                explanation = `Bila menolak, ingat untuk meminjam dari rumah sebelah jika nombor atas lebih kecil. ${num1} buang ${num2} baki ${answer}.`;
+            }
+            else if (topic === 'Darab') {
+                // Sifir limit ikut tahun
+                let sifirMax = (year === 2) ? 5 : (year === 3) ? 9 : (year >= 4) ? 20 : 10;
+                if(diff === 'Susah' && year >= 4) sifirMax = 50; 
+                num1 = rawakInteger(2, sifirMax);
+                num2 = rawakInteger(2, maxVal / 100 > 10 ? 10 : 9); // Hadkan supaya tak melampau
+                answer = num1 * num2;
+                qText = `${num1} × ${num2} = ?`;
+                explanation = `Konsep darab ialah tambah berulang. ${num1} kumpulan ${num2} menjadi ${answer}.`;
+            }
+            else if (topic === 'Bahagi') {
+                let divisor = (year <= 3) ? rawakInteger(2, 9) : rawakInteger(2, 20);
+                answer = rawakInteger(2, (maxVal/divisor > 50) ? 50 : 20); 
+                num1 = answer * divisor; // Pastikan bahagi tepat tiada baki
+                num2 = divisor;
+                qText = `${num1} ÷ ${num2} = ?`;
+                explanation = `${num1} dibahagikan sama rata kepada ${num2} bahagian. Setiap bahagian akan mendapat ${answer}.`;
+            }
+
+            generatedQuestions.push({
+                q: qText, a: answer, o: janaPilihanSalah(answer), exp: explanation, tag: `${topic} (${diff})`
+            });
+        }
+        return generatedQuestions;
     }
 
     function mulaKuiz(diff) {
-        // Cari soalan dalam DB yang sepadan
-        let rawQuestions = questionsDB.filter(q => q.year === currentChild.year && q.topic === selectedTopicName && q.diff === diff);
-        
-        // Mock data generator jika database kosong untuk demo
-        if(rawQuestions.length === 0) {
-            for(let i=0; i<5; i++) {
-                rawQuestions.push({
-                    id: 'mock-'+Date.now()+i, year: currentChild.year, topic: selectedTopicName, diff: diff,
-                    q: `Soalan Demo ${selectedTopicName} (${diff}) - ${i+1}`,
-                    o: ["A", "B", "C", "D"], a: "A", exp: "Ini adalah penerangan dari Cikgu Geni untuk soalan demo.", tag: selectedTopicName
-                });
-            }
-        }
-
-        // Ambil max 10 soalan
-        activeQuiz = rawQuestions.slice(0, 10);
-        qIndex = 0;
-        tempScore = 0;
-        document.getElementById('q-score-temp').innerText = tempScore;
-        document.getElementById('q-total').innerText = activeQuiz.length;
-        
+        // Enjin KSSR menjana 30 soalan segar!
+        activeQuiz = generateMathSession(currentChild.year, selectedTopicName, diff);
+        qIndex = 0; tempScore = 0;
+        document.getElementById('q-score').innerText = tempScore;
         loadSoalan();
         switchScreen('screen-quiz');
     }
 
     function loadSoalan() {
         if(qIndex >= activeQuiz.length) return tunjukResult();
-
         const q = activeQuiz[qIndex];
         document.getElementById('q-current').innerText = qIndex + 1;
-        document.getElementById('q-skill').innerText = q.tag || q.topic;
+        document.getElementById('q-skill').innerText = q.tag;
         document.getElementById('q-text').innerText = q.q;
         
         const optionsDiv = document.getElementById('q-options');
         optionsDiv.innerHTML = '';
-        
         q.o.forEach(opt => {
             const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerText = opt;
+            btn.className = 'option-btn'; btn.innerText = opt;
             btn.onclick = () => semakJawapan(opt, q);
             optionsDiv.appendChild(btn);
         });
@@ -727,75 +610,57 @@
 
     function semakJawapan(selected, qObj) {
         let attempts = JSON.parse(localStorage.getItem('mg_attempts') || '[]');
-        let isCorrect = (selected === qObj.a);
-
-        // Record attempt
-        attempts.push({ childId: currentChild.id, qId: qObj.id, correct: isCorrect, date: new Date().toISOString(), topic: qObj.topic });
+        let isCorrect = (selected == qObj.a);
+        attempts.push({ childId: currentChild.id, correct: isCorrect });
         localStorage.setItem('mg_attempts', JSON.stringify(attempts));
 
         if(isCorrect) {
-            tempScore += 10;
-            document.getElementById('q-score-temp').innerText = tempScore;
+            tempScore += 10; document.getElementById('q-score').innerText = tempScore;
             const star = document.getElementById('correct-star');
             star.style.display = 'block';
             setTimeout(() => { star.style.display = 'none'; qIndex++; loadSoalan(); }, 600);
         } else {
-            // Rekod Buku Salah
             let wrongBook = JSON.parse(localStorage.getItem('mg_wrongbook') || '[]');
-            if(!wrongBook.find(w => w.qId === qObj.id && w.childId === currentChild.id)) {
-                wrongBook.push({ childId: currentChild.id, qId: qObj.id, q: qObj.q, a: qObj.a, exp: qObj.exp });
-                localStorage.setItem('mg_wrongbook', JSON.stringify(wrongBook));
-            }
+            wrongBook.push({ childId: currentChild.id, q: qObj.q, a: qObj.a, exp: qObj.exp });
+            localStorage.setItem('mg_wrongbook', JSON.stringify(wrongBook));
             
-            tunjukCikguGeni(`Jawapan kurang tepat.<br><br>Soalan: <b>${qObj.q}</b><br><br>${qObj.exp}`);
+            document.getElementById('ai-message').innerHTML = `Jangan putus asa, ${currentChild.name}!<br><br><b>${qObj.q}</b><br><br>${qObj.exp}`;
+            document.getElementById('ai-modal').style.display = 'flex';
         }
     }
 
-    // --- 6. CIKGU GENI & MODALS ---
-    function tunjukCikguGeni(msg) {
-        document.getElementById('ai-message').innerHTML = msg;
-        document.getElementById('ai-modal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('ai-modal').style.display = 'none';
-        qIndex++; loadSoalan(); // Continue to next question after reading explanation
-    }
+    function closeModal() { document.getElementById('ai-modal').style.display = 'none'; qIndex++; loadSoalan(); }
 
     function tunjukResult() {
-        document.getElementById('modal-score-earned').innerText = tempScore / 10; // 1 star per 10 points
+        let bintangMuka = Math.floor(tempScore / 10);
+        document.getElementById('modal-score-earned').innerText = bintangMuka;
         document.getElementById('success-modal').style.display = 'flex';
         
-        // Simpan Bintang ke Profil Anak
-        currentChild.stars += (tempScore / 10);
+        currentChild.stars += bintangMuka;
         let children = JSON.parse(localStorage.getItem('mg_children') || '[]');
         let index = children.findIndex(c => c.id === currentChild.id);
         if(index > -1) children[index].stars = currentChild.stars;
         localStorage.setItem('mg_children', JSON.stringify(children));
     }
 
-    function tamatKuiz() {
-        document.getElementById('success-modal').style.display = 'none';
-        pilihAnak(currentChild); // refresh dashboard
-    }
+    function tamatKuiz() { document.getElementById('success-modal').style.display = 'none'; pilihAnak(currentChild); }
 
-    // --- 7. BUKU SALAH SAYA ---
+    // BUKU SALAH
     function bukaBukuSalah() {
         let wrongBook = JSON.parse(localStorage.getItem('mg_wrongbook') || '[]');
         let myWrongs = wrongBook.filter(w => w.childId === currentChild.id);
-        
         const container = document.getElementById('wrong-book-list');
         container.innerHTML = '';
 
         if(myWrongs.length === 0) {
-            container.innerHTML = `<p class="text-center text-gray">Hebat! Tiada rekod soalan salah buat masa ini.</p>`;
+            container.innerHTML = `<p class="text-center text-gray">Hebat! Tiada rekod kesilapan.</p>`;
         } else {
-            myWrongs.forEach(w => {
-                const div = document.createElement('div');
-                div.className = 'card';
+            // Hadkan kepada 20 paparan terakhir supaya tak terlalu panjang
+            myWrongs.slice(-20).reverse().forEach(w => {
+                const div = document.createElement('div'); div.className = 'card';
                 div.innerHTML = `
                     <p style="font-family: 'Fredoka'; color: var(--gs-purple); font-size: 1.2rem; margin-bottom: 5px;">${w.q}</p>
-                    <p class="text-success mb-1"><b>Jawapan Betul:</b> ${w.a}</p>
+                    <p class="text-success mb-1"><b>Jawapan Tepat:</b> ${w.a}</p>
                     <div style="background: var(--gs-purple-soft); padding: 10px; border-radius: 10px; font-size: 0.9rem;">
                         <b>Cikgu Geni:</b> ${w.exp}
                     </div>
@@ -806,43 +671,28 @@
         switchScreen('screen-wrong-book');
     }
 
-    // --- 8. LAPORAN IBU BAPA (PDF) ---
+    // PDF LAPORAN
     function lihatLaporan(childId) {
         let children = JSON.parse(localStorage.getItem('mg_children') || '[]');
         let child = children.find(c => c.id === childId);
         if(!child) return;
 
         document.getElementById('rep-name').innerText = "Laporan " + child.name;
-        document.getElementById('rep-year').innerText = "Tahun " + child.year;
-
-        let attempts = JSON.parse(localStorage.getItem('mg_attempts') || '[]');
-        let childAttempts = attempts.filter(a => a.childId === childId);
+        let attempts = JSON.parse(localStorage.getItem('mg_attempts') || '[]').filter(a => a.childId === childId);
         
-        document.getElementById('rep-total-q').innerText = childAttempts.length;
-        
-        let correctCount = childAttempts.filter(a => a.correct).length;
-        let accuracy = childAttempts.length > 0 ? Math.round((correctCount / childAttempts.length) * 100) : 0;
-        document.getElementById('rep-accuracy').innerText = accuracy + "%";
+        document.getElementById('rep-total-q').innerText = attempts.length;
+        let correctCount = attempts.filter(a => a.correct).length;
+        let acc = attempts.length > 0 ? Math.round((correctCount / attempts.length) * 100) : 0;
+        document.getElementById('rep-accuracy').innerText = acc + "%";
 
-        // Logic ringkas menentukan topik kuat/lemah (Mock logic)
-        if(childAttempts.length > 0) {
-            document.getElementById('rep-strong').innerText = childAttempts[0].topic + " (" + accuracy + "%)";
-            document.getElementById('rep-ai-advice').innerText = `${child.name} menunjukkan usaha yang bagus! Berdasarkan rekod, teruskan buat latihan tubi harian sekurang-kurangnya 10 minit sehari untuk mengekalkan momentum 'Genius' mereka.`;
-        } else {
-            document.getElementById('rep-strong').innerText = "Tiada Data";
-            document.getElementById('rep-ai-advice').innerText = "Sila galakkan anak buat latihan dahulu untuk Cikgu Geni menjana laporan.";
+        if(attempts.length > 0) {
+            document.getElementById('rep-ai-advice').innerText = `${child.name} sedang meningkat naik! Teruskan galakan untuk menggunakan enjin soalan dinamik ini sekurang-kurangnya 15 minit sehari.`;
         }
-
         switchScreen('screen-report');
     }
 
     function muatTurunPDF() {
-        const elemenLaporan = document.getElementById('bahagian-pdf');
-        html2pdf().set({
-            margin: 0.5, filename: `Laporan_Maths_Genius.pdf`,
-            image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        }).from(elemenLaporan).save();
+        html2pdf().set({ margin: 0.5, filename: `Laporan_Prestasi.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }).from(document.getElementById('bahagian-pdf')).save();
     }
 </script>
 </body>
