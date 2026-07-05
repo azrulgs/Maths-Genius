@@ -37,7 +37,6 @@
             min-height: 100vh;
         }
 
-        /* App Container (Mobile Feel) */
         #app-container {
             width: 100%;
             max-width: 600px;
@@ -50,14 +49,12 @@
             overflow-x: hidden;
         }
 
-        /* Typography */
         h1, h2, h3 { font-family: 'Fredoka', sans-serif; }
         .text-center { text-align: center; }
         .mb-1 { margin-bottom: 0.5rem; }
         .mb-2 { margin-bottom: 1rem; }
         .mt-2 { margin-top: 1rem; }
 
-        /* Header */
         header {
             background-color: var(--primary-blue);
             color: var(--bg-white);
@@ -80,11 +77,9 @@
         .stats { display: flex; gap: 15px; font-weight: bold; }
         .stat-item { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; }
 
-        /* Screens */
         .screen { display: none; padding: 20px; flex-grow: 1; padding-bottom: 80px; animation: fadeIn 0.3s ease-in-out; }
         .screen.active { display: block; }
 
-        /* Cards & Buttons */
         .card {
             background: var(--bg-white);
             border-radius: 20px;
@@ -124,19 +119,17 @@
         .btn-green { background-color: var(--success-green); color: white; box-shadow: 0 4px 0 #27AE60; }
         .btn-outline { background-color: transparent; border: 2px solid var(--primary-blue); color: var(--primary-blue); box-shadow: none; }
 
-        /* Level Selector */
         .level-group { margin-bottom: 25px; }
         .level-title { font-family: 'Fredoka'; color: var(--primary-blue); margin-bottom: 10px; font-size: 1.4rem;}
 
-        /* Quiz UI */
         .question-box {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             text-align: center;
             font-family: 'Nunito';
             font-weight: 700;
-            margin: 30px 0;
+            margin: 25px 0;
             color: var(--primary-blue);
-            line-height: 1.4;
+            line-height: 1.5;
         }
         .options-grid {
             display: grid;
@@ -145,7 +138,7 @@
         }
         .option-btn {
             font-size: 1.3rem;
-            padding: 20px;
+            padding: 18px;
             border-radius: 20px;
             background: white;
             border: 3px solid var(--primary-blue);
@@ -156,7 +149,6 @@
         }
         .option-btn:hover { background: var(--light-blue); }
 
-        /* Mascot & AI Tutor Modal */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.6);
@@ -181,7 +173,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
-        /* Bottom Navigation */
         .bottom-nav {
             position: absolute; bottom: 0; width: 100%;
             background: white; display: flex; justify-content: space-around;
@@ -196,13 +187,11 @@
         .nav-item.active { color: var(--primary-blue); font-weight: bold; }
         .nav-item i { font-size: 1.5rem; }
 
-        /* Animations */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes starPop { 0% { transform: scale(0); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
 
         .star-anim { color: var(--accent-yellow); font-size: 3rem; animation: starPop 0.5s ease; display: none; margin: 10px auto; }
-
     </style>
 </head>
 <body>
@@ -229,11 +218,11 @@
     <main id="screen-home" class="screen active">
         <div class="card" style="background: linear-gradient(135deg, var(--primary-blue), #8E44AD); color: white; border:none;">
             <h2>Misi Harian <i class="fas fa-rocket"></i></h2>
-            <p>Selesaikan soalan KBAT untuk lencana emas!</p>
+            <p>Selesaikan latihan mengikut silibus sekolah anda!</p>
             <div style="background: rgba(255,255,255,0.3); border-radius: 10px; height: 10px; margin-top: 10px;">
-                <div style="background: var(--accent-yellow); width: 60%; height: 100%; border-radius: 10px;"></div>
+                <div style="background: var(--accent-yellow); width: 40%; height: 100%; border-radius: 10px;"></div>
             </div>
-            <p style="text-align: right; font-size: 0.8rem; margin-top: 5px;">6/10 Siap</p>
+            <p style="text-align: right; font-size: 0.8rem; margin-top: 5px;">4/10 Siap</p>
         </div>
 
         <h3 class="level-title mb-1">Pilih Tahun Anda</h3>
@@ -248,7 +237,7 @@
         </div>
 
         <div class="level-group">
-            <h4 style="color: #7F8C8D; margin-bottom: 10px;">Tahap 2 (Mencabar)</h4>
+            <h4 style="color: #7F8C8D; margin-bottom: 10px;">Tahap 2</h4>
             <div class="grid-2">
                 <button class="btn btn-purple" onclick="goToTopicSelection('Tahun 4')">Tahun 4</button>
                 <button class="btn btn-purple" onclick="goToTopicSelection('Tahun 5')">Tahun 5</button>
@@ -262,7 +251,6 @@
         <button class="btn btn-outline mb-2" onclick="switchScreen('screen-home')" style="width: auto; padding: 5px 15px;"><i class="fas fa-arrow-left"></i> Kembali</button>
         <h2 id="topic-year-title" class="mb-2" style="color: var(--primary-blue);">Tahun 1</h2>
         
-        <!-- Dinamik Content Akan Disuntik Di Sini oleh JavaScript -->
         <div id="topic-list"></div>
     </main>
 
@@ -270,19 +258,17 @@
     <main id="screen-quiz" class="screen">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <button class="btn btn-outline" onclick="switchScreen('screen-topics')" style="width: auto; padding: 5px 15px;"><i class="fas fa-times"></i></button>
-            <div style="font-weight: bold; color: var(--primary-blue);">Soalan <span id="q-current">1</span>/3</div>
+            <div style="font-weight: bold; color: var(--primary-blue);">Soalan <span id="q-current">1</span>/10</div>
             <div style="font-weight: bold; color: var(--accent-yellow);"><i class="fas fa-star"></i> <span id="q-score">0</span></div>
         </div>
 
-        <div class="card text-center" style="border: 4px dashed var(--soft-purple); padding: 30px 15px;">
-            <p id="q-instruction" style="color: #7F8C8D; font-size: 1.1rem; margin-bottom: 10px;">Selesaikan masalah di bawah:</p>
-            <div id="q-text" class="question-box">Soalan akan dipaparkan di sini.</div>
+        <div class="card text-center" style="border: 4px dashed var(--soft-purple); padding: 25px 15px;">
+            <p id="q-instruction" style="color: #7F8C8D; font-size: 1.1rem; margin-bottom: 10px;">Selesaikan:</p>
+            <div id="q-text" class="question-box">Soalan dipaparkan di sini.</div>
             <div class="star-anim" id="correct-star"><i class="fas fa-star"></i></div>
         </div>
 
-        <div class="options-grid" id="q-options">
-            <!-- Options dynamically loaded -->
-        </div>
+        <div class="options-grid" id="q-options"></div>
     </main>
 
     <!-- SCREEN: PARENT DASHBOARD -->
@@ -290,17 +276,17 @@
         <h2 class="mb-2 text-center" style="color: var(--primary-blue);">Laporan Ibu Bapa</h2>
         <div class="card">
             <h3>Prestasi Ammar</h3>
-            <p>Tahap: Terkini</p>
+            <p>Mengikuti Silibus KSSR Semakan</p>
             <hr style="margin: 10px 0; border: 0; border-top: 1px solid #eee;">
-            <p><strong>Topik Kuat:</strong> Tambah & Tolak (85%)</p>
-            <p><strong>Topik Lemah:</strong> Penyelesaian Masalah KBAT (50%)</p>
+            <p><strong>Topik Kuat:</strong> Pengiraan Asas (80% dikuasai)</p>
+            <p><strong>Topik Lemah:</strong> Penyelesaian Masalah Bertulis (55% dikuasai)</p>
             <button class="btn btn-purple mt-2"><i class="fas fa-download"></i> Muat Turun Laporan (PDF)</button>
         </div>
         
         <div class="card">
             <h3>Cadangan Cikgu Geni 🤖</h3>
             <p style="font-size: 0.95rem; line-height: 1.5; color: #555;">
-                "Ammar sangat cemerlang dalam operasi asas! Untuk meningkatkan kemahiran berfikir (KBAT), galakkan Ammar membaca soalan penyelesaian masalah dengan perlahan dan mengeluarkan maklumat penting terlebih dahulu sebelum mengira."
+                "Latihan disusun mengikut had nilai tempat kementerian (Tahun 1 bawah 100, Tahun 2 bawah 1000). Untuk anak Tahap 1, bantu mereka visualisasikan objek konkrit semasa mengira."
             </p>
         </div>
     </main>
@@ -321,14 +307,12 @@
         </div>
     </nav>
 
-    <!-- AI TUTOR MODAL (CIKGU GENI) -->
+    <!-- AI TUTOR MODAL -->
     <div class="modal-overlay" id="ai-modal">
         <div class="modal-content">
             <div class="mascot-img">🦉</div>
             <h2 style="color: var(--primary-blue); margin-bottom: 10px;">Cikgu Geni</h2>
-            <p id="ai-message" style="font-size: 1.1rem; color: #555; margin-bottom: 20px;">
-                Teguran AI akan berada di sini.
-            </p>
+            <p id="ai-message" style="font-size: 1.1rem; color: #555; margin-bottom: 20px;"></p>
             <button class="btn btn-yellow" onclick="closeModal()">Cuba Lagi</button>
         </div>
     </div>
@@ -339,7 +323,7 @@
             <div class="mascot-img" style="background: var(--success-green);">🌟</div>
             <h2 style="color: var(--success-green); margin-bottom: 10px;">Tahniah!</h2>
             <p style="font-size: 1.1rem; color: #555; margin-bottom: 20px;">
-                Hebat! Anda berjaya habiskan latihan penyelesaian masalah yang susah ini. Anda sememangnya Genius!
+                Hebat! Anda berjaya menyelesaikan kesemua 10 soalan silibus tahun ini dengan cemerlang!
             </p>
             <button class="btn btn-green" onclick="finishQuiz()">Kembali ke Menu</button>
         </div>
@@ -347,12 +331,11 @@
 
 </div>
 
-<!-- Firebase SDK Module -->
+<!-- Firebase Config Placeholder -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBnzVeU918yE1N86CfSOVEH_7za_Ubvjc0",
         authDomain: "maths-genius-1b171.firebaseapp.com",
@@ -365,52 +348,87 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-
     window.firebaseDb = db;
     window.firebaseSet = set;
     window.firebaseRef = ref;
 </script>
 
-<!-- Application Logic -->
 <script>
-    // --- STATE MANAGEMENT ---
-    let currentUserData = {
-        name: "Ammar",
-        stars: 120,
-        currentYear: "Tahun 1"
-    };
+    let currentUserData = { name: "Ammar", stars: 120, currentYear: "Tahun 1" };
 
-    // Pangkalan Data Soalan (Aras Susah / KBAT) Mengikut Tahun
+    // 10 SOALAN SETIAP TAHUN (TOTAL 60) MENGIKUT SILIBUS KSSR SEBENAR MALAYSIA
     const questionBank = {
-        "tambah_tahun1": [
-            { q: "Ali ada 25 biji gula-gula. Dia beli lagi 13 biji. Kemudian dia makan 5 biji. Berapa baki?", options: [33, 35, 30, 28], answer: 33, aiDesc: "Mula-mula tambah: 25 + 13 = 38. Kemudian tolak yang dimakan: 38 - 5 = 33." },
-            { q: "Ibu ada 40 biji kek kecil. Ibu beri 10 kepada jiran dan 5 kepada adik. Berapa baki kek?", options: [20, 25, 30, 15], answer: 25, aiDesc: "Tolak satu per satu: 40 - 10 = 30. Kemudian, 30 - 5 = 25." },
-            { q: "Sara ada RM5. Dia beli pensel berharga RM2. Berapa baki duit Sara?", options: ["RM2", "RM3", "RM4", "RM1"], answer: "RM3", aiDesc: "Kira baki duit: RM5 tolak RM2 bersamaan RM3." }
+        "tahun1": [
+            { q: "2 + 3 = ?", options: [4, 5, 6, 7], answer: 5, aiDesc: "Buka 2 jari, tambah lagi 3 jari. Jumlahnya ialah 5." },
+            { q: "8 - 3 = ?", options: [4, 5, 6, 7], answer: 5, aiDesc: "Buka 8 jari, tutup 3 jari. Baki yang tinggal ialah 5." },
+            { q: "Ada 4 biji epal 🍎. Tambah 2 biji epal 🍎 lagi. Berapa jumlah epal?", options: [5, 6, 7, 8], answer: 6, aiDesc: "4 epal + 2 epal = 6 epal kesemuanya." },
+            { q: "Kira nombor selepas 17.", options: [16, 18, 19, 20], answer: 18, aiDesc: "Selepas nombor 17, kita sebut nombor 18." },
+            { q: "Kira nombor sebelum 30.", options: [28, 29, 31, 32], answer: 29, aiDesc: "Sebelum nombor 30 ialah nombor 29." },
+            { q: "Pilih nombor paling BESAR: 12, 18, 9.", options: [12, 18, 9, 21], answer: 18, aiDesc: "Antara 12, 18 dan 9, nilai 18 adalah yang paling banyak." },
+            { q: "1 kumpulan ada 2 gula-gula 🍬. Ada 3 kumpulan. Berapa semua gula-gula?", options: [4, 5, 6, 8], answer: 6, aiDesc: "Kira lompat dua-dua sebanyak 3 kali: 2, 4, 6!" },
+            { q: "6 batang pensel ✏️ dikongsi sama rata kepada 2 orang murid. Seorang dapat berapa?", options: [2, 3, 4, 5], answer: 3, aiDesc: "6 bahagi kepada 2 bahagian sama banyak. Seterusnya, setiap orang dapat 3." },
+            { q: "12 + 15 = ?", options: [25, 27, 29, 37], options: [25, 27, 28, 30], answer: 27, aiDesc: "Gunakan bentuk lazim. Sa: 2 + 5 = 7. Puluh: 1 + 1 = 2. Jadi, 27." },
+            { q: "Siti ada 20 keping pelekat. Dia beri 8 kepada kawan. Berapa baki pelekat Siti?", options: [10, 11, 12, 14], answer: 12, aiDesc: "Kira tolak: 20 - 8 = 12 pelekat yang tinggal." }
         ],
-        "campuran_tahun2": [
-            { q: "Sebuah kedai ada 500 biji roti. 175 biji roti telah dijual. Berapa baki roti?", options: [325, 315, 225, 425], answer: 325, aiDesc: "Gunakan bentuk lazim untuk tolak: 500 - 175 = 325. Hati-hati bila pinjam dari sifar ya!" },
-            { q: "Dalam kelas ada 28 murid lelaki dan 24 murid perempuan. Berapa jumlah murid?", options: [52, 42, 62, 50], answer: 52, aiDesc: "Tambahkan: 28 + 24. Lapan tambah empat ialah 12, kumpul semula 1 di atas puluh. Jawapannya 52." },
-            { q: "Ada 7 beg. Setiap beg ada 5 buku. Berapa jumlah buku?", options: [30, 35, 40, 45], answer: 35, aiDesc: "Ini soalan darab berulang: 7 kumpulan darab 5 objek (7 x 5 = 35)." }
+        "tahun2": [
+            { q: "Nilai digit bagi angka 5 dalam nombor 356 ialah...", options: ["5", "50", "500", "Sa"], answer: "50", aiDesc: "Angka 5 berada di rumah Puluh, jadi nilainya ialah 50." },
+            { q: "20 + 30 = ?", options: [40, 50, 60, 70], answer: 50, aiDesc: "2 puluh tambah 3 puluh menjadi 5 puluh atau 50." },
+            { q: "2 × 3 = ?", options: [5, 6, 8, 9], answer: 6, aiDesc: "Sifir 2: Dua kali tiga bersamaan dengan 6." },
+            { q: "10 ÷ 2 = ?", options: [3, 4, 5, 6], answer: 5, aiDesc: "Sifir 2: Cari apa darab 2 dapat 10. Jawapannya ialah 5 (5 x 2 = 10)." },
+            { q: "RM2 + RM3 = ?", options: ["RM4", "RM5", "RM6", "RM10"], answer: "RM5", aiDesc: "Tambahkan nilai wang ringgit: 2 + 3 = RM5." },
+            { q: "125 + 234 = ?", options: [359, 369, 349, 459], answer: 359, aiDesc: "Tambah ikut nilai tempat. 5+4=9, 2+3=5, 1+2=3. Hasilnya 359." },
+            { q: "450 - 125 = ?", options: [325, 335, 315, 225], answer: 325, aiDesc: "Lakukan pinjaman bentuk lazim di rumah sa. 10 - 5 = 5, 4 - 2 = 2, 4 - 1 = 3. Jawapannya 325." },
+            { q: "4 × 6 = ?", options: [20, 22, 24, 26], answer: 24, aiDesc: "Gunakan Sifir 4 atau Sifir 6. Empat kali enam ialah 24." },
+            { q: "Ali ada RM10. Dia beli buku berharga RM4. Berapa baki duit Ali?", options: ["RM5", "RM6", "RM7", "RM4"], answer: "RM6", aiDesc: "Kira baki menggunakan operasi tolak wang: RM10 - RM4 = RM6." },
+            { q: "Satu kotak ada 6 pensel. Ada 5 kotak. Berapa jumlah semua pensel?", options: [25, 30, 35, 40], answer: 30, aiDesc: "Gunakan operasi darab: 5 kotak × 6 pensel = 30 pensel semuanya." }
         ],
-        "campuran_tahun3": [
-            { q: "Perpustakaan ada 2,450 buku. Sebanyak 1,275 buku ditambah. Berapa jumlah buku?", options: [3725, 3625, 3825, 3525], answer: 3725, aiDesc: "Tambahkan dalam bentuk lazim: 2450 + 1275. Pastikan anda susun nilai tempat dengan betul." },
-            { q: "144 buah buku dibahagi sama rata kepada 12 murid. Setiap murid dapat berapa?", options: [10, 11, 12, 13], answer: 12, aiDesc: "Gunakan sifir 12. 144 bahagi 12 jawapannya ialah 12 (12 x 12 = 144)." },
-            { q: "Ali ada RM50. Dia beli beg RM28.50 dan pensel RM3.20. Berapa baki wang Ali?", options: ["RM18.30", "RM19.30", "RM17.30", "RM20.30"], answer: "RM18.30", aiDesc: "Tambahkan perbelanjaan dahulu: RM28.50 + RM3.20 = RM31.70. Kemudian, RM50.00 - RM31.70 = RM18.30." }
+        "tahun3": [
+            { q: "1 meter (m) bersamaan dengan berapa sentimeter (cm)?", options: ["10 cm", "100 cm", "1000 cm", "50 cm"], answer: "100 cm", aiDesc: "Ingat formula ukuran asas panjang: 1 meter bersamaan tepat dengan 100 sentimeter." },
+            { q: "Apakah maksud pecahan separuh (setengah)?", options: ["1/2", "1/4", "3/4", "1/3"], answer: "1/2", aiDesc: "Separuh bermaksud satu bahagian daripada dua bahagian yang dipotong sama rata." },
+            { q: "300 + 200 = ?", options: [400, 500, 600, 700], answer: 500, aiDesc: "Tiga ratus tambah dua ratus menjadi lima ratus (500)." },
+            { q: "72 ÷ 8 = ?", options: [7, 8, 9, 10], answer: 9, aiDesc: "Semak semula sifir 8. Lapan kali sembilan ialah 72. Maka, 72 bahagi 8 ialah 9." },
+            { q: "1,245 + 2,310 = ?", options: [3555, 3455, 3545, 4555], answer: 3555, aiDesc: "Bentuk lazim ribu: 5+0=5, 4+1=5, 2+3=5, 1+2=3. Jumlahnya ialah 3,555." },
+            { q: "4,800 - 1,250 = ?", options: [3550, 3650, 3450, 3500], answer: 3550, aiDesc: "Bentuk lazim tolak: Puluh meminjam dari Ratus. Hasil akhirnya ialah 3,550." },
+            { q: "12 × 4 = ?", options: [44, 46, 48, 50], answer: 48, aiDesc: "Kira bentuk lazim darab: 2 × 4 = 8, dan 1 × 4 = 4. Jawapannya 48." },
+            { q: "RM15.50 + RM4.20 = ?", options: ["RM19.50", "RM19.70", "RM20.70", "RM19.20"], answer: "RM19.70", aiDesc: "Tambah ringgit dan sen berasingan. RM15 + RM4 = RM19. 50 sen + 20 sen = 70 sen. Hasilnya RM19.70." },
+            { q: "2 jam bersamaan dengan berapa minit?", options: ["60 minit", "100 minit", "120 minit", "150 minit"], answer: "120 minit", aiDesc: "1 jam = 60 minit. Jika 2 jam, 60 + 60 = 120 minit." },
+            { q: "Sebuah kedai ada 5,000 botol air. Sebanyak 2,350 botol telah dijual. Berapa baki botol air?", options: [2650, 2750, 3650, 2550], answer: 2650, aiDesc: "Lakukan pengiraan tolak: 5,000 - 2,350 = 2,650 botol yang tinggal." }
         ],
-        "campuran_tahun4": [
-            { q: "Kilang menghasilkan 48,000 botol air. 15,750 botol dihantar ke kedai. Berapa baki botol?", options: [32250, 33250, 31250, 30250], answer: 32250, aiDesc: "Tolak 48,000 dengan 15,750. Jangan lupa kumpul semula pada bahagian ribu dan ratus." },
-            { q: "Satu kotak ada 125 buku. Ada 24 kotak semuanya. Berapa jumlah buku?", options: [3000, 2500, 2800, 3200], answer: 3000, aiDesc: "Darabkan 125 dengan 24. Kira bahagian sa dan puluh secara berasingan sebelum menambahkannya." },
-            { q: "Harga sebuah beg ialah RM85.50. Ali membeli 3 beg. Berapakah jumlah bayaran?", options: ["RM256.50", "RM246.50", "RM265.50", "RM255.50"], answer: "RM256.50", aiDesc: "Darab wang: RM85.50 x 3. Pastikan titik perpuluhan diletakkan pada tempat yang betul." }
+        "tahun4": [
+            { q: "0.5 + 0.3 = ?", options: [0.2, 0.8, 1.0, 0.08], answer: 0.8, aiDesc: "Tambah nombor perpuluhan selajur: 5 + 3 = 8, jadi jawapannya 0.8." },
+            { q: "1/2 + 1/2 = ?", options: ["2/4", "1/4", "1", "2"], answer: "1", aiDesc: "Dua bahagian daripada dua (2/2) adalah bersamaan dengan satu objek penuh (1)." },
+            { q: "1 kilogram (kg) bersamaan dengan berapa gram (g)?", options: ["10 g", "100 g", "1000 g", "500 g"], answer: "1000 g", aiDesc: "Penukaran unit jisim standard: 1 kilogram ialah bersamaan dengan 1000 gram." },
+            { q: "12,450 + 23,780 = ?", options: [35230, 36230, 36130, 36200], answer: 36230, aiDesc: "Gunakan bentuk lazim dengan teliti termasuk kumpul semula. Hasilnya ialah 36,230." },
+            { q: "2,400 ÷ 8 = ?", options: [30, 300, 3000, 400], answer: 300, aiDesc: "Bahagikan nombor asas dahulu: 24 ÷ 8 = 3. Kemudian bawa turun dua angka sifar menjadi 300." },
+            { q: "3 km bersamaan dengan berapa meter?", options: ["30 m", "300 m", "3000 m", "30000 m"], answer: "3000 m", aiDesc: "1 km = 1000 m. Seterusnya jika 3 km, ia darab 1000 menjadikannya 3000 meter." },
+            { q: "Sebuah segi empat tepat mempunyai panjang 8 cm dan lebar 5 cm. Cari luasnya.", options: ["13 cm²", "26 cm²", "40 cm²", "35 cm²"], answer: "40 cm²", aiDesc: "Formula Luas = Panjang × Lebar. Maka jalan kiranya ialah 8 cm × 5 cm = 40 cm²." },
+            { q: "25% daripada 200 ialah berapa?", options: [25, 50, 75, 100], answer: 50, aiDesc: "25% bermaksud suku (1/4). Suku daripada 200 ialah bersamaan dengan 50." },
+            { q: "RM125.50 - RM48.75 = ?", options: ["RM76.75", "RM77.75", "RM76.25", "RM86.75"], answer: "RM76.75", aiDesc: "Tolak nilai wang dengan menyusun titik perpuluhan sen secara lurus. Jawapannya RM76.75." },
+            { q: "Satu kotak ada 125 buah buku. Ada 24 kotak semuanya. Berapa jumlah buku?", options: [2500, 2800, 3000, 3200], answer: 3000, aiDesc: "Gunakan operasi darab besar: 125 × 24 = 3,000 buah buku keseluruhannya." }
         ],
-        "campuran_tahun5": [
-            { q: "Ali ada RM500. Dia menggunakan 35% daripada wang itu. Berapa wang yang telah digunakan?", options: ["RM175", "RM150", "RM200", "RM165"], answer: "RM175", aiDesc: "Kira peratus: 35/100 x RM500 = RM175." },
-            { q: "Perjalanan bermula jam 8:30 pagi dan tamat 11:15 pagi. Berapa lama perjalanan itu?", options: ["2 jam 45 minit", "3 jam 15 minit", "2 jam 30 minit", "3 jam"], answer: "2 jam 45 minit", aiDesc: "Dari 8:30 ke 11:00 ialah 2 jam 30 minit. Tambah lagi 15 minit, jadi 2 jam 45 minit." },
-            { q: "Kilang membungkus 18,000 biskut ke dalam 24 kotak sama banyak. Berapa biskut dalam setiap kotak?", options: [750, 800, 720, 650], answer: 750, aiDesc: "Bahagikan 18,000 dengan 24. Jawapannya ialah 750." }
+        "tahun5": [
+            { q: "50% daripada 80 ialah...", options: [20, 40, 50, 60], answer: 40, aiDesc: "50% bermaksud separuh daripada nilai asal. Separuh daripada 80 ialah 40." },
+            { q: "0.75 + 0.25 = ?", options: [0.10, 1.0, 1.05, 10.0], answer: 1.0, aiDesc: "Kira selajur: 75 sen tambah 25 sen genap menjadi satu ringgit penuh atau 1.0." },
+            { q: "2 jam 45 minit = berapa minit?", options: [145, 165, 125, 105], answer: 165, aiDesc: "Tukarkan jam: 2 jam × 60 = 120 minit. Tambah baki: 120 + 45 = 165 minit." },
+            { q: "800,000 - 345,750 = ?", options: [454250, 454150, 455250, 554250], answer: 454250, aiDesc: "Lakukan operasi tolak ratus ribu bentuk lazim secara berhati-hati dengan teknik pinjaman sifar." },
+            { q: "3/5 + 1/5 = ?", options: ["4/10", "4/5", "2/5", "1"], answer: "4/5", aiDesc: "Kerana penyebutnya sudah sama (5), anda hanya perlu tambah pengangka atas sahaja: 3 + 1 = 4/5." },
+            { q: "Harga 1 buku ialah RM12.50. Berapakah harga bagi 8 buah buku yang sama?", options: ["RM90", "RM96", "RM100", "RM110"], answer: "RM100", aiDesc: "Gunakan pengiraan darab wang wang perpuluhan: RM12.50 × 8 = RM100.00." },
+            { q: "Satu perjalanan mula jam 8:30 pagi dan tamat jam 11:15 pagi. Berapa lama tempoh itu?", options: ["2 jam 45 minit", "3 jam 15 minit", "2 jam 30 minit", "3 jam"], answer: "2 jam 45 minit", aiDesc: "Dari 8:30 pagi hingga 10:30 pagi ialah 2 jam. Tambah ke 11:15 pagi memerlukan lagi 45 minit." },
+            { q: "Sebuah stadium mempunyai 500,000 tempat duduk. Jika 278,450 telah ditempah, berapa baki kosong?", options: [221550, 221650, 222550, 321550], answer: 221550, aiDesc: "Kira baki tempat duduk kosong: 500,000 - 278,450 = 221,550." },
+            { q: "Ali ada RM500. Dia menggunakan 35% daripada wang itu. Berapakah nilai wang yang digunakan?", options: ["RM150", "RM165", "RM175", "RM185"], answer: "RM175", aiDesc: "Cara kira: 35/100 × RM500. Sifir potong sifar bawah dan atas, 35 × 5 = RM175." },
+            { q: "Kilang membungkus 18,000 biskut ke dalam 24 kotak sama banyak. Berapa biskut dalam setiap kotak?", options: [700, 750, 800, 850], answer: 750, aiDesc: "Gunakan operasi bahagi: 18,000 ÷ 24 = 750 biskut sesebuah kotak." }
         ],
-        "campuran_tahun6": [
-            { q: "Harga asal sebuah basikal ialah RM850. Diskaun 20% diberi. Berapakah harga baru?", options: ["RM680", "RM700", "RM750", "RM650"], answer: "RM680", aiDesc: "Kira nilai diskaun: 20/100 x 850 = RM170. Harga selepas diskaun: RM850 - RM170 = RM680." },
-            { q: "85,000 risalah dibahagi sama rata kepada 25 cawangan. Berapa risalah diterima setiap cawangan?", options: [3400, 3500, 3200, 3600], answer: 3400, aiDesc: "Bahagikan 85,000 dengan 25. 85 ÷ 25 = 3 (baki 10), bawa turun 0 jadi 100 ÷ 25 = 4. Tambah baki sifar." },
-            { q: "Padang segi empat tepat ada panjang 45m dan lebar 30m. Cari luas padang tersebut.", options: ["1350m²", "1450m²", "150m²", "1250m²"], answer: "1350m²", aiDesc: "Formula luas segi empat = Panjang x Lebar. 45m x 30m = 1350 meter persegi." }
+        "tahun6": [
+            { q: "Luas segi empat tepat yang mempunyai panjang 10 cm dan lebar 6 cm ialah...", options: ["16 cm²", "32 cm²", "60 cm²", "26 cm²"], answer: "60 cm²", aiDesc: "Luas formula diguna: Panjang × Lebar. Jadi 10 cm × 6 cm = 60 cm²." },
+            { q: "Harga asal beg ialah RM120. Kedai beri diskaun sebanyak 25%. Berapakah harga selepas diskaun?", options: ["RM80", "RM90", "RM95", "RM100"], answer: "RM90", aiDesc: "Diskaun 25% bermaksud potongan 1/4 daripada RM120 iaitu RM30. Harga baru: RM120 - RM30 = RM90." },
+            { q: "Sebuah segi empat tepat mempunyai panjang 15 cm dan lebar 8 cm. Cari perimeter bentuk ini.", options: ["23 cm", "46 cm", "120 cm", "38 cm"], answer: "46 cm", aiDesc: "Perimeter ialah hasil tambah sekeliling luaran: 15 + 8 + 15 + 8 = 46 cm." },
+            { q: "Sebuah kedai menjual 1,245 buah kotak pensel. Setiap kotak mengandungi 36 batang pensel. Berapa jumlah semua?", options: [44820, 44720, 45820, 43820], answer: 44820, aiDesc: "Gunakan kaedah darab nilai besar: 1,245 × 36 = 44,820 pensel kesemuanya." },
+            { q: "85,000 risalah dibahagi sama rata kepada 25 cawangan. Berapa risalah diterima setiap cawangan?", options: [3200, 3400, 3500, 3600], answer: 3400, aiDesc: "Lakukan operasi pembahagian standard: 85,000 ÷ 25 = 3,400 helai risalah." },
+            { q: "Ali membeli 3 barang: beg RM89.90, buku RM25.50 dan pensel warna RM18.75. Dia membayar RM150. Berapa bakinya?", options: ["RM15.85", "RM16.25", "RM14.15", "RM15.15"], answer: "RM15.85", aiDesc: "Jumlah beli: 89.90 + 25.50 + 18.75 = RM134.15. Hitung baki: RM150 - RM134.15 = RM15.85." },
+            { q: "Padang berbentuk segi empat tepat mempunyai panjang 45 m dan lebar 30 m. Cari luas padang tersebut.", options: ["150 m²", "1350 m²", "1450 m²", "1250 m²"], answer: "1350 m²", aiDesc: "Kira Luas kawasan: 45 m × 30 m = 1350 meter persegi (m²)." },
+            { q: "Sebuah kotak besar mengandungi 3.5 kg tepung. Ibu mengeluarkan 1,250 g tepung untuk kek. Berapa baki tepung (g)?", options: ["2250 g", "2200 g", "2350 g", "2150 g"], answer: "2250 g", aiDesc: "Tukarkan kg ke g dahulu: 3.5 kg = 3500 g. Seterusnya baki tolak: 3500 g - 1250 g = 2250 g." },
+            { q: "Nisbah bilangan buku cerita kepada buku rujukan ialah 2:5. Jika buku cerita ada 10 buah, berapa buah buku rujukan?", options: [15, 20, 25, 30], answer: 25, aiDesc: "Bahagian nisbah: 2 bahagian = 10, maka 1 bahagian = 5. Buku rujukan ada 5 bahagian × 5 = 25 buah." },
+            { q: "Sebuah tangki mengandungi 4.5 liter air. 1.25 liter telah digunakan. Berapakah baki air yang tinggal dalam ml?", options: ["3250 ml", "3200 ml", "3150 ml", "3300 ml"], answer: "3250 ml", aiDesc: "Kira baki dalam liter: 4.5 - 1.25 = 3.25 liter. Tukar kepada ml (darab 1000) menjadi 3250 ml." }
         ]
     };
 
@@ -419,11 +437,9 @@
     let tempScore = 0;
     let selectedTopic = "";
 
-    // --- NAVIGATION LOGIC ---
     function switchScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
-        
         if(screenId === 'screen-quiz') {
             document.getElementById('main-header').style.display = 'none';
         } else {
@@ -437,49 +453,30 @@
         if(element) element.classList.add('active');
     }
 
-    // Dynamic Topic Generator Based on Selected Year
     function goToTopicSelection(year) {
         currentUserData.currentYear = year;
         document.getElementById('topic-year-title').innerText = year;
         
         const topicList = document.getElementById('topic-list');
-        topicList.innerHTML = ''; // Kosongkan senarai sebelumnya
+        topicList.innerHTML = ''; 
 
-        let topics = [];
+        let key = year.replace(" ", "").toLowerCase();
         
-        if(year === 'Tahun 1') {
-            topics.push({ id: 'tambah_tahun1', title: 'Cabaran Tahun 1', desc: 'Selesaikan masalah asas yang susah!', icon: 'fa-plus-circle', color: 'var(--success-green)' });
-        } else if (year === 'Tahun 2') {
-            topics.push({ id: 'campuran_tahun2', title: 'Cabaran Tahun 2', desc: 'Soalan campuran dan asas pendaraban.', icon: 'fa-minus-circle', color: 'var(--danger-red)' });
-        } else if (year === 'Tahun 3') {
-            topics.push({ id: 'campuran_tahun3', title: 'Cabaran Tahun 3', desc: 'Uji kemahiran operasi nombor lebih besar.', icon: 'fa-times-circle', color: 'var(--accent-yellow)' });
-        } else if (year === 'Tahun 4') {
-            topics.push({ id: 'campuran_tahun4', title: 'Cabaran Tahun 4', desc: 'Masalah ribuan, wang dan ukuran.', icon: 'fa-divide', color: 'var(--primary-blue)' });
-        } else if (year === 'Tahun 5') {
-            topics.push({ id: 'campuran_tahun5', title: 'Cabaran Tahun 5', desc: 'Peratus, masa & operasi bergabung.', icon: 'fa-percentage', color: 'var(--soft-purple)' });
-        } else if (year === 'Tahun 6') {
-            topics.push({ id: 'campuran_tahun6', title: 'Cabaran Tahun 6 (KBAT)', desc: 'Soalan paling susah dan mencabar minda!', icon: 'fa-brain', color: 'var(--danger-red)' });
-        }
-
-        topics.forEach(t => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.style.cursor = 'pointer';
-            card.style.textAlign = 'center';
-            card.onclick = () => startQuiz(t.id);
-            
-            card.innerHTML = `
-                <i class="fas ${t.icon}" style="font-size: 3rem; color: ${t.color}; margin-bottom: 10px;"></i>
-                <h3>${t.title}</h3>
-                <p style="color: #7F8C8D; font-size: 0.9rem;">${t.desc}</p>
-            `;
-            topicList.appendChild(card);
-        });
-
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.cursor = 'pointer';
+        card.style.textAlign = 'center';
+        card.onclick = () => startQuiz(key);
+        
+        card.innerHTML = `
+            <i class="fas fa-graduation-cap" style="font-size: 3rem; color: var(--primary-blue); margin-bottom: 10px;"></i>
+            <h3>Set Soalan Silibus ${year}</h3>
+            <p style="color: #7F8C8D; font-size: 0.9rem;">Mengandungi 10 buah soalan berperingkat mengikut KSSR KPM.</p>
+        `;
+        topicList.appendChild(card);
         switchScreen('screen-topics');
     }
 
-    // --- QUIZ LOGIC ---
     function startQuiz(topic) {
         selectedTopic = topic;
         currentQuiz = questionBank[topic];
@@ -497,10 +494,7 @@
         }
 
         const q = currentQuiz[currentQuestionIndex];
-        // Kemaskini progress indicator
         document.getElementById('q-current').innerText = currentQuestionIndex + 1;
-        document.getElementById('q-current').nextSibling.nodeValue = "/" + currentQuiz.length; 
-        
         document.getElementById('q-text').innerText = q.q;
         
         const optionsDiv = document.getElementById('q-options');
@@ -519,25 +513,20 @@
         const q = currentQuiz[currentQuestionIndex];
         
         if (selectedOption == q.answer) {
-            // Correct Answer
             tempScore += 10;
             document.getElementById('q-score').innerText = tempScore;
             
-            // Animation
             const star = document.getElementById('correct-star');
             star.style.display = 'block';
             setTimeout(() => { star.style.display = 'none'; }, 500);
 
-            // Next Question
             currentQuestionIndex++;
             setTimeout(loadQuestion, 600);
         } else {
-            // Wrong Answer - Trigger AI Tutor
-            showAiModal(`Tidak mengapa, mari kita cuba sama-sama.<br><br>Soalan ini ialah: <b>${q.q}</b><br><br>${q.aiDesc}`);
+            showAiModal(`Cuba lagi sayang! Ini bimbingan Cikgu Geni:<br><br><b>${q.q}</b><br><br>${q.aiDesc}`);
         }
     }
 
-    // --- MODALS (AI TUTOR & SUCCESS) ---
     function showAiModal(msg) {
         document.getElementById('ai-message').innerHTML = msg;
         document.getElementById('ai-modal').style.display = 'flex';
@@ -549,33 +538,23 @@
 
     function showSuccessModal() {
         document.getElementById('success-modal').style.display = 'flex';
-        updateUserStars(tempScore);
+        currentUserData.stars += tempScore;
+        document.getElementById('star-count').innerText = currentUserData.stars;
         
-        // Simpan Data Ke Firebase (Jika berhubung)
         try {
             if(window.firebaseDb && window.firebaseSet && window.firebaseRef) {
-                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'users/ammar/score'), {
-                    stars: currentUserData.stars,
-                    lastTopic: selectedTopic,
-                    lastScore: tempScore,
-                    timestamp: new Date().toISOString()
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'users/ammar/progress/' + selectedTopic), {
+                    score: tempScore,
+                    dateCompleted: new Date().toLocaleDateString()
                 });
             }
-        } catch (e) {
-            console.log("Firebase saving disabled or not configured fully:", e);
-        }
+        } catch (e) { console.log(e); }
     }
 
     function finishQuiz() {
         document.getElementById('success-modal').style.display = 'none';
-        switchScreen('screen-topics');
+        switchScreen('screen-home');
     }
-
-    function updateUserStars(addedScore) {
-        currentUserData.stars += addedScore;
-        document.getElementById('star-count').innerText = currentUserData.stars;
-    }
-
 </script>
 </body>
 </html>
