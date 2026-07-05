@@ -4,691 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maths Genius by Genius Solihin</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- HTML2PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* === TEMA BRANDING GENIUS SOLIHIN === */
-        :root {
-            --gs-purple: #6C3483;
-            --gs-purple-light: #9B59B6;
-            --gs-purple-soft: #EBDEF0;
-            --gs-yellow: #F1C40F;
-            --gs-yellow-dark: #F39C12;
-            --bg-white: #F8F9FA;
-            --card-white: #FFFFFF;
-            --text-dark: #2C3E50;
-            --text-gray: #7F8C8D;
-            --success: #2ECC71;
-            --danger: #E74C3C;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; -webkit-tap-highlight-color: transparent; }
-        
-        body { background-color: var(--gs-purple-soft); color: var(--text-dark); display: flex; justify-content: center; min-height: 100vh; }
-
-        /* Container Premium */
-        #app-container {
-            width: 100%; max-width: 480px; background-color: var(--bg-white);
-            min-height: 100vh; position: relative; box-shadow: 0 0 30px rgba(108, 52, 131, 0.2);
-            display: flex; flex-direction: column; overflow-x: hidden;
-        }
-
-        h1, h2, h3, h4 { font-family: 'Fredoka', sans-serif; }
-        .text-center { text-align: center; }
-        .text-purple { color: var(--gs-purple); }
-        .mb-1 { margin-bottom: 0.5rem; } .mb-2 { margin-bottom: 1rem; } .mb-3 { margin-bottom: 1.5rem; }
-        .mt-1 { margin-top: 0.5rem; } .mt-2 { margin-top: 1rem; }
-
-        /* Header / Navbar */
-        header {
-            background: linear-gradient(135deg, var(--gs-purple), var(--gs-purple-light));
-            color: white; padding: 25px 20px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
-            box-shadow: 0 8px 20px rgba(108, 52, 131, 0.2); position: relative; z-index: 10;
-        }
-        .header-top { display: flex; justify-content: space-between; align-items: center; }
-        
-        /* Screens */
-        .screen { display: none; padding: 20px; flex-grow: 1; padding-bottom: 100px; animation: fadeIn 0.3s ease-in-out; }
-        .screen.active { display: block; }
-
-        /* Cards */
-        .card { background: var(--card-white); border-radius: 20px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid rgba(108, 52, 131, 0.1); }
-        .card-premium { background: linear-gradient(135deg, var(--gs-yellow), var(--gs-yellow-dark)); color: white; border: none; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-
-        /* Buttons */
-        .btn {
-            background-color: var(--gs-purple); color: white; border: none; padding: 15px;
-            border-radius: 15px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.1s; box-shadow: 0 4px 0 #512E5F;
-            display: inline-flex; justify-content: center; align-items: center; gap: 10px; width: 100%;
-        }
-        .btn:active { transform: translateY(4px); box-shadow: 0 0 0 #512E5F; }
-        .btn-yellow { background-color: var(--gs-yellow); color: #7A6608; box-shadow: 0 4px 0 #D4AC0D; }
-        .btn-yellow:active { box-shadow: 0 0 0 #D4AC0D; }
-        .btn-outline { background-color: transparent; border: 2px solid var(--gs-purple); color: var(--gs-purple); box-shadow: none; }
-        .btn-red { background-color: var(--danger); color: white; box-shadow: 0 4px 0 #C0392B; }
-        .btn-small { padding: 8px 12px; font-size: 0.9rem; border-radius: 10px; box-shadow: 0 2px 0 #512E5F; }
-
-        /* Inputs */
-        .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group label { display: block; font-weight: bold; color: var(--text-dark); margin-bottom: 5px; font-size: 0.9rem; }
-        .input-field { width: 100%; padding: 15px; border-radius: 15px; border: 2px solid var(--gs-purple-soft); font-size: 1rem; background: var(--bg-white); }
-        .input-field:focus { outline: none; border-color: var(--gs-purple); background: white; }
-
-        /* Quiz UI */
-        .question-box { font-size: 1.8rem; text-align: center; font-family: 'Fredoka'; margin: 20px 0; color: var(--gs-purple); line-height: 1.4; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .option-btn { font-size: 1.3rem; padding: 20px; border-radius: 20px; background: var(--card-white); border: 3px solid var(--gs-purple-soft); color: var(--text-dark); font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .option-btn:hover { border-color: var(--gs-purple); background: var(--gs-purple-soft); color: var(--gs-purple); }
-
-        /* Modals */
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(44, 62, 80, 0.8); display: none; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(3px); }
-        .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 25px; padding: 30px; text-align: center; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 4px solid var(--gs-purple); }
-        .mascot-img { width: 100px; height: 100px; background: var(--gs-yellow); border-radius: 50%; margin: -80px auto 20px auto; border: 5px solid white; display: flex; justify-content: center; align-items: center; font-size: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-
-        /* Bottom Nav */
-        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-top-left-radius: 25px; border-top-right-radius: 25px; z-index: 50; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-gray); font-size: 0.85rem; gap: 5px; cursor: pointer; width: 25%; }
-        .nav-item.active { color: var(--gs-purple); font-weight: bold; }
-        .nav-item i { font-size: 1.5rem; }
-
-        /* Profile Selection Cards */
-        .child-card { background: var(--gs-purple-soft); padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; margin-bottom: 10px; }
-        .child-card:hover { border-color: var(--gs-purple); background: white; }
-        .child-avatar { width: 50px; height: 50px; background: var(--gs-yellow); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 25px; border: 2px solid white; }
-
-        .badge { background: var(--gs-yellow); color: #7A6608; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        @keyframes starPop { 0% { transform: scale(0); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
-        .star-anim { color: var(--gs-yellow); font-size: 3rem; animation: starPop 0.5s ease; display: none; margin: 10px auto; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }
+        .gradient-card { background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); }
     </style>
 </head>
 <body>
 
-<div id="app-container">
-
-    <!-- HEADER DENGAN LOGO SEBENAR -->
-    <header id="main-header" style="display: none;">
-        <div class="header-top">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="/logo-gs.png" alt="Logo Genius Solihin" style="height: 40px; width: auto; object-fit: contain;">
-                <div style="line-height: 1.1;">
-                    <span style="font-family: 'Fredoka', sans-serif; font-weight: bold; font-size: 1.1rem; color: white;">Maths Genius</span><br>
-                    <span style="font-size: 0.75rem; color: var(--gs-yellow);">by Genius Solihin</span>
-                </div>
-            </div>
-            <div id="header-user-info" style="text-align: right;">
-                <p style="font-size: 0.8rem; opacity: 0.9;" id="header-role">Ibu Bapa</p>
-                <h3 id="header-name" style="font-size: 1.1rem;">Nama</h3>
-            </div>
-        </div>
-    </header>
-
-    <!-- LANDING PAGE -->
-    <main id="screen-landing" class="screen active">
-        <div class="text-center" style="margin-top: 20px;">
-            <img src="/logo-gs.png" alt="Logo Genius Solihin" style="height: 60px; width: auto; object-fit: contain; margin-bottom: 15px;">
-            <h1 class="text-purple" style="font-size: 2.2rem; line-height: 1.2;">Maths Genius</h1>
-            <p style="color: var(--gs-yellow-dark); font-weight: bold; font-size: 1.1rem; margin-bottom: 10px;">by Genius Solihin</p>
-            <p style="color: var(--text-gray); margin-bottom: 20px; font-style: italic;">“Melahirkan Anak-anak yang Bijaksana & Soleh.”</p>
-            
-            <div class="card card-premium text-left mb-3">
-                <h3 class="mb-1"><i class="fas fa-star"></i> Belajar Matematik KSSR</h3>
-                <p style="font-size: 0.95rem;">Lengkap dengan enjin soalan dinamik, Cikgu Geni Tutor AI, sistem ganjaran dan laporan ibu bapa.</p>
-            </div>
-
-            <button class="btn btn-yellow mb-1" onclick="switchScreen('screen-register')">Mula Percubaan Percuma</button>
-            <button class="btn btn-outline mb-1" onclick="switchScreen('screen-login')">Log Masuk</button>
-            <button class="btn btn-outline" style="border: none; text-decoration: underline;" onclick="switchScreen('screen-pricing')">Lihat Pakej Kami</button>
-        </div>
-    </main>
-
-    <!-- LOGIN -->
-    <main id="screen-login" class="screen">
-        <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-landing')"><i class="fas fa-arrow-left"></i></button>
-        <h2 class="text-purple mb-1">Log Masuk Ibu Bapa</h2>
-        <div class="card">
-            <div class="input-group">
-                <label>E-mel</label>
-                <input type="email" id="login-email" class="input-field" placeholder="contoh@email.com">
-            </div>
-            <div class="input-group">
-                <label>Kata Laluan</label>
-                <input type="password" id="login-password" class="input-field" placeholder="********">
-            </div>
-            <button class="btn" onclick="prosesLogin()">Log Masuk</button>
-        </div>
-    </main>
-
-    <!-- REGISTER -->
-    <main id="screen-register" class="screen">
-        <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-landing')"><i class="fas fa-arrow-left"></i></button>
-        <h2 class="text-purple mb-1">Daftar Akaun Baru</h2>
-        <div class="card">
-            <div class="input-group">
-                <label>Nama Penuh</label>
-                <input type="text" id="reg-name" class="input-field" placeholder="Nama anda">
-            </div>
-            <div class="input-group">
-                <label>E-mel</label>
-                <input type="email" id="reg-email" class="input-field" placeholder="contoh@email.com">
-            </div>
-            <div class="input-group">
-                <label>Kata Laluan</label>
-                <input type="password" id="reg-password" class="input-field" placeholder="Cipta kata laluan">
-            </div>
-            <button class="btn btn-yellow" onclick="prosesRegister()">Daftar Sekarang</button>
-        </div>
-    </main>
-
-    <!-- DASHBOARD IBU BAPA -->
-    <main id="screen-parent-dashboard" class="screen">
-        <h2 class="text-purple mb-1">Selamat Datang, <span id="pd-parent-name">Ibu Bapa</span></h2>
-        <div class="card card-premium mb-2" style="padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+    <div id="app" class="max-w-md mx-auto min-h-screen bg-white shadow-2xl overflow-hidden">
+        <!-- Header -->
+        <header class="p-6 flex items-center border-b">
+            <img src="logo-gs.png" onerror="this.src='https://via.placeholder.com/50'" class="w-12 h-12 mr-3" alt="Logo">
             <div>
-                <h4 style="margin:0;">Pelan Langganan</h4>
-                <p style="font-size: 0.8rem; margin:0;" id="pd-plan-status">Free Trial (Tinggal 7 Hari)</p>
+                <h1 class="font-bold text-lg text-purple-900">Maths Genius</h1>
+                <p class="text-xs text-purple-600">by Genius Solihin</p>
             </div>
-            <button class="btn btn-small" style="width: auto; background: white; color: var(--gs-yellow-dark);" onclick="switchScreen('screen-pricing')">Naik Taraf</button>
-        </div>
+        </header>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 class="text-purple">Senarai Anak</h3>
-            <button class="btn btn-small btn-yellow" style="width: auto;" onclick="switchScreen('screen-add-child')"><i class="fas fa-plus"></i> Tambah</button>
-        </div>
-
-        <div id="children-list-container"></div>
-        <button class="btn btn-outline mt-2" onclick="logKeluar()"><i class="fas fa-sign-out-alt"></i> Log Keluar</button>
-    </main>
-
-    <!-- TAMBAH ANAK -->
-    <main id="screen-add-child" class="screen">
-        <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-parent-dashboard')"><i class="fas fa-arrow-left"></i></button>
-        <h2 class="text-purple mb-1">Tambah Profil Anak</h2>
-        <div class="card">
-            <div class="input-group">
-                <label>Nama Anak</label>
-                <input type="text" id="child-name" class="input-field" placeholder="Cth: Aisyah">
+        <!-- Main Content -->
+        <main id="content" class="p-6">
+            <!-- Landing Page -->
+            <div id="landing-page">
+                <h2 class="text-2xl font-bold text-purple-900 mb-4">Belajar Matematik Jadi Mudah, Seronok & Genius!</h2>
+                <button onclick="showPage('pricing-page')" class="w-full bg-yellow-400 text-purple-900 font-bold py-4 rounded-2xl mb-3 shadow-lg">Beli Akses Lifetime</button>
+                <button onclick="showPage('dashboard-page')" class="w-full border-2 border-purple-600 text-purple-600 font-bold py-4 rounded-2xl">Cuba Demo</button>
             </div>
-            <div class="input-group">
-                <label>Tahun Pembelajaran</label>
-                <select id="child-year" class="input-field">
-                    <option value="1">Tahun 1</option>
-                    <option value="2">Tahun 2</option>
-                    <option value="3">Tahun 3</option>
-                    <option value="4">Tahun 4</option>
-                    <option value="5">Tahun 5</option>
-                    <option value="6">Tahun 6</option>
-                </select>
-            </div>
-            <button class="btn btn-yellow" onclick="simpanAnak()"><i class="fas fa-save"></i> Simpan Profil</button>
-        </div>
-    </main>
 
-    <!-- DASHBOARD ANAK -->
-    <main id="screen-child-dashboard" class="screen">
-        <div class="card card-premium text-center">
-            <div class="child-avatar" style="margin: 0 auto 10px auto; width: 60px; height: 60px; font-size: 30px;">👦🏻</div>
-            <h2>Hai, <span id="cd-name">Pelajar</span>!</h2>
-            <p class="badge" style="background: white; margin-top: 5px; display: inline-block;"><span id="cd-level">Genius Beginner</span></p>
-            
-            <div class="grid-2 mt-2" style="background: rgba(0,0,0,0.1); padding: 10px; border-radius: 15px;">
-                <div><i class="fas fa-star text-yellow"></i> <br><strong id="cd-stars">0</strong> Bintang</div>
-                <div><i class="fas fa-fire" style="color: #E74C3C;"></i> <br><strong id="cd-streak">1</strong> Streak</div>
-            </div>
-        </div>
-
-        <h3 class="text-purple mb-1">Pilih Aktiviti</h3>
-        <div class="grid-2">
-            <div class="card text-center" style="cursor: pointer; border-color: var(--gs-purple);" onclick="bukaPilihanTopik()">
-                <i class="fas fa-book-open text-purple" style="font-size: 2.5rem; margin-bottom: 10px;"></i>
-                <h4 class="text-purple">Modul Belajar</h4>
-                <p style="font-size: 0.8rem;" id="cd-year-tag">Tahun 1</p>
-            </div>
-            <div class="card text-center" style="cursor: pointer; border-color: var(--danger);" onclick="bukaBukuSalah()">
-                <i class="fas fa-book-medical" style="font-size: 2.5rem; color: var(--danger); margin-bottom: 10px;"></i>
-                <h4 style="color: var(--danger);">Buku Salah</h4>
-                <p style="font-size: 0.8rem;">Ulang kaji</p>
-            </div>
-        </div>
-    </main>
-
-    <!-- PILIH TOPIK & ARAS -->
-    <main id="screen-topics" class="screen">
-        <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-child-dashboard')"><i class="fas fa-arrow-left"></i></button>
-        <h2 class="text-purple mb-1" id="topic-title">Topik Tahun 1</h2>
-        
-        <div id="topic-list-container" class="grid-2 mb-2"></div>
-
-        <div id="difficulty-selector" style="display: none;" class="card">
-            <h3 class="text-center text-purple mb-1">Pilih Aras Kesukaran</h3>
-            <p class="text-center text-gray mb-2" style="font-size:0.85rem;">Enjin akan menjana 30 soalan baru bagi setiap sesi.</p>
-            <button class="btn btn-outline mb-1" style="border-color: var(--success); color: var(--success);" onclick="mulaKuiz('Senang')">Senang</button>
-            <button class="btn btn-outline mb-1" style="border-color: var(--gs-yellow-dark); color: var(--gs-yellow-dark);" onclick="mulaKuiz('Sederhana')">Sederhana</button>
-            <button class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);" onclick="mulaKuiz('Susah')">Susah</button>
-        </div>
-    </main>
-
-    <!-- KUIZ -->
-    <main id="screen-quiz" class="screen">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <button class="btn btn-outline" style="width: auto; padding: 5px 15px;" onclick="switchScreen('screen-topics')"><i class="fas fa-times"></i></button>
-            <div style="font-weight: bold; color: var(--text-gray);">Soalan <span id="q-current">1</span>/30</div>
-            <div style="font-weight: bold; color: var(--gs-yellow-dark);"><i class="fas fa-star"></i> <span id="q-score">0</span></div>
-        </div>
-
-        <div class="card text-center" style="border: 4px dashed var(--gs-purple-soft); padding: 30px 15px;">
-            <p id="q-skill" class="badge mb-1">Topik</p>
-            <div id="q-text" class="question-box">Soalan dipaparkan di sini.</div>
-            <div class="star-anim" id="correct-star"><i class="fas fa-star"></i></div>
-        </div>
-        <div class="options-grid" id="q-options"></div>
-    </main>
-
-    <!-- BUKU SALAH SAYA -->
-    <main id="screen-wrong-book" class="screen">
-        <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-child-dashboard')"><i class="fas fa-arrow-left"></i></button>
-        <h2 class="text-purple mb-1">Buku Salah Saya</h2>
-        <div id="wrong-book-list"></div>
-    </main>
-
-    <!-- LAPORAN PDF -->
-    <main id="screen-report" class="screen">
-        <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="switchScreen('screen-parent-dashboard')"><i class="fas fa-arrow-left"></i></button>
-        <h2 class="text-purple mb-1">Laporan Prestasi</h2>
-        
-        <div id="bahagian-pdf" style="background-color: var(--bg-white); padding: 10px; border-radius: 10px; margin-bottom: 15px;">
-            <div class="card text-center" style="border-color: var(--gs-purple);">
-                <img src="/logo-gs.png" alt="Logo Genius Solihin" style="height: 40px; width: auto; object-fit: contain; margin-bottom: 10px;">
-                <h3 class="text-purple" id="rep-name">Laporan</h3>
-                <p id="rep-year">Tahun</p>
-                <hr style="margin: 15px 0; border: 0; border-top: 1px dashed var(--gs-purple-soft);">
-                
-                <div class="grid-2 text-left mb-2">
-                    <div>
-                        <p class="text-gray" style="font-size: 0.8rem;">Jumlah Soalan</p>
-                        <h4 id="rep-total-q">0</h4>
-                    </div>
-                    <div>
-                        <p class="text-gray" style="font-size: 0.8rem;">Ketepatan</p>
-                        <h4 id="rep-accuracy">0%</h4>
+            <!-- Pricing Page -->
+            <div id="pricing-page" class="hidden">
+                <h2 class="text-xl font-bold mb-4">Pakej Maths Genius Tahap 1</h2>
+                <div class="bg-purple-50 p-6 rounded-3xl border-2 border-yellow-400 text-center">
+                    <p class="text-3xl font-bold text-purple-900">RM 99.00</p>
+                    <p class="text-sm text-gray-600 mb-6">Bayar Sekali Sahaja, Akses Lifetime</p>
+                    <button onclick="activateLifetime()" class="w-full bg-purple-600 text-white py-3 rounded-xl font-bold">Beli Akses Lifetime</button>
+                    <div class="mt-4">
+                        <input type="text" id="activation-code" placeholder="Masukkan Kod" class="w-full p-2 border rounded-lg mb-2 text-center">
+                        <button onclick="checkCode()" class="text-sm text-purple-700 underline">Aktifkan Kod Pembelian</button>
                     </div>
                 </div>
-                <div class="text-left" style="background: var(--gs-purple-soft); padding: 15px; border-radius: 10px;">
-                    <h4 class="text-purple mb-1"><i class="fas fa-robot"></i> Cadangan Cikgu Geni</h4>
-                    <p style="font-size: 0.9rem;" id="rep-ai-advice">Sila lakukan latihan.</p>
+            </div>
+
+            <!-- Dashboard -->
+            <div id="dashboard-page" class="hidden">
+                <div class="gradient-card text-white p-6 rounded-3xl mb-6">
+                    <p id="status-text" class="text-sm opacity-80">Status: Demo Mode</p>
+                    <h2 class="text-xl font-bold">Selamat Datang, Ibu Bapa!</h2>
+                </div>
+                <div class="grid gap-4">
+                    <div class="p-4 border rounded-2xl bg-gray-50">
+                        <h3 class="font-bold">Anak: Razak (Tahun 1)</h3>
+                        <p class="text-sm">Bintang: 0 | Progress: 0%</p>
+                        <button class="mt-2 w-full bg-purple-600 text-white py-2 rounded-lg text-sm">Mula Belajar</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <button class="btn btn-yellow" onclick="muatTurunPDF()"><i class="fas fa-download"></i> Muat Turun Laporan (PDF)</button>
-    </main>
-
-    <!-- PRICING -->
-    <main id="screen-pricing" class="screen">
-        <button class="btn btn-outline mb-2" style="width: auto; padding: 8px 15px;" onclick="kembaliDariPricing()"><i class="fas fa-arrow-left"></i></button>
-        <h2 class="text-purple mb-1 text-center">Pelan Langganan</h2>
-        <div class="card text-center" style="border: 2px solid var(--gs-purple);">
-            <div class="badge" style="position: absolute; top: -10px; right: 20px; background: var(--gs-purple); color: white;">Premium</div>
-            <h3 class="text-purple">Monthly Plan</h3>
-            <h2 class="mb-1 text-purple">RM 19.90 <span style="font-size: 1rem; color: var(--text-gray);">/bulan</span></h2>
-            <ul style="text-align: left; font-size: 0.9rem; margin-bottom: 15px; padding-left: 20px;">
-                <li>Hingga 3 Profil Anak</li>
-                <li>Akses Enjin Penjana Ribuan Soalan</li>
-                <li>Tutor AI Cikgu Geni Unlocked</li>
-                <li>Laporan PDF Terperinci</li>
-            </ul>
-            <button class="btn btn-yellow" onclick="alert('Integrasi Payment Gateway di sini.')">Langgan Sekarang</button>
-        </div>
-    </main>
-
-    <!-- NAVIGASI BAWAH -->
-    <nav id="bottom-nav-parent" class="bottom-nav" style="display: none;">
-        <div class="nav-item" onclick="switchScreen('screen-parent-dashboard')"><i class="fas fa-users"></i><span>Anak</span></div>
-        <div class="nav-item" onclick="alert('Admin Panel')"><i class="fas fa-cog"></i><span>Tetapan</span></div>
-    </nav>
-    <nav id="bottom-nav-child" class="bottom-nav" style="display: none;">
-        <div class="nav-item" onclick="switchScreen('screen-child-dashboard')"><i class="fas fa-home"></i><span>Utama</span></div>
-        <div class="nav-item" onclick="bukaPilihanTopik()"><i class="fas fa-gamepad"></i><span>Latihan</span></div>
-        <div class="nav-item" onclick="switchScreen('screen-parent-dashboard')"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></div>
-    </nav>
-
-    <!-- MODAL CIKGU GENI -->
-    <div class="modal-overlay" id="ai-modal">
-        <div class="modal-content">
-            <div class="mascot-img">🦉</div>
-            <h2 class="text-purple mb-1">Cikgu Geni</h2>
-            <p id="ai-message" style="font-size: 1.1rem; margin-bottom: 20px; line-height: 1.5;"></p>
-            <button class="btn btn-yellow" onclick="closeModal()">Faham, Cikgu!</button>
-        </div>
+        </main>
     </div>
 
-    <!-- MODAL SUCCESS -->
-    <div class="modal-overlay" id="success-modal">
-        <div class="modal-content" style="border-color: var(--success);">
-            <div class="mascot-img" style="background: var(--success);">🌟</div>
-            <h2 style="color: var(--success); margin-bottom: 10px;">Tahniah!</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 20px;">Anda telah melengkapkan 30 soalan dan mendapat <strong id="modal-score-earned">0</strong> bintang!</p>
-            <button class="btn btn-green" onclick="tamatKuiz()">Teruskan</button>
-        </div>
-    </div>
-
-</div>
-
-<!-- ==========================================
-     JAVASCRIPT: ENJIN PENJANA SOALAN DINAMIK & LOGIK APP
-=========================================== -->
-<script>
-    let currentParent = null;
-    let currentChild = null;
-    let activeQuiz = [];
-    let qIndex = 0;
-    let tempScore = 0;
-    let selectedTopicName = "";
-
-    window.onload = () => {
-        const loggedInEmail = localStorage.getItem('mg_loggedIn');
-        if(loggedInEmail) {
-            const parents = JSON.parse(localStorage.getItem('mg_parents') || '[]');
-            currentParent = parents.find(p => p.email === loggedInEmail);
-            if(currentParent) { renderParentDashboard(); return; }
+    <script>
+        // State Management
+        function showPage(pageId) {
+            document.querySelectorAll('#content > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
         }
-        switchScreen('screen-landing');
-    };
 
-    function switchScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
-        window.scrollTo(0, 0);
-
-        const header = document.getElementById('main-header');
-        const navParent = document.getElementById('bottom-nav-parent');
-        const navChild = document.getElementById('bottom-nav-child');
-
-        header.style.display = 'none'; navParent.style.display = 'none'; navChild.style.display = 'none';
-
-        if(screenId === 'screen-parent-dashboard' || screenId === 'screen-report') {
-            header.style.display = 'block'; document.getElementById('header-role').innerText = "Ibu Bapa";
-            document.getElementById('header-name').innerText = currentParent ? currentParent.name : "";
-            navParent.style.display = 'flex';
-        } else if (screenId === 'screen-child-dashboard' || screenId === 'screen-topics' || screenId === 'screen-wrong-book') {
-            header.style.display = 'block'; document.getElementById('header-role').innerText = "Pelajar";
-            document.getElementById('header-name').innerText = currentChild ? currentChild.name : "";
-            navChild.style.display = 'flex';
+        function activateLifetime() {
+            localStorage.setItem('access_status', 'lifetime_active');
+            updateUI();
+            alert("Tahniah! Akses Lifetime anda telah aktif.");
+            showPage('dashboard-page');
         }
-    }
 
-    function kembaliDariPricing() { currentParent ? switchScreen('screen-parent-dashboard') : switchScreen('screen-landing'); }
-
-    // AUTH
-    function prosesRegister() {
-        const name = document.getElementById('reg-name').value.trim();
-        const email = document.getElementById('reg-email').value.trim();
-        const pwd = document.getElementById('reg-password').value.trim();
-        if(!name || !email || !pwd) return alert("Sila isi semua maklumat.");
-
-        let parents = JSON.parse(localStorage.getItem('mg_parents') || '[]');
-        if(parents.find(p => p.email === email)) return alert("E-mel ini telah didaftarkan.");
-
-        parents.push({ id: 'P_'+Date.now(), name, email, pwd, plan: 'Free Trial' });
-        localStorage.setItem('mg_parents', JSON.stringify(parents));
-        alert("Pendaftaran berjaya! Sila log masuk."); switchScreen('screen-login');
-    }
-
-    function prosesLogin() {
-        const email = document.getElementById('login-email').value.trim();
-        const pwd = document.getElementById('login-password').value.trim();
-        let parents = JSON.parse(localStorage.getItem('mg_parents') || '[]');
-        let p = parents.find(x => x.email === email && x.pwd === pwd);
-        if(p) { currentParent = p; localStorage.setItem('mg_loggedIn', p.email); renderParentDashboard(); } 
-        else { alert("E-mel atau kata laluan salah."); }
-    }
-
-    function logKeluar() { localStorage.removeItem('mg_loggedIn'); currentParent = null; currentChild = null; switchScreen('screen-landing'); }
-
-    // PARENT DASHBOARD & CHILD PROFILES
-    function renderParentDashboard() {
-        document.getElementById('pd-parent-name').innerText = currentParent.name;
-        let children = JSON.parse(localStorage.getItem('mg_children') || '[]');
-        let myChildren = children.filter(c => c.parentId === currentParent.id);
-        const container = document.getElementById('children-list-container');
-        container.innerHTML = '';
-
-        if(myChildren.length === 0) {
-            container.innerHTML = `<p class="text-center text-gray">Sila klik butang Tambah.</p>`;
-        } else {
-            myChildren.forEach(child => {
-                const div = document.createElement('div');
-                div.className = 'card child-card';
-                div.onclick = () => pilihAnak(child);
-                div.innerHTML = `
-                    <div class="child-avatar">${child.avatar}</div>
-                    <div style="flex-grow: 1;">
-                        <h4 class="text-purple">${child.name}</h4>
-                        <p style="font-size: 0.8rem; color: var(--text-gray);">Tahun ${child.year} | ${child.stars} 🌟</p>
-                    </div>
-                    <div>
-                        <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); lihatLaporan('${child.id}')"><i class="fas fa-chart-pie"></i></button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-        switchScreen('screen-parent-dashboard');
-    }
-
-    function simpanAnak() {
-        const name = document.getElementById('child-name').value.trim();
-        const year = document.getElementById('child-year').value;
-        if(!name) return alert("Sila masukkan nama anak.");
-        let children = JSON.parse(localStorage.getItem('mg_children') || '[]');
-        children.push({ id: 'C_'+Date.now(), parentId: currentParent.id, name, year: parseInt(year), avatar: '👦🏻', stars: 0, streak: 0, level: 'Genius Beginner' });
-        localStorage.setItem('mg_children', JSON.stringify(children));
-        document.getElementById('child-name').value = ''; renderParentDashboard();
-    }
-
-    function pilihAnak(child) {
-        currentChild = child;
-        document.getElementById('cd-name').innerText = child.name;
-        document.getElementById('cd-level').innerText = child.level;
-        document.getElementById('cd-stars').innerText = child.stars;
-        document.getElementById('cd-year-tag').innerText = "Tahun " + child.year;
-        switchScreen('screen-child-dashboard');
-    }
-
-    function bukaPilihanTopik() {
-        document.getElementById('topic-title').innerText = "Topik Tahun " + currentChild.year;
-        const container = document.getElementById('topic-list-container');
-        document.getElementById('difficulty-selector').style.display = 'none';
-        container.innerHTML = ''; container.style.display = 'grid';
-
-        let topics = (currentChild.year === 1) ? ['Tambah', 'Tolak'] : ['Tambah', 'Tolak', 'Darab', 'Bahagi'];
-        topics.forEach(t => {
-            const btn = document.createElement('button');
-            btn.className = 'btn btn-outline'; btn.innerText = t;
-            btn.onclick = () => { selectedTopicName = t; container.style.display = 'none'; document.getElementById('difficulty-selector').style.display = 'block'; };
-            container.appendChild(btn);
-        });
-        switchScreen('screen-topics');
-    }
-
-    function rawakInteger(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-
-    function janaPilihanSalah(jawapanBetul) {
-        let pilihan = [jawapanBetul];
-        while(pilihan.length < 4) {
-            let salah = jawapanBetul + rawakInteger(-5, 5);
-            if(salah !== jawapanBetul && salah >= 0 && !pilihan.includes(salah)) pilihan.push(salah);
-        }
-        return pilihan.sort(() => Math.random() - 0.5); 
-    }
-
-    function generateMathSession(year, topic, diff) {
-        let generatedQuestions = [];
-        let maxVal;
-        if(year === 1) maxVal = (diff === 'Senang') ? 10 : (diff === 'Sederhana') ? 50 : 100;
-        else if(year === 2) maxVal = (diff === 'Senang') ? 100 : (diff === 'Sederhana') ? 500 : 1000;
-        else if(year === 3) maxVal = (diff === 'Senang') ? 1000 : (diff === 'Sederhana') ? 5000 : 10000;
-        else if(year === 4) maxVal = (diff === 'Senang') ? 10000 : (diff === 'Sederhana') ? 50000 : 100000;
-        else maxVal = (diff === 'Senang') ? 100000 : (diff === 'Sederhana') ? 500000 : 1000000;
-
-        for(let i = 0; i < 30; i++) {
-            let num1, num2, answer, qText, explanation;
-            
-            if(topic === 'Tambah') {
-                num1 = rawakInteger(1, maxVal / 2);
-                num2 = rawakInteger(1, maxVal / 2);
-                answer = num1 + num2;
-                qText = `${num1} + ${num2} = ?`;
-                explanation = `Gunakan bentuk lazim. Tambahkan nilai sa dahulu, kemudian puluh dan seterusnya. Jawapannya ialah ${answer}.`;
-            } 
-            else if (topic === 'Tolak') {
-                num1 = rawakInteger(maxVal / 2, maxVal);
-                num2 = rawakInteger(1, num1); 
-                answer = num1 - num2;
-                qText = `${num1} - ${num2} = ?`;
-                explanation = `Bila menolak, ingat untuk meminjam dari rumah sebelah jika nombor atas lebih kecil. ${num1} buang ${num2} baki ${answer}.`;
+        function checkCode() {
+            const code = document.getElementById('activation-code').value;
+            if (code === "GENIUS123") {
+                activateLifetime();
+            } else {
+                alert("Kod tidak sah!");
             }
-            else if (topic === 'Darab') {
-                let sifirMax = (year === 2) ? 5 : (year === 3) ? 9 : (year >= 4) ? 20 : 10;
-                if(diff === 'Susah' && year >= 4) sifirMax = 50; 
-                num1 = rawakInteger(2, sifirMax);
-                num2 = rawakInteger(2, maxVal / 100 > 10 ? 10 : 9); 
-                answer = num1 * num2;
-                qText = `${num1} × ${num2} = ?`;
-                explanation = `Konsep darab ialah tambah berulang. ${num1} kumpulan ${num2} menjadi ${answer}.`;
+        }
+
+        function updateUI() {
+            const status = localStorage.getItem('access_status');
+            const statusText = document.getElementById('status-text');
+            if (status === 'lifetime_active') {
+                statusText.innerText = "Status Akses: Lifetime Active";
+                statusText.className = "text-sm text-yellow-300 font-bold";
             }
-            else if (topic === 'Bahagi') {
-                let divisor = (year <= 3) ? rawakInteger(2, 9) : rawakInteger(2, 20);
-                answer = rawakInteger(2, (maxVal/divisor > 50) ? 50 : 20); 
-                num1 = answer * divisor; 
-                num2 = divisor;
-                qText = `${num1} ÷ ${num2} = ?`;
-                explanation = `${num1} dibahagikan sama rata kepada ${num2} bahagian. Setiap bahagian akan mendapat ${answer}.`;
-            }
-
-            generatedQuestions.push({
-                q: qText, a: answer, o: janaPilihanSalah(answer), exp: explanation, tag: `${topic} (${diff})`
-            });
         }
-        return generatedQuestions;
-    }
 
-    function mulaKuiz(diff) {
-        activeQuiz = generateMathSession(currentChild.year, selectedTopicName, diff);
-        qIndex = 0; tempScore = 0;
-        document.getElementById('q-score').innerText = tempScore;
-        loadSoalan();
-        switchScreen('screen-quiz');
-    }
-
-    function loadSoalan() {
-        if(qIndex >= activeQuiz.length) return tunjukResult();
-        const q = activeQuiz[qIndex];
-        document.getElementById('q-current').innerText = qIndex + 1;
-        document.getElementById('q-skill').innerText = q.tag;
-        document.getElementById('q-text').innerText = q.q;
-        
-        const optionsDiv = document.getElementById('q-options');
-        optionsDiv.innerHTML = '';
-        q.o.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn'; btn.innerText = opt;
-            btn.onclick = () => semakJawapan(opt, q);
-            optionsDiv.appendChild(btn);
-        });
-    }
-
-    function semakJawapan(selected, qObj) {
-        let attempts = JSON.parse(localStorage.getItem('mg_attempts') || '[]');
-        let isCorrect = (selected == qObj.a);
-        attempts.push({ childId: currentChild.id, correct: isCorrect });
-        localStorage.setItem('mg_attempts', JSON.stringify(attempts));
-
-        if(isCorrect) {
-            tempScore += 10; document.getElementById('q-score').innerText = tempScore;
-            const star = document.getElementById('correct-star');
-            star.style.display = 'block';
-            setTimeout(() => { star.style.display = 'none'; qIndex++; loadSoalan(); }, 600);
-        } else {
-            let wrongBook = JSON.parse(localStorage.getItem('mg_wrongbook') || '[]');
-            wrongBook.push({ childId: currentChild.id, q: qObj.q, a: qObj.a, exp: qObj.exp });
-            localStorage.setItem('mg_wrongbook', JSON.stringify(wrongBook));
-            
-            document.getElementById('ai-message').innerHTML = `Jangan putus asa, ${currentChild.name}!<br><br><b>${qObj.q}</b><br><br>${qObj.exp}`;
-            document.getElementById('ai-modal').style.display = 'flex';
-        }
-    }
-
-    function closeModal() { document.getElementById('ai-modal').style.display = 'none'; qIndex++; loadSoalan(); }
-
-    function tunjukResult() {
-        let bintangMuka = Math.floor(tempScore / 10);
-        document.getElementById('modal-score-earned').innerText = bintangMuka;
-        document.getElementById('success-modal').style.display = 'flex';
-        
-        currentChild.stars += bintangMuka;
-        let children = JSON.parse(localStorage.getItem('mg_children') || '[]');
-        let index = children.findIndex(c => c.id === currentChild.id);
-        if(index > -1) children[index].stars = currentChild.stars;
-        localStorage.setItem('mg_children', JSON.stringify(children));
-    }
-
-    function tamatKuiz() { document.getElementById('success-modal').style.display = 'none'; pilihAnak(currentChild); }
-
-    function bukaBukuSalah() {
-        let wrongBook = JSON.parse(localStorage.getItem('mg_wrongbook') || '[]');
-        let myWrongs = wrongBook.filter(w => w.childId === currentChild.id);
-        const container = document.getElementById('wrong-book-list');
-        container.innerHTML = '';
-
-        if(myWrongs.length === 0) {
-            container.innerHTML = `<p class="text-center text-gray">Hebat! Tiada rekod kesilapan.</p>`;
-        } else {
-            myWrongs.slice(-20).reverse().forEach(w => {
-                const div = document.createElement('div'); div.className = 'card';
-                div.innerHTML = `
-                    <p style="font-family: 'Fredoka'; color: var(--gs-purple); font-size: 1.2rem; margin-bottom: 5px;">${w.q}</p>
-                    <p class="text-success mb-1"><b>Jawapan Tepat:</b> ${w.a}</p>
-                    <div style="background: var(--gs-purple-soft); padding: 10px; border-radius: 10px; font-size: 0.9rem;">
-                        <b>Cikgu Geni:</b> ${w.exp}
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-        switchScreen('screen-wrong-book');
-    }
-
-    function lihatLaporan(childId) {
-        let children = JSON.parse(localStorage.getItem('mg_children') || '[]');
-        let child = children.find(c => c.id === childId);
-        if(!child) return;
-
-        document.getElementById('rep-name').innerText = "Laporan " + child.name;
-        let attempts = JSON.parse(localStorage.getItem('mg_attempts') || '[]').filter(a => a.childId === childId);
-        
-        document.getElementById('rep-total-q').innerText = attempts.length;
-        let correctCount = attempts.filter(a => a.correct).length;
-        let acc = attempts.length > 0 ? Math.round((correctCount / attempts.length) * 100) : 0;
-        document.getElementById('rep-accuracy').innerText = acc + "%";
-
-        if(attempts.length > 0) {
-            document.getElementById('rep-ai-advice').innerText = `${child.name} sedang meningkat naik! Teruskan galakan untuk menggunakan enjin soalan dinamik ini sekurang-kurangnya 15 minit sehari.`;
-        }
-        switchScreen('screen-report');
-    }
-
-    function muatTurunPDF() {
-        html2pdf().set({ margin: 0.5, filename: `Laporan_Prestasi.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }).from(document.getElementById('bahagian-pdf')).save();
-    }
-</script>
+        // Initialize
+        window.onload = updateUI;
+    </script>
 </body>
 </html>
