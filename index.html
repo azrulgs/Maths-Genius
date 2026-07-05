@@ -51,7 +51,6 @@
             box-shadow: 0 8px 20px rgba(108, 52, 131, 0.2); position: relative; z-index: 10;
         }
         .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .logo-placeholder { font-family: 'Fredoka'; font-size: 1.2rem; font-weight: bold; color: var(--gs-yellow); background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 10px; }
         
         /* Screens */
         .screen { display: none; padding: 20px; flex-grow: 1; padding-bottom: 100px; animation: fadeIn 0.3s ease-in-out; }
@@ -116,15 +115,16 @@
 
 <div id="app-container">
 
+    <!-- HEADER DENGAN LOGO SEBENAR -->
     <header id="main-header" style="display: none;">
         <div class="header-top">
-            <div className="flex items-center rounded-2xl bg-white/10 px-3 py-2 w-fit">
-  <img
-    src="/logo-gs.png"
-    alt="Genius Solihin"
-    className="h-10 w-auto object-contain"
-  />
-</div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="/logo-gs.png" alt="Logo Genius Solihin" style="height: 40px; width: auto; object-fit: contain;">
+                <div style="line-height: 1.1;">
+                    <span style="font-family: 'Fredoka', sans-serif; font-weight: bold; font-size: 1.1rem; color: white;">Maths Genius</span><br>
+                    <span style="font-size: 0.75rem; color: var(--gs-yellow);">by Genius Solihin</span>
+                </div>
+            </div>
             <div id="header-user-info" style="text-align: right;">
                 <p style="font-size: 0.8rem; opacity: 0.9;" id="header-role">Ibu Bapa</p>
                 <h3 id="header-name" style="font-size: 1.1rem;">Nama</h3>
@@ -135,7 +135,7 @@
     <!-- LANDING PAGE -->
     <main id="screen-landing" class="screen active">
         <div class="text-center" style="margin-top: 20px;">
-            <div class="logo-placeholder" style="display: inline-block; background: var(--gs-purple); color: white; margin-bottom: 20px; font-size: 1.5rem; padding: 10px 20px;">[Logo Genius Solihin]</div>
+            <img src="/logo-gs.png" alt="Logo Genius Solihin" style="height: 60px; width: auto; object-fit: contain; margin-bottom: 15px;">
             <h1 class="text-purple" style="font-size: 2.2rem; line-height: 1.2;">Maths Genius</h1>
             <p style="color: var(--gs-yellow-dark); font-weight: bold; font-size: 1.1rem; margin-bottom: 10px;">by Genius Solihin</p>
             <p style="color: var(--text-gray); margin-bottom: 20px; font-style: italic;">“Melahirkan Anak-anak yang Bijaksana & Soleh.”</p>
@@ -307,7 +307,7 @@
         
         <div id="bahagian-pdf" style="background-color: var(--bg-white); padding: 10px; border-radius: 10px; margin-bottom: 15px;">
             <div class="card text-center" style="border-color: var(--gs-purple);">
-                <div class="logo-placeholder" style="display: inline-block; background: var(--gs-purple); color: white; margin-bottom: 10px; font-size: 1rem; padding: 5px 10px;">[Logo Genius Solihin]</div>
+                <img src="/logo-gs.png" alt="Logo Genius Solihin" style="height: 40px; width: auto; object-fit: contain; margin-bottom: 10px;">
                 <h3 class="text-purple" id="rep-name">Laporan</h3>
                 <p id="rep-year">Tahun</p>
                 <hr style="margin: 15px 0; border: 0; border-top: 1px dashed var(--gs-purple-soft);">
@@ -519,10 +519,6 @@
         switchScreen('screen-topics');
     }
 
-    // ====================================================================
-    // ENJIN PENJANA SOALAN MATEMATIK KSSR (DINAMIK)
-    // Menjana tepat 30 soalan baru bagi setiap sesi mengikut had KPM.
-    // ====================================================================
     function rawakInteger(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
     function janaPilihanSalah(jawapanBetul) {
@@ -531,12 +527,11 @@
             let salah = jawapanBetul + rawakInteger(-5, 5);
             if(salah !== jawapanBetul && salah >= 0 && !pilihan.includes(salah)) pilihan.push(salah);
         }
-        return pilihan.sort(() => Math.random() - 0.5); // Shuffle
+        return pilihan.sort(() => Math.random() - 0.5); 
     }
 
     function generateMathSession(year, topic, diff) {
         let generatedQuestions = [];
-        // Had KSSR: Y1(100), Y2(1000), Y3(10000), Y4(100000), Y5(1000000)
         let maxVal;
         if(year === 1) maxVal = (diff === 'Senang') ? 10 : (diff === 'Sederhana') ? 50 : 100;
         else if(year === 2) maxVal = (diff === 'Senang') ? 100 : (diff === 'Sederhana') ? 500 : 1000;
@@ -544,7 +539,6 @@
         else if(year === 4) maxVal = (diff === 'Senang') ? 10000 : (diff === 'Sederhana') ? 50000 : 100000;
         else maxVal = (diff === 'Senang') ? 100000 : (diff === 'Sederhana') ? 500000 : 1000000;
 
-        // Jana genap 30 soalan
         for(let i = 0; i < 30; i++) {
             let num1, num2, answer, qText, explanation;
             
@@ -557,17 +551,16 @@
             } 
             else if (topic === 'Tolak') {
                 num1 = rawakInteger(maxVal / 2, maxVal);
-                num2 = rawakInteger(1, num1); // pastikan tiada negatif
+                num2 = rawakInteger(1, num1); 
                 answer = num1 - num2;
                 qText = `${num1} - ${num2} = ?`;
                 explanation = `Bila menolak, ingat untuk meminjam dari rumah sebelah jika nombor atas lebih kecil. ${num1} buang ${num2} baki ${answer}.`;
             }
             else if (topic === 'Darab') {
-                // Sifir limit ikut tahun
                 let sifirMax = (year === 2) ? 5 : (year === 3) ? 9 : (year >= 4) ? 20 : 10;
                 if(diff === 'Susah' && year >= 4) sifirMax = 50; 
                 num1 = rawakInteger(2, sifirMax);
-                num2 = rawakInteger(2, maxVal / 100 > 10 ? 10 : 9); // Hadkan supaya tak melampau
+                num2 = rawakInteger(2, maxVal / 100 > 10 ? 10 : 9); 
                 answer = num1 * num2;
                 qText = `${num1} × ${num2} = ?`;
                 explanation = `Konsep darab ialah tambah berulang. ${num1} kumpulan ${num2} menjadi ${answer}.`;
@@ -575,7 +568,7 @@
             else if (topic === 'Bahagi') {
                 let divisor = (year <= 3) ? rawakInteger(2, 9) : rawakInteger(2, 20);
                 answer = rawakInteger(2, (maxVal/divisor > 50) ? 50 : 20); 
-                num1 = answer * divisor; // Pastikan bahagi tepat tiada baki
+                num1 = answer * divisor; 
                 num2 = divisor;
                 qText = `${num1} ÷ ${num2} = ?`;
                 explanation = `${num1} dibahagikan sama rata kepada ${num2} bahagian. Setiap bahagian akan mendapat ${answer}.`;
@@ -589,7 +582,6 @@
     }
 
     function mulaKuiz(diff) {
-        // Enjin KSSR menjana 30 soalan segar!
         activeQuiz = generateMathSession(currentChild.year, selectedTopicName, diff);
         qIndex = 0; tempScore = 0;
         document.getElementById('q-score').innerText = tempScore;
@@ -651,7 +643,6 @@
 
     function tamatKuiz() { document.getElementById('success-modal').style.display = 'none'; pilihAnak(currentChild); }
 
-    // BUKU SALAH
     function bukaBukuSalah() {
         let wrongBook = JSON.parse(localStorage.getItem('mg_wrongbook') || '[]');
         let myWrongs = wrongBook.filter(w => w.childId === currentChild.id);
@@ -661,7 +652,6 @@
         if(myWrongs.length === 0) {
             container.innerHTML = `<p class="text-center text-gray">Hebat! Tiada rekod kesilapan.</p>`;
         } else {
-            // Hadkan kepada 20 paparan terakhir supaya tak terlalu panjang
             myWrongs.slice(-20).reverse().forEach(w => {
                 const div = document.createElement('div'); div.className = 'card';
                 div.innerHTML = `
@@ -677,7 +667,6 @@
         switchScreen('screen-wrong-book');
     }
 
-    // PDF LAPORAN
     function lihatLaporan(childId) {
         let children = JSON.parse(localStorage.getItem('mg_children') || '[]');
         let child = children.find(c => c.id === childId);
