@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths Genius by Genius Solihin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; background-color: #f8f7ff; }
+        .bg-gradient-gs { background: linear-gradient(135deg, #6d28d9, #eab308); }
+        .card-premium { background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnzVeU918yE1N86CfSOVEH_7za_Ubvjc0",
+            authDomain: "maths-genius-1b171.firebaseapp.com",
+            databaseURL: "https://maths-genius-1b171-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "maths-genius-1b171",
+            storageBucket: "maths-genius-1b171.firebasestorage.app",
+            messagingSenderId: "721438989994",
+            appId: "1:721438989994:web:e911e4fb1244bba9953ad3"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Main App Component
+        function App() {
+            const [view, setView] = React.useState('landing'); // landing, login, parentDashboard, childDashboard
+            const [user, setUser] = React.useState(null);
+
+            const Header = () => (
+                <header className="flex items-center justify-between p-4 bg-white shadow-sm sticky top-0 z-50">
+                    <div className="flex items-center gap-3">
+                        <img src="/logo-gs.png" alt="Logo" className="w-10 h-10 object-contain" onError={(e) => e.target.src='https://via.placeholder.com/40'}/>
+                        <div>
+                            <h1 className="font-bold text-purple-800 text-lg">Maths Genius</h1>
+                            <p className="text-[10px] text-gray-500 uppercase tracking-widest">by Genius Solihin</p>
+                        </div>
+                    </div>
+                </header>
+            );
+
+            return (
+                <div className="min-h-screen">
+                    {view !== 'landing' && <Header />}
+                    
+                    {view === 'landing' && <LandingPage setView={setView} />}
+                    {view === 'login' && <LoginPage setView={setView} setUser={setUser} />}
+                    {view === 'parentDashboard' && <ParentDashboard user={user} setView={setView} />}
+                    {view === 'childDashboard' && <ChildDashboard user={user} setView={setView} />}
+                </div>
+            );
+        }
+
+        const LandingPage = ({ setView }) => (
+            <div className="text-center p-8 max-w-4xl mx-auto">
+                <img src="/logo-gs.png" className="w-24 h-24 mx-auto mb-6" />
+                <h1 className="text-4xl font-bold text-purple-900 mb-4">Bantu Anak Tahap 1 Kuasai Matematik Dengan Mudah, Seronok & Tersusun</h1>
+                <p className="text-lg text-gray-600 mb-8">Aplikasi pembelajaran Matematik untuk Tahun 1 hingga 3, lengkap dengan Cikgu Geni, laporan prestasi & ganjaran.</p>
+                <div className="space-x-4">
+                    <button onClick={() => setView('login')} className="bg-purple-600 text-white px-8 py-3 rounded-full font-bold hover:bg-purple-700 transition">Log Masuk</button>
+                    <button className="bg-yellow-500 text-white px-8 py-3 rounded-full font-bold hover:bg-yellow-600 transition">Cuba Demo</button>
+                </div>
+            </div>
+        );
+
+        const LoginPage = ({ setView, setUser }) => {
+            const handleLogin = () => {
+                setUser({ name: "Hafiz", email: "hafiz@example.com" });
+                setView('parentDashboard');
+            };
+            return (
+                <div className="p-6 max-w-md mx-auto card-premium mt-10 p-8">
+                    <h2 className="text-2xl font-bold text-purple-800 mb-6 text-center">Login Ibu Bapa</h2>
+                    <input type="email" placeholder="Email" className="w-full p-3 border rounded-xl mb-4" />
+                    <input type="password" placeholder="Password" className="w-full p-3 border rounded-xl mb-6" />
+                    <button onClick={handleLogin} className="w-full bg-purple-600 text-white py-3 rounded-xl font-bold">Masuk Sekarang</button>
+                </div>
+            );
+        };
+
+        const ParentDashboard = ({ user, setView }) => (
+            <div className="p-6 max-w-4xl mx-auto">
+                <h2 className="text-2xl font-bold text-purple-900 mb-6">Selamat Datang, {user.name}!</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="card-premium p-6 border-l-4 border-yellow-500">
+                        <h3 className="font-bold text-lg">Aisyah</h3>
+                        <p className="text-sm text-gray-500">Tahun 2 | Genius Explorer</p>
+                        <div className="mt-4 flex gap-2">
+                            <button className="bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-sm">Lihat Laporan</button>
+                            <button onClick={() => setView('childDashboard')} className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm">Mula Belajar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ChildDashboard = ({ user, setView }) => (
+            <div className="p-6 max-w-4xl mx-auto">
+                <div className="bg-gradient-gs text-white p-6 rounded-3xl mb-6">
+                    <h2 className="text-2xl font-bold">Hai, Aisyah!</h2>
+                    <p>Tahun 2 | Bintang: 80 | Streak: 4 Hari</p>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <button className="card-premium p-6 text-center hover:bg-purple-50 transition">
+                        <span className="text-3xl">📚</span>
+                        <p className="font-bold mt-2">Pilih Topik</p>
+                    </button>
+                    <button className="card-premium p-6 text-center hover:bg-yellow-50 transition">
+                        <span className="text-3xl">⚡</span>
+                        <p className="font-bold mt-2">Latihan Harian</p>
+                    </button>
+                </div>
+            </div>
+        );
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
