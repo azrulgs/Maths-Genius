@@ -65,6 +65,14 @@
         .btn-purple { background-color: var(--soft-purple); color: #5B2C6F; box-shadow: 0 4px 0 #AF7AC5; }
         .btn-green { background-color: var(--success-green); color: white; box-shadow: 0 4px 0 #27AE60; }
         .btn-outline { background-color: transparent; border: 2px solid var(--primary-blue); color: var(--primary-blue); box-shadow: none; }
+        .btn-red { background-color: var(--danger-red); color: white; box-shadow: 0 4px 0 #C0392B; }
+
+        /* Input Field Styling */
+        .input-field {
+            width: 100%; padding: 15px; border-radius: 15px; border: 2px solid var(--primary-blue);
+            font-size: 1.2rem; margin-bottom: 15px; text-align: center;
+        }
+        .input-field:focus { outline: none; border-color: var(--accent-yellow); }
 
         .level-group { margin-bottom: 25px; }
         .level-title { font-family: 'Fredoka'; color: var(--primary-blue); margin-bottom: 10px; font-size: 1.4rem;}
@@ -78,7 +86,7 @@
         .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 25px; padding: 30px; text-align: center; position: relative; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 5px solid var(--primary-blue); }
         .mascot-img { width: 100px; height: 100px; background: var(--accent-yellow); border-radius: 50%; margin: -80px auto 20px auto; border: 5px solid white; display: flex; justify-content: center; align-items: center; font-size: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         
-        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); border-top-left-radius: 20px; border-top-right-radius: 20px; }
+        #bottom-nav { position: absolute; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); border-top-left-radius: 20px; border-top-right-radius: 20px; z-index: 10; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #95A5A6; text-decoration: none; font-size: 0.9rem; gap: 5px; cursor: pointer; }
         .nav-item.active { color: var(--primary-blue); font-weight: bold; }
         .nav-item i { font-size: 1.5rem; }
@@ -94,23 +102,38 @@
 <div id="app-container">
     
     <!-- HEADER -->
-    <header id="main-header">
+    <header id="main-header" style="display: none;">
         <div class="header-top">
             <div class="user-info">
                 <div class="avatar">👦🏻</div>
                 <div>
-                    <h2 style="font-size: 1.2rem;">Hai, Ammar!</h2>
+                    <h2 id="user-name-display" style="font-size: 1.2rem;">Hai!</h2>
                     <p style="font-size: 0.8rem; opacity: 0.9;">Tahap: Genius Explorer</p>
                 </div>
             </div>
             <div class="stats">
-                <div class="stat-item"><i class="fas fa-star" style="color:var(--accent-yellow)"></i> <span id="star-count">120</span></div>
+                <div class="stat-item"><i class="fas fa-star" style="color:var(--accent-yellow)"></i> <span id="star-count">0</span></div>
             </div>
         </div>
     </header>
 
+    <!-- SCREEN: LOGIN -->
+    <main id="screen-login" class="screen active">
+        <div class="text-center" style="margin-top: 40px;">
+            <div class="mascot-img" style="margin: 0 auto 20px auto; width: 120px; height: 120px; font-size: 60px;">🦉</div>
+            <h1 style="color: var(--primary-blue); margin-bottom: 5px; font-size: 2.5rem;">Maths Genius</h1>
+            <p style="color: #7F8C8D; margin-bottom: 30px;">Belajar Matematik Jadi Mudah & Seronok!</p>
+            
+            <div class="card" style="margin-top: 20px;">
+                <h3 class="mb-2" style="color: var(--text-dark);">Siapa nama anda?</h3>
+                <input type="text" id="login-name" class="input-field" placeholder="Taip nama di sini..." autocomplete="off">
+                <button class="btn btn-yellow" onclick="logMasuk()">Mula Belajar <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </main>
+
     <!-- SCREEN: HOME -->
-    <main id="screen-home" class="screen active">
+    <main id="screen-home" class="screen">
         <div class="card" style="background: linear-gradient(135deg, var(--primary-blue), #8E44AD); color: white; border:none;">
             <h2>Misi Harian <i class="fas fa-rocket"></i></h2>
             <p>Selesaikan latihan mengikut silibus sekolah anda!</p>
@@ -148,7 +171,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <button class="btn btn-outline" onclick="switchScreen('screen-topics')" style="width: auto; padding: 5px 15px;"><i class="fas fa-times"></i></button>
             <div style="font-weight: bold; color: var(--primary-blue);">Soalan <span id="q-current">1</span>/10</div>
-            <div style="font-weight: bold; color: var(--accent-yellow);"><i class="fas fa-star"></i> <span id="q-score">0</span></div>
+            <div style="font-weight: bold; color: var(--accent-yellow);"><i class="fas fa-star"></i> <span id="q-score-temp">0</span></div>
         </div>
 
         <div class="card text-center" style="border: 4px dashed var(--soft-purple); padding: 25px 15px;">
@@ -165,18 +188,19 @@
         <h2 class="mb-2 text-center" style="color: var(--primary-blue);">Laporan Ibu Bapa</h2>
         <div id="bahagian-pdf" style="background-color: var(--bg-white); padding: 10px; border-radius: 10px;">
             <div class="card">
-                <h3>Prestasi Ammar</h3>
+                <h3 id="parent-dashboard-name">Prestasi Anak</h3>
                 <p>Mengikuti Silibus KSSR Semakan</p>
                 <hr style="margin: 10px 0; border: 0; border-top: 1px solid #eee;">
-                <p><strong>Topik Kuat:</strong> Pengiraan Asas (80% dikuasai)</p>
-                <p><strong>Bintang Terkumpul:</strong> <span id="pdf-star-count">120</span> 🌟</p>
+                <p><strong>Topik Kuat:</strong> Pengiraan Asas</p>
+                <p><strong>Bintang Terkumpul:</strong> <span id="pdf-star-count">0</span> 🌟</p>
             </div>
         </div>
-        <button class="btn btn-purple mt-2" onclick="muatTurunPDF()"><i class="fas fa-download"></i> Muat Turun Laporan (PDF)</button>
+        <button class="btn btn-purple mb-1" onclick="muatTurunPDF()"><i class="fas fa-download"></i> Muat Turun Laporan (PDF)</button>
+        <button class="btn btn-red" onclick="logKeluar()"><i class="fas fa-sign-out-alt"></i> Tukar Akaun (Log Keluar)</button>
     </main>
 
     <!-- BOTTOM NAVIGATION -->
-    <nav class="bottom-nav">
+    <nav id="bottom-nav" style="display: none;">
         <div class="nav-item active" onclick="switchTab('screen-home', this)"><i class="fas fa-home"></i><span>Utama</span></div>
         <div class="nav-item" onclick="switchTab('screen-topics', this)"><i class="fas fa-gamepad"></i><span>Latihan</span></div>
         <div class="nav-item" onclick="switchTab('screen-parents', this)"><i class="fas fa-chart-pie"></i><span>Ibu Bapa</span></div>
@@ -205,7 +229,58 @@
 </div>
 
 <script>
-    let currentUserData = { name: "Ammar", stars: 120, currentYear: "Tahun 1" };
+    let currentUserData = { name: "", stars: 0, currentYear: "Tahun 1" };
+
+    // Semak pengguna sedia ada apabila aplikasi dibuka
+    window.onload = function() {
+        const savedUser = localStorage.getItem('mg_user_name');
+        const savedStars = localStorage.getItem('mg_user_stars');
+        
+        if (savedUser && savedUser.trim() !== "") {
+            currentUserData.name = savedUser;
+            currentUserData.stars = savedStars ? parseInt(savedStars) : 0;
+            updateProfilUI();
+            switchScreen('screen-home');
+        } else {
+            switchScreen('screen-login');
+        }
+    };
+
+    function logMasuk() {
+        const inputNama = document.getElementById('login-name').value.trim();
+        if (inputNama === "") {
+            alert("Sila taip nama anda terlebih dahulu ya!");
+            return;
+        }
+        
+        currentUserData.name = inputNama;
+        currentUserData.stars = 0; // Set bintang kepada 0 untuk pengguna baharu
+        
+        // Simpan data ke memori pelayar
+        localStorage.setItem('mg_user_name', inputNama);
+        localStorage.setItem('mg_user_stars', 0);
+        
+        updateProfilUI();
+        switchScreen('screen-home');
+    }
+
+    function logKeluar() {
+        const sah = confirm("Anda pasti mahu log keluar? Ini akan membuang rekod semasa dari peranti ini.");
+        if(sah) {
+            localStorage.removeItem('mg_user_name');
+            localStorage.removeItem('mg_user_stars');
+            currentUserData = { name: "", stars: 0, currentYear: "Tahun 1" };
+            document.getElementById('login-name').value = "";
+            switchScreen('screen-login');
+        }
+    }
+
+    function updateProfilUI() {
+        document.getElementById('user-name-display').innerText = "Hai, " + currentUserData.name + "!";
+        document.getElementById('star-count').innerText = currentUserData.stars;
+        document.getElementById('pdf-star-count').innerText = currentUserData.stars;
+        document.getElementById('parent-dashboard-name').innerText = "Prestasi " + currentUserData.name;
+    }
 
     // FORMAT DATA: q=Soalan, o=Pilihan, a=Jawapan, d=Penerangan AI
     const qBank = {
@@ -384,22 +459,16 @@
             {q:"8100 ÷ 9 = ?", o:[700,800,900,1000], a:900, d:"81 bahagi 9 ialah 9. Jadi 900."},
             {q:"10000 ÷ 10 = ?", o:[100,500,1000,5000], a:1000, d:"Potong satu sifar. Jawapan 1000."}
         ],
-
-        // --- TAHUN 5 --- (Menggunakan logik serupa gandaan lebih besar)
-        "tahun5_tambah": [ {q:"125000 + 125000 = ?", o:[200000,250000,300000,350000], a:250000, d:"Gandakan nilai ratus ribu."} /* (Contoh format, diringkaskan) */ ],
+        "tahun5_tambah": [ {q:"125000 + 125000 = ?", o:[200000,250000,300000,350000], a:250000, d:"Gandakan nilai ratus ribu."} ],
         "tahun5_tolak": [ {q:"500000 - 250000 = ?", o:[150000,200000,250000,300000], a:250000, d:"Separuh juta tolak suku juta. Baki 250000."} ],
         "tahun5_darab": [ {q:"1500 x 4 = ?", o:[5000,6000,7000,8000], a:6000, d:"15 kali 4 = 60. Tambah 2 sifar = 6000."} ],
         "tahun5_bahagi": [ {q:"84000 ÷ 4 = ?", o:[12000,21000,24000,32000], a:21000, d:"8 bahagi 4=2, 4 bahagi 4=1. Jawapan 21000."} ],
-
-        // --- TAHUN 6 --- (Penyelesaian KBAT/Perpuluhan mudah Tahap 2)
         "tahun6_tambah": [ {q:"1.25 juta + 0.5 juta = ?", o:["1.5 juta","1.75 juta","2.0 juta","2.25 juta"], a:"1.75 juta", d:"Tambah nilai perpuluhan juta."} ],
         "tahun6_tolak": [ {q:"3.5 juta - 1.5 juta = ?", o:["1.0 juta","1.5 juta","2.0 juta","2.5 juta"], a:"2.0 juta", d:"Tolak lurus bahagian perpuluhan."} ],
         "tahun6_darab": [ {q:"RM 12.50 x 8 = ?", o:["RM 80","RM 90","RM 100","RM 110"], a:"RM 100", d:"Pengiraan wang ringgit didarab."} ],
         "tahun6_bahagi": [ {q:"RM 1000 ÷ 8 = ?", o:["RM 100","RM 125","RM 150","RM 175"], a:"RM 125", d:"Seribu dibahagi kepada 8 bahagian ialah 125."} ]
     };
 
-    // Fungsi tambahan untuk jana soalan rawak jika array tidak penuh 10 untuk Tahun 5 & 6 dalam demo ini
-    // (Bagi memastikan sistem tidak tergendala, ia akan clone soalan sedia ada jika perlu)
     function checkAndFillBank(topic) {
         if (!qBank[topic]) qBank[topic] = [];
         while (qBank[topic].length < 10) {
@@ -415,7 +484,20 @@
     function switchScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
-        document.getElementById('main-header').style.display = (screenId === 'screen-quiz') ? 'none' : 'block';
+        
+        const header = document.getElementById('main-header');
+        const nav = document.getElementById('bottom-nav');
+        
+        if(screenId === 'screen-login') {
+            header.style.display = 'none';
+            nav.style.display = 'none';
+        } else if (screenId === 'screen-quiz') {
+            header.style.display = 'none';
+            nav.style.display = 'none'; // Sembunyikan menu di bawah waktu kuiz
+        } else {
+            header.style.display = 'block';
+            nav.style.display = 'flex';
+        }
     }
 
     function switchTab(screenId, element) {
@@ -433,13 +515,12 @@
         let key = year.replace(" ", "").toLowerCase();
         let topics = [];
 
-        // Logik Perpisahan Kategori seperti diminta
         if (key === 'tahun1') {
             topics = [
                 { id: key + '_tambah', title: 'Tambah', icon: 'fa-plus', color: 'var(--success-green)' },
                 { id: key + '_tolak', title: 'Tolak', icon: 'fa-minus', color: 'var(--danger-red)' }
             ];
-            topicList.className = 'grid-2'; // 2 lajur
+            topicList.className = 'grid-2'; 
         } else {
             topics = [
                 { id: key + '_tambah', title: 'Tambah', icon: 'fa-plus', color: 'var(--success-green)' },
@@ -468,11 +549,11 @@
 
     function startQuiz(topic) {
         selectedTopic = topic;
-        checkAndFillBank(topic); // Pastikan ada 10 soalan
+        checkAndFillBank(topic); 
         currentQuiz = qBank[topic];
         currentQuestionIndex = 0;
         tempScore = 0;
-        document.getElementById('q-score').innerText = tempScore;
+        document.getElementById('q-score-temp').innerText = tempScore;
         loadQuestion();
         switchScreen('screen-quiz');
     }
@@ -502,14 +583,14 @@
         const q = currentQuiz[currentQuestionIndex];
         if (selectedOption == q.a) {
             tempScore += 10;
-            document.getElementById('q-score').innerText = tempScore;
+            document.getElementById('q-score-temp').innerText = tempScore;
             const star = document.getElementById('correct-star');
             star.style.display = 'block';
             setTimeout(() => { star.style.display = 'none'; }, 500);
             currentQuestionIndex++;
             setTimeout(loadQuestion, 600);
         } else {
-            showAiModal(`Cuba lagi sayang! Ini bimbingan Cikgu Geni:<br><br><b>${q.q}</b><br><br>${q.d}`);
+            showAiModal(`Cuba lagi ${currentUserData.name}! Ini bimbingan Cikgu Geni:<br><br><b>${q.q}</b><br><br>${q.d}`);
         }
     }
 
@@ -519,8 +600,10 @@
     function showSuccessModal() {
         document.getElementById('success-modal').style.display = 'flex';
         currentUserData.stars += tempScore;
-        document.getElementById('star-count').innerText = currentUserData.stars;
-        document.getElementById('pdf-star-count').innerText = currentUserData.stars;
+        
+        // Simpan jumlah markah terbaru ke pelayar
+        localStorage.setItem('mg_user_stars', currentUserData.stars);
+        updateProfilUI();
     }
 
     function finishQuiz() { document.getElementById('success-modal').style.display = 'none'; switchScreen('screen-home'); }
@@ -528,7 +611,7 @@
     function muatTurunPDF() {
         const elemenLaporan = document.getElementById('bahagian-pdf');
         html2pdf().set({
-            margin: 0.5, filename: 'Laporan_Ammar.pdf',
+            margin: 0.5, filename: `Laporan_Maths_Genius_${currentUserData.name}.pdf`,
             image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         }).from(elemenLaporan).save();
