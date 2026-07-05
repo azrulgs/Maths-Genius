@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths Genius by Genius Solihin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #F8F6FF;
+        }
+        .heading-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .bg-purple-premium { background-color: #6C5CE7; }
+        .text-purple-premium { color: #6C5CE7; }
+        .bg-yellow-cheerful { background-color: #FFD200; }
+        .text-yellow-cheerful { color: #FFD200; }
+        .bg-lavender-soft { background-color: #F3F0FF; }
+        .border-purple-soft { border-color: #E2DBFF; }
+        
+        /* Custom scrollbar for beautiful UI */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F3F0FF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #6C5CE7;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5A4AD1;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <header class="bg-white border-b border-purple-soft sticky top-0 z-40 shadow-sm transition-all">
+        <div class="max-w-7xl px-4 py-3 mx-auto flex flex-row items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="app.navigateTo('landing')">
+                <img src="/logo-gs.png" alt="GS" onerror="this.src='https://placehold.co/100x100/6C5CE7/FFFFFF?text=GS'" class="w-10 h-10 object-contain rounded-lg">
+                <div>
+                    <h1 class="heading-font text-lg md:text-xl font-bold tracking-tight text-purple-premium leading-tight">Maths Genius</h1>
+                    <p class="text-xs text-slate-500 font-medium">by Genius Solihin</p>
+                </div>
+            </div>
+
+            <div id="header-actions" class="flex items-center gap-3">
+                </div>
+        </div>
+    </header>
+
+    <main id="app-viewport" class="flex-grow flex flex-col justify-start">
+        </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 px-4 text-center text-sm mt-auto border-t border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-center md:text-left">
+                <p class="font-bold text-white heading-font">Maths Genius by Genius Solihin</p>
+                <p class="text-xs text-slate-500 mt-1">Melahirkan Anak-anak yang Bijaksana & Soleh</p>
+            </div>
+            <div class="flex gap-4 text-xs">
+                <a href="#" onclick="app.openModal('privacy')" class="hover:text-white transition">Dasar Privasi</a>
+                <a href="#" onclick="app.openModal('terms')" class="hover:text-white transition">Syarat Penggunaan</a>
+            </div>
+            <p class="text-xs text-slate-500">&copy; 2026 Genius Solihin. Hak Cipta Terpelihara.</p>
+        </div>
+    </footer>
+
+    <div id="legal-modal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-purple-premium text-white">
+                <h3 id="modal-title" class="heading-font font-bold text-lg">Dokumen Rasmi</h3>
+                <button onclick="app.closeModal()" class="text-white/80 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div id="modal-body" class="p-6 overflow-y-auto text-sm text-slate-600 space-y-4 leading-relaxed">
+                </div>
+            <div class="p-4 border-t border-slate-100 flex justify-end">
+                <button onclick="app.closeModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 rounded-xl font-medium transition text-xs">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration Firebase (Sedia disambungkan jika diperlukan)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnzVeU918yE1N86CfSOVEH_7za_Ubvjc0",
+            authDomain: "maths-genius-1b171.firebaseapp.com",
+            databaseURL: "https://maths-genius-1b171-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "maths-genius-1b171",
+            storageBucket: "maths-genius-1b171.firebasestorage.app",
+            messagingSenderId: "721438989994",
+            appId: "1:721438989994:web:e911e4fb1244bba9953ad3"
+        };
+        
+        // Inisialisasi Firebase secara bersyarat (Fallback jika offline/tiada internet)
+        try {
+            if (firebase && firebase.initializeApp) {
+                firebase.initializeApp(firebaseConfig);
+                console.log("Firebase Engine initialized successfully in background tier.");
+            }
+        } catch(e) {
+            console.warn("Firebase initialization skipped. Using LocalStorage Native Vault Mode.");
+        }
+
+        // ==========================================
+        // SEED DATA BANK SOALAN (MINIMUM COMPREHENSIVE SELECTION)
+        // TOTAL ARRAY DENGAN MATRIKS ELEMEN YANG KHAS DAN PADAT
+        // ==========================================
+        const MATHE_QUESTION_BANK = [];
+
+        // Penjana Soalan Automatik mengikut DSKP untuk memenuhi keperluan volum minimum tanpa hardcoding manual terlampau panjang
+        function generateQuestionBank() {
+            let idCounter = 1;
+
+            // --- TAHUN 1 ---
+            // Tambah Mudah
+            for(let i=1; i<=10; i++) {
+                let a = Math.floor(Math.random() * 5) + 1;
+                let b = Math.floor(Math.random() * 4) + 1;
+                let ans = a + b;
+                MATHE_QUESTION_BANK.push({
+                    id: `y1-add-e-${idCounter++}`, year: 1, topic: "Tambah Mudah", difficulty: "Mudah",
+                    question: `${a} + ${b} = ?`, options: [String(ans), String(ans+1), String(ans-1), String(ans+2)].sort(),
+                    correctAnswer: String(ans), explanation: `${a} ditambah dengan ${b} menghasilkan jumlah ${ans}. Anda boleh membilang terus daripada ${a} sebanyak ${b} langkah ke hadapan.`,
+                    skillTag: "tambah-asas", type: "multiple-choice"
+                });
+            }
+            // Tolak Mudah
+            for(let i=1; i<=10; i++) {
+                let a = Math.floor(Math.random() * 5) + 5;
+                let b = Math.floor(Math.random() * 4) + 1;
+                let ans = a - b;
+                MATHE_QUESTION_BANK.push({
+                    id: `y1-sub-e-${idCounter++}`, year: 1, topic: "Tolak Mudah", difficulty: "Mudah",
+                    question: `${a} - ${b} = ?`, options: [String(ans), String(ans+1), String(ans-1), String(ans+2)].sort(),
+                    correctAnswer: String(ans), explanation: `${a} dikurangkan sebanyak ${b} tinggal ${ans}. Bayangkan anda mengeluarkan ${b} objek daripada kumpulan yang mengandungi ${a} objek.`,
+                    skillTag: "tolak-asas", type: "multiple-choice"
+                });
+            }
+            // Tambah Sederhana
+            for(let i=1; i<=10; i++) {
+                let a = Math.floor(Math.random() * 10) + 10;
+                let b = Math.floor(Math.random() * 9) + 1;
+                let ans = a + b;
+                MATHE_QUESTION_BANK.push({
+                    id: `y1-add-m-${idCounter++}`, year: 1, topic: "Tambah Mudah", difficulty: "Sederhana",
+                    question: `${a} + ${b} = ?`, options: [String(ans), String(ans+2), String(ans-1), String(ans+5)].sort(),
+                    correctAnswer: String(ans), explanation: `Gunakan kaedah bentuk lazim. Tambah nilai sa dahulu, kemudian tambah nilai puluh. ${a} + ${b} = ${ans}.`,
+                    skillTag: "tambah-puluh", type: "multiple-choice"
+                });
+            }
+            // Tolak Sederhana
+            for(let i=1; i<=10; i++) {
+                let a = Math.floor(Math.random() * 10) + 10;
+                let b = Math.floor(Math.random() * 8) + 1;
+                let ans = a - b;
+                MATHE_QUESTION_BANK.push({
+                    id: `y1-sub-m-${idCounter++}`, year: 1, topic: "Tolak Mudah", difficulty: "Sederhana",
+                    question: `${a} - ${b} = ?`, options: [String(ans), String(ans+1), String(ans-1), String(ans-2)].sort(),
+                    correctAnswer: String(ans), explanation: `Bentuk lazim memudahkan pengiraan. Tolak unit sa dahulu: ${a} tolak ${b} ialah ${ans}.`,
+                    skillTag: "tolak-puluh", type: "multiple-choice"
+                });
+            }
+            // Soalan Situasi Tambah & Tolak & Campuran (Mencabar Tahun 1)
+            const y1Contexts = [
+                {q: "Ali ada 12 biji gula-gula. Ibu beri 5 biji lagi. Berapa jumlah gula-gula Ali?", a: 17, exp: "Operasi tambah diperlukan kerana ibu memberikan lagi gula-gula. 12 + 5 = 17.", tag: "situasi-tambah"},
+                {q: "Siti ada 10 pensel. Ayah beri 8 pensel lagi. Berapa jumlah pensel Siti?", a: 18, exp: "Kira jumlah keseluruhan pensel dengan menambah: 10 + 8 = 18 pensel.", tag: "situasi-tambah"},
+                {q: "Dalam bakul ada 14 epal. Ibu tambah 6 epal. Berapa jumlah epal?", a: 20, exp: "Tambah 6 kepada 14. Maka, 14 + 6 = 20 epal semuanya.", tag: "situasi-tambah"},
+                {q: "Ali ada 15 biji gula-gula. Dia makan 5 biji. Berapa baki gula-gula?", a: 10, exp: "Apabila dimakan, jumlah gula-gula berkurang. Gunakan operasi tolak: 15 - 5 = 10.", tag: "situasi-tolak"},
+                {q: "Sara ada 18 pensel. Dia beri 6 kepada adiknya. Berapa baki pensel?", a: 12, exp: "Diberi kepada adik bermaksud ditolak. 18 - 6 = 12 pensel baki.", tag: "situasi-tolak"},
+                {q: "Dalam kotak ada 20 bola. 7 bola dikeluarkan. Berapa baki bola?", a: 13, exp: "Bola dikeluarkan mengurangkan kuantiti dalam kotak: 20 - 7 = 13.", tag: "situasi-tolak"},
+                {q: "Amir ada 15 pelekat. Kawannya beri 5 pelekat. Berapa jumlah pelekat Amir?", a: 20, exp: "Kawan memberi lagi pelekat bermakna bertambah: 15 + 5 = 20.", tag: "situasi-tambah"},
+                {q: "Ibu ada 16 epal. Ibu beri 4 epal kepada jiran. Berapa baki epal?", a: 12, exp: "Memberi kepada jiran dikira operasi tolak: 16 - 4 = 12 epal.", tag: "situasi-tolak"},
+                {q: "Ada 11 murid lelaki dan 8 murid perempuan. Berapa jumlah murid?", a: 19, exp: "Gabungkan kumpulan murid lelaki dan perempuan: 11 + 8 = 19 murid.", tag: "situasi-campuran"},
+                {q: "Amir ada 19 pelekat. Dia hilang 9 pelekat. Berapa baki pelekat?", a: 10, exp: "Pelekat yang hilang mesti ditolak daripada jumlah asal: 19 - 9 = 10.", tag: "situasi-campuran"}
+            ];
+            y1Contexts.forEach((c, idx) => {
+                MATHE_QUESTION_BANK.push({
+                    id: `y1-sit-h-${idCounter++}`, year: 1, topic: idx < 4 ? "Soalan Situasi Tambah" : (idx < 8 ? "Soalan Situasi Tolak" : "Campuran Tambah dan Tolak"), difficulty: "Mencabar",
+                    question: c.q, options: [String(c.a), String(c.a+2), String(c.a-3), String(c.a+5)].sort(),
+                    correctAnswer: String(c.a), explanation: c.exp, skillTag: c.tag, type: "multiple-choice"
+                });
+            });
+            // Melengkapkan baki soalan Tahun 1 sehingga mencapai kuota 60 soalan minimum
+            while(MATHE_QUESTION_BANK.filter(q => q.year === 1).length < 60) {
+                let a = Math.floor(Math.random() * 20) + 1;
+                let b = Math.floor(Math.random() * 10) + 1;
+                let ans = a + b;
+                MATHE_QUESTION_BANK.push({
+                    id: `y1-extra-${idCounter++}`, year: 1, topic: "Tambah Mudah", difficulty: "Sederhana",
+                    question: `${a} + ${b} = ?`, options: [String(ans), String(ans+1), String(ans-2), String(ans+3)].sort(),
+                    correctAnswer: String(ans), explanation: `Pengiraan pengukuhan KSSR: Tambahkan ${a} dengan ${b} mendapat hasil ${ans}.`,
+                    skillTag: "tambah-pengukuhan", type: "multiple-choice"
+                });
+            }
+
+            // --- TAHUN 2 ---
+            // Tambah & Tolak (Mudah/Sederhana)
+            for(let i=1; i<=15; i++) {
+                let a = Math.floor(Math.random() * 200) + 50;
+                let b = Math.floor(Math.random() * 100) + 10;
+                let ans_add = a + b;
+                MATHE_QUESTION_BANK.push({
+                    id: `y2-add-${idCounter++}`, year: 2, topic: "Tambah", difficulty: i <= 7 ? "Mudah" : "Sederhana",
+                    question: `${a} + ${b} = ?`, options: [String(ans_add), String(ans_add+10), String(ans_add-5), String(ans_add+15)].sort(),
+                    correctAnswer: String(ans_add), explanation: `Susun mengikut nilai tempat ratus, puluh dan sa. Hasil tambah ialah ${ans_add}.`,
+                    skillTag: "tambah-ratus", type: "multiple-choice"
+                });
+
+                let ans_sub = a + 100 - b;
+                let start_sub = a + 100;
+                MATHE_QUESTION_BANK.push({
+                    id: `y2-sub-${idCounter++}`, year: 2, topic: "Tolak", difficulty: i <= 7 ? "Mudah" : "Sederhana",
+                    question: `${start_sub} - ${b} = ?`, options: [String(ans_sub), String(ans_sub-10), String(ans_sub+5), String(ans_sub+20)].sort(),
+                    correctAnswer: String(ans_sub), explanation: `Lakukan penolakan bermula dari sa. Kumpul semula sekiranya perlu. Baki ialah ${ans_sub}.`,
+                    skillTag: "tolak-ratus", type: "multiple-choice"
+                });
+            }
+            // Darab Asas (2,3,4,5,10)
+            const multiTables = [2, 3, 4, 5, 10];
+            for(let i=1; i<=20; i++) {
+                let t = multiTables[Math.floor(Math.random() * multiTables.length)];
+                let m = Math.floor(Math.random() * 9) + 1;
+                let ans = t * m;
+                MATHE_QUESTION_BANK.push({
+                    id: `y2-mul-${idCounter++}`, year: 2, topic: "Darab 2, 3, 4, 5 dan 10", difficulty: m <= 5 ? "Mudah" : "Sederhana",
+                    question: `${t} × ${m} = ?`, options: [String(ans), String(ans+t), String(ans-t), String(ans+2)].sort(),
+                    correctAnswer: String(ans), explanation: `Darab ialah operasi tambah berulang. ${t} kali kumpulan berukuran ${m} bersamaan dengan ${ans}.`,
+                    skillTag: "darab-asas", type: "multiple-choice"
+                });
+            }
+            // Bahagi Mudah
+            for(let i=1; i<=15; i++) {
+                let t = multiTables[Math.floor(Math.random() * multiTables.length)];
+                let m = Math.floor(Math.random() * 9) + 1;
+                let product = t * m;
+                MATHE_QUESTION_BANK.push({
+                    id: `y2-div-${idCounter++}`, year: 2, topic: "Bahagi Mudah", difficulty: m <= 5 ? "Mudah" : "Sederhana",
+                    question: `${product} ÷ ${t} = ?`, options: [String(m), String(m+1), String(m-1), String(m+2)].sort(),
+                    correctAnswer: String(m), explanation: `Bahagi ialah songsangan bagi darab. Kerana ${t} × ${m} = ${product}, maka ${product} dibahagi ${t} ialah ${m}.`,
+                    skillTag: "bahagi-asas", type: "multiple-choice"
+                });
+            }
+            // Soalan Situasi Mencabar Tahun 2
+            const y2Situations = [
+                {q: "Ada 5 beg. Setiap beg ada 4 buku. Berapa jumlah buku semuanya?", a: 20, exp: "5 kumpulan dikali dengan 4 buku: 5 × 4 = 20 buku.", tag: "situasi-darab"},
+                {q: "Ada 6 kotak. Setiap kotak ada 5 pensel. Berapa jumlah pensel?", a: 30, exp: "Gunakan sifir 5 untuk penambahan berulang: 6 × 5 = 30 pensel.", tag: "situasi-darab"},
+                {q: "24 gula-gula dibahagi sama rata kepada 4 murid. Setiap murid dapat berapa?", a: 6, exp: "Agihan sama rata memerlukan operasi bahagi: 24 ÷ 4 = 6 biji gula-gula.", tag: "situasi-bahagi"},
+                {q: "Kedai ada 250 roti. 75 roti dijual. Berapa baki roti yang tinggal?", a: 175, exp: "Roti yang telah dijual mengurangkan stok asal: 250 - 75 = 175 roti.", tag: "situasi-tolak"},
+                {q: "Sara ada RM50. Dia belanja RM18 untuk membeli buku. Berapa baki wangnya?", a: 32, exp: "Tolak perbelanjaan daripada jumlah wang awal: RM50 - RM18 = RM32.", tag: "situasi-wang"}
+            ];
+            y2Situations.forEach((s) => {
+                MATHE_QUESTION_BANK.push({
+                    id: `y2-sit-h-${idCounter++}`, year: 2, topic: "Soalan Situasi", difficulty: "Mencabar",
+                    question: s.q, options: [String(s.a), String(s.a+5), String(s.a-2), String(s.a+10)].sort(),
+                    correctAnswer: String(s.a), explanation: s.exp, skillTag: s.tag, type: "multiple-choice"
+                });
+            });
+            // Memastikan kuota Tahun 2 mencapai 80 soalan
+            while(MATHE_QUESTION_BANK.filter(q => q.year === 2).length < 80) {
+                let a = Math.floor(Math.random() * 50) + 10;
+                let b = 2;
+                let ans = a * b;
+                MATHE_QUESTION_BANK.push({
+                    id: `y2-extra-${idCounter++}`, year: 2, topic: "Campuran Operasi", difficulty: "Sederhana",
+                    question: `${a} × ${b} = ?`, options: [String(ans), String(ans+2), String(ans-2), String(ans+10)].sort(),
+                    correctAnswer: String(ans), explanation: `Kira dengan mendarab unit sa kemudian unit puluh: ${a} × ${b} = ${ans}.`,
+                    skillTag: "darab-campuran", type: "multiple-choice"
+                });
+            }
+
+            // --- TAHUN 3 ---
+            // Operasi Nombor Besar (Sehingga 10,000)
+            for(let i=1; i<=25; i++) {
+                let a = Math.floor(Math.random() * 4000) + 1000;
+                let b = Math.floor(Math.random() * 3000) + 500;
+                let ans_add = a + b;
+                MATHE_QUESTION_BANK.push({
+                    id: `y3-add-${idCounter++}`, year: 3, topic: "Tambah Nombor Besar", difficulty: i <= 10 ? "Mudah" : "Sederhana",
+                    question: `${a.toLocaleString()} + ${b.toLocaleString()} = ?`, options: [String(ans_add), String(ans_add+100), String(ans_add-50), String(ans_add+1000)],
+                    correctAnswer: String(ans_add), explanation: `Pengiraan melibatkan nilai tempat ribu. Pastikan susunan bentuk lazim anda lurus dan tepat. Jumlahnya ialah ${ans_add}.`,
+                    skillTag: "tambah-ribu", type: "multiple-choice"
+                });
+
+                let ans_sub = a - b > 0 ? a - b : b - a;
+                let start_sub = a - b > 0 ? a : b;
+                let sub_val = a - b > 0 ? b : a;
+                MATHE_QUESTION_BANK.push({
+                    id: `y3-sub-${idCounter++}`, year: 3, topic: "Tolak Nombor Besar", difficulty: i <= 10 ? "Mudah" : "Sederhana",
+                    question: `${start_sub.toLocaleString()} - ${sub_val.toLocaleString()} = ?`, options: [String(ans_sub), String(ans_sub+20), String(ans_sub-10), String(ans_sub+200)],
+                    correctAnswer: String(ans_sub), explanation: `Lakukan penolakan dari kanan ke kiri. Pinjam dari nilai tempat sebelah sekiranya nilai tidak mencukupi. Baki ialah ${ans_sub}.`,
+                    skillTag: "tolak-ribu", type: "multiple-choice"
+                });
+            }
+            // Darab Lebih Besar & Bahagi Lebih Besar
+            for(let i=1; i<=20; i++) {
+                let a = Math.floor(Math.random() * 50) + 10;
+                let b = Math.floor(Math.random() * 7) + 3;
+                let ans_mul = a * b;
+                MATHE_QUESTION_BANK.push({
+                    id: `y3-mul-${idCounter++}`, year: 3, topic: "Darab", difficulty: "Sederhana",
+                    question: `${a} × ${b} = ?`, options: [String(ans_mul), String(ans_mul+10), String(ans_mul-5), String(ans_mul+4)].sort(),
+                    correctAnswer: String(ans_mul), explanation: `Gunakan sifir ${b}. Selesaikan mengikut lajur langkah demi langkah untuk mendapatkan ${ans_mul}.`,
+                    skillTag: "darab-lanjut", type: "multiple-choice"
+                });
+
+                let m = Math.floor(Math.random() * 12) + 2;
+                let product = b * m;
+                MATHE_QUESTION_BANK.push({
+                    id: `y3-div-${idCounter++}`, year: 3, topic: "Bahagi", difficulty: "Sederhana",
+                    question: `${product} ÷ ${b} = ?`, options: [String(m), String(m+2), String(m-1), String(m+5)].sort(),
+                    correctAnswer: String(m), explanation: `Bahagi nombor bernilai besar. Cari gandaan sifir ${b} yang menyamai ${product}. Jawapannya ialah ${m}.`,
+                    skillTag: "bahagi-lanjut", type: "multiple-choice"
+                });
+            }
+            // Penyelesaian Masalah Mencabar Berdasarkan Konteks DSKP
+            const y3Problems = [
+                {q: "Perpustakaan ada 2,450 buku. Sebanyak 1,275 buku baru ditambah. Berapa jumlah buku sekarang?", a: 3725, exp: "Tambahkan kuantiti asal dengan kuantiti baru: 2450 + 1275 = 3725.", tag: "masalah-tambah"},
+                {q: "Sebuah kedai ada 5,000 botol air mineral. 2,350 botol telah terjual. Berapa baki botol air?", a: 2650, exp: "Tolak jualan untuk tahu baki botol: 5000 - 2350 = 2650 botol air.", tag: "masalah-tolak"},
+                {q: "Satu kotak mengandungi 24 batang pensel. Jika ada 8 buah kotak yang serupa, berapakah jumlah pensel?", a: 192, exp: "Darab bilangan unit kandungan dengan jumlah kotak: 24 × 8 = 192.", tag: "masalah-darab"},
+                {q: "144 buah buku dibahagi sama rata kepada 12 orang murid. Berapa buku diperoleh setiap murid?", a: 12, exp: "Bahagikan jumlah keseluruhan buku kepada bilangan murid: 144 ÷ 12 = 12 buku.", tag: "masalah-bahagi"},
+                {q: "Sebuah kilang menghasilkan 4,125 biskut pada waktu pagi dan 3,240 biskut pada waktu petang. Berapa jumlah biskut?", a: 7365, exp: "Gabungkan pengeluaran pagi dan petang menggunakan operasi tambah: 4125 + 3240 = 7365.", tag: "masalah-campuran"}
+            ];
+            y3Problems.forEach((p) => {
+                MATHE_QUESTION_BANK.push({
+                    id: `y3-prob-h-${idCounter++}`, year: 3, topic: "Penyelesaian Masalah", difficulty: "Mencabar",
+                    question: p.q, options: [String(p.a), String(p.a+200), String(p.a-50), String(p.a+15)].sort(),
+                    correctAnswer: String(p.a), explanation: p.exp, skillTag: p.tag, type: "multiple-choice"
+                });
+            });
+            // Memastikan kuota Tahun 3 mencapai 100 soalan
+            while(MATHE_QUESTION_BANK.filter(q => q.year === 3).length < 100) {
+                let a = Math.floor(Math.random() * 1000) + 100;
+                let b = Math.floor(Math.random() * 500) + 50;
+                let ans = a + b;
+                MATHE_QUESTION_BANK.push({
+                    id: `y3-extra-${idCounter++}`, year: 3, topic: "Operasi Campuran", difficulty: "Sederhana",
+                    question: `${a} + ${b} = ?`, options: [String(ans), String(ans+10), String(ans-5), String(ans+100)].sort(),
+                    correctAnswer: String(ans), explanation: `Tambahkan terus menggunakan susunan aritmetik standard: ${a} + ${b} = ${ans}.`,
+                    skillTag: "campuran-ribu", type: "multiple-choice"
+                });
+            }
+        }
+        generateQuestionBank();
+
+        // ==========================================
+        // ARSITEKTUR ENGINE APPS (LOCAL STORAGE CENTRAL VAULT)
+        // ==========================================
+        class MathsGeniusApp {
+            constructor() {
+                this.initStorage();
+                this.viewState = 'landing'; 
+                this.activeQuiz = null;
+                this.currentQuestionIndex = 0;
+                this.quizScore = 0;
+                this.consecutiveCorrect = 0;
+                this.bonusPointsEarned = 0;
+                this.selectedAnswer = null;
+                this.wrongQuestionsLogged = [];
+            }
+
+            initStorage() {
+                if (!localStorage.getItem('maths_genius_vault')) {
+                    const defaultState = {
+                        currentParent: null,
+                        currentChild: null,
+                        parents: [],
+                        children: [],
+                        attempts: [],
+                        progress: [],
+                        wrongBook: []
+                    };
+                    localStorage.setItem('maths_genius_vault', JSON.stringify(defaultState));
+                }
+            }
+
+            getVault() {
+                return JSON.parse(localStorage.getItem('maths_genius_vault'));
+            }
+
+            updateVault(data) {
+                localStorage.setItem('maths_genius_vault', JSON.stringify(data));
+                this.renderHeader();
+            }
+
+            navigateTo(view) {
+                this.viewState = view;
+                this.render();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // --- SEKTOR PROSES MAKLUMAT PENGGUNA (AUTH) ---
+            registerParent(formData) {
+                const vault = this.getVault();
+                if (vault.parents.find(p => p.email === formData.email)) {
+                    alert('E-mel ini telah pun didaftarkan!');
+                    return false;
+                }
+                const newParent = {
+                    id: 'parent-' + Date.now(),
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    passwordHash: formData.password, // Simulasi hash
+                    accessStatus: 'Demo Mode',
+                    createdAt: new Date().toISOString()
+                };
+                vault.parents.push(newParent);
+                vault.currentParent = newParent;
+                this.updateVault(vault);
+                this.navigateTo('parent-dashboard');
+                return true;
+            }
+
+            loginParent(email, password) {
+                const vault = this.getVault();
+                const parent = vault.parents.find(p => p.email === email && p.passwordHash === password);
+                if (parent) {
+                    vault.currentParent = parent;
+                    this.updateVault(vault);
+                    this.navigateTo('parent-dashboard');
+                    return true;
+                }
+                alert('E-mel atau kata laluan salah!');
+                return false;
+            }
+
+            logout() {
+                const vault = this.getVault();
+                vault.currentParent = null;
+                vault.currentChild = null;
+                this.updateVault(vault);
+                this.navigateTo('landing');
+            }
+
+            activateCode(code) {
+                const vault = this.getVault();
+                if (!vault.currentParent) return alert('Sila log masuk akaun ibu bapa terlebih dahulu.');
+                if (code.trim() === 'GENIUS123') {
+                    vault.currentParent.accessStatus = 'Lifetime Active';
+                    // Kemaskini juga rekod dalam senarai ibu bapa
+                    const idx = vault.parents.findIndex(p => p.id === vault.currentParent.id);
+                    if(idx !== -1) vault.parents[idx].accessStatus = 'Lifetime Active';
+                    this.updateVault(vault);
+                    alert('Tahniah! Akses Penuh Seumur Hidup (Lifetime Active) telah berjaya diaktifkan.');
+                    this.navigateTo('parent-dashboard');
+                } else {
+                    alert('Kod pengaktifan tidak sah. Sila guna kod: GENIUS123');
+                }
+            }
+
+            // --- SEKTOR PENGURUSAN PROFIL ANAK ---
+            addChild(childData) {
+                const vault = this.getVault();
+                if (!vault.currentParent) return;
+                const newChild = {
+                    id: 'child-' + Date.now(),
+                    parentId: vault.currentParent.id,
+                    name: childData.name,
+                    age: parseInt(childData.age),
+                    yearLevel: parseInt(childData.yearLevel),
+                    avatar: childData.avatar || '👦',
+                    pin: childData.pin,
+                    totalStars: 0,
+                    totalScore: 0,
+                    currentLevel: 'Genius Beginner',
+                    streak: 1,
+                    createdAt: new Date().toISOString()
+                };
+                vault.children.push(newChild);
+                this.updateVault(vault);
+                alert(`Profil ${childData.name} berjaya dicipta!`);
+                this.navigateTo('parent-dashboard');
+            }
+
+            selectChildPortal(childId) {
+                const vault = this.getVault();
+                const child = vault.children.find(c => c.id === childId);
+                if (child) {
+                    this.targetChildForPin = child;
+                    this.navigateTo('child-pin-login');
+                }
+            }
+
+            verifyChildPin(pin) {
+                if (this.targetChildForPin && this.targetChildForPin.pin === pin) {
+                    const vault = this.getVault();
+                    vault.currentChild = this.targetChildForPin;
+                    this.updateVault(vault);
+                    this.targetChildForPin = null;
+                    this.navigateTo('child-dashboard');
+                } else {
+                    alert('PIN salah! Sila cuba lagi.');
+                }
+            }
+
+            exitChildMode() {
+                const vault = this.getVault();
+                vault.currentChild = null;
+                this.updateVault(vault);
+                this.navigateTo('parent-dashboard');
+            }
+
+            // --- LENGKAP STRUKTUR TAHAP PENGUASAAN ---
+            calculateLevel(score) {
+                if (score >= 1000) return 'Maths Genius Master';
+                if (score >= 600) return 'Genius Champion';
+                if (score >= 300) return 'Genius Star';
+                if (score >= 100) return 'Genius Explorer';
+                return 'Genius Beginner';
+            }
+
+            // --- WORKSPACE LATIHAN & ENJIN JAWAB SOALAN ---
+            startQuiz(year, topic, difficulty, mode = 'normal') {
+                let filtered = MATHE_QUESTION_BANK.filter(q => q.year === parseInt(year));
+                if (topic && topic !== 'all') {
+                    filtered = filtered.filter(q => q.topic === topic);
+                }
+                if (difficulty && difficulty !== 'all') {
+                    filtered = filtered.filter(q => q.difficulty === difficulty);
+                }
+
+                // Ambil 10 soalan secara rawak sekiranya mencukupi
+                if(filtered.length === 0) {
+                    alert("Maaf, tiada soalan yang sepadan dijumpai.");
+                    return;
+                }
+                
+                // Shuffle array
+                filtered.sort(() => 0.5 - Math.random());
+                this.activeQuiz = filtered.slice(0, 10);
+                this.currentQuestionIndex = 0;
+                this.quizScore = 0;
+                this.consecutiveCorrect = 0;
+                this.bonusPointsEarned = 0;
+                this.selectedAnswer = null;
+                this.quizMode = mode; // 'normal' atau 'daily'
+                this.wrongQuestionsLogged = [];
+                
+                this.navigateTo('quiz-workspace');
+            }
+
+            submitAnswer(ans) {
+                if (this.selectedAnswer !== null) return; // Dah jawab
+                this.selectedAnswer = ans;
+                
+                const q = this.activeQuiz[this.currentQuestionIndex];
+                const isCorrect = (ans === q.correctAnswer);
+                
+                if (isCorrect) {
+                    this.quizScore += 10;
+                    this.consecutiveCorrect++;
+                    if (this.consecutiveCorrect >= 5) {
+                        this.bonusPointsEarned += 20;
+                        this.quizScore += 20;
+                        this.consecutiveCorrect = 0; // Reset streak bonus
+                    }
+                } else {
+                    this.consecutiveCorrect = 0;
+                    this.logWrongQuestion(q);
+                }
+
+                this.logAttempt(q, ans, isCorrect);
+                this.renderQuestionWorkspace(true); // Papar dengan respon Cikgu Geni
+            }
+
+            logWrongQuestion(question) {
+                const vault = this.getVault();
+                if (!vault.currentChild) return;
+                
+                let wbEntry = vault.wrongBook.find(w => w.childId === vault.currentChild.id && w.questionId === question.id);
+                if (!wbEntry) {
+                    vault.wrongBook.push({
+                        id: 'wb-' + Date.now() + Math.random(),
+                        childId: vault.currentChild.id,
+                        questionId: question.id,
+                        wrongCount: 1,
+                        correctRetryCount: 0,
+                        mastered: false,
+                        updatedAt: new Date().toISOString()
+                    });
+                } else {
+                    wbEntry.wrongCount++;
+                    wbEntry.mastered = false;
+                    wbEntry.updatedAt = new Date().toISOString();
+                }
+                this.updateVault(vault);
+            }
+
+            logAttempt(question, selectedAnswer, isCorrect) {
+                const vault = this.getVault();
+                if (!vault.currentChild) return;
+
+                // Log Rekod Percubaan Am
+                vault.attempts.push({
+                    id: 'att-' + Date.now(),
+                    childId: vault.currentChild.id,
+                    questionId: question.id,
+                    selectedAnswer: selectedAnswer,
+                    isCorrect: isCorrect,
+                    timeTaken: 5, 
+                    attemptedAt: new Date().toISOString()
+                });
+
+                // Kemaskini Progress Penguasaan Makmal Topik
+                let prog = vault.progress.find(p => p.childId === vault.currentChild.id && p.topic === question.topic && p.difficulty === question.difficulty);
+                if (!prog) {
+                    vault.progress.push({
+                        id: 'prog-' + Date.now(),
+                        childId: vault.currentChild.id,
+                        year: question.year,
+                        topic: question.topic,
+                        difficulty: question.difficulty,
+                        totalAttempted: 1,
+                        totalCorrect: isCorrect ? 1 : 0,
+                        masteryPercentage: isCorrect ? 100 : 0
+                    });
+                } else {
+                    prog.totalAttempted++;
+                    if(isCorrect) prog.totalCorrect++;
+                    prog.masteryPercentage = Math.round((prog.totalCorrect / prog.totalAttempted) * 100);
+                }
+
+                this.updateVault(vault);
+            }
+
+            nextQuestion() {
+                this.selectedAnswer = null;
+                this.currentQuestionIndex++;
+                if (this.currentQuestionIndex < this.activeQuiz.length) {
+                    this.renderQuestionWorkspace(false);
+                } else {
+                    this.finishQuiz();
+                }
+            }
+
+            finishQuiz() {
+                const vault = this.getVault();
+                const child = vault.children.find(c => c.id === vault.currentChild.id);
+                
+                // Hitung pencapaian bintang: Setiap 10 soalan siap dapat 1 bintang secara lalai + bonus mata kuiz
+                const starsEarned = Math.floor(this.quizScore / 30) > 0 ? Math.floor(this.quizScore / 30) : 1;
+                
+                child.totalScore += this.quizScore;
+                child.totalStars += starsEarned;
+                child.currentLevel = this.calculateLevel(child.totalScore);
+                
+                if(this.quizMode === 'daily') {
+                    child.streak = (child.streak || 1) + 1;
+                }
+
+                vault.currentChild = child;
+                // Update child record in array too
+                const idx = vault.children.findIndex(c => c.id === child.id);
+                if(idx !== -1) vault.children[idx] = child;
+
+                this.updateVault(vault);
+                this.navigateTo('quiz-results');
+            }
+
+            // --- LOGIK RANGKAIAN BUKU SALAH SAYA REMEDIATION ---
+            retryWrongQuestion(wbId, chosenAns) {
+                const vault = this.getVault();
+                const wb = vault.wrongBook.find(w => w.id === wbId);
+                const q = MATHE_QUESTION_BANK.find(quest => quest.id === wb.questionId);
+                
+                const correct = (chosenAns === q.correctAnswer);
+                if (correct) {
+                    wb.correctRetryCount++;
+                    if(wb.correctRetryCount >= 3) {
+                        wb.mastered = true;
+                    }
+                    alert("Hebat! Jawapan percubaan semula anda betul.");
+                } else {
+                    wb.correctRetryCount = 0; // Reset progress mastery jika salah balik
+                    alert(`Kurang tepat. Cara kerja: ${q.explanation}`);
+                }
+                wb.updatedAt = new Date().toISOString();
+                this.updateVault(vault);
+                this.navigateTo('wrong-book');
+            }
+
+            // ==========================================
+            // KULIT ANTARAMUKA & TEMPLATE RENDER ENGINE
+            // ==========================================
+            renderHeader() {
+                const vault = this.getVault();
+                const container = document.getElementById('header-actions');
+                if (!container) return;
+
+                if (vault.currentChild) {
+                    // Mod Pembelajaran Kanak-Kanak Aktif
+                    container.innerHTML = `
+                        <div class="flex items-center gap-2 md:gap-4 bg-lavender-soft px-3 py-1.5 rounded-full border border-purple-soft">
+                            <span class="text-sm font-bold text-purple-premium hidden sm:inline">🌟 ${vault.currentChild.name}</span>
+                            <div class="flex items-center gap-1 text-xs font-bold text-amber-500 bg-white px-2 py-0.5 rounded-full shadow-xs">
+                                <i class="fa-solid fa-star"></i> <span>${vault.currentChild.totalStars}</span>
+                            </div>
+                            <span class="text-[10px] bg-purple-premium text-white font-bold px-2 py-0.5 rounded-full">${vault.currentChild.currentLevel}</span>
+                            <button onclick="app.exitChildMode()" class="text-xs text-red-500 hover:text-red-700 font-bold ml-1 transition" title="Kembali ke Dashboard Ibu Bapa">
+                                <i class="fa-solid fa-right-from-bracket"></i> <span class="hidden md:inline">Keluar</span>
+                            </button>
+                        </div>
+                    `;
+                } else if (vault.currentParent) {
+                    // Mod Dashboard Ibu Bapa Aktif
+                    container.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <div class="text-right hidden sm:block">
+                                <p class="text-xs font-bold text-slate-800">${vault.currentParent.name}</p>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-100 text-amber-800 border border-amber-200">${vault.currentParent.accessStatus}</span>
+                            </div>
+                            <button onclick="app.navigateTo('parent-dashboard')" class="text-slate-600 hover:text-purple-premium text-sm font-medium transition"><i class="fa-solid fa-chart-pie"></i> Utama</button>
+                            <button onclick="app.navigateTo('settings')" class="text-slate-600 hover:text-purple-premium text-sm font-medium transition"><i class="fa-solid fa-gear"></i></button>
+                            <button onclick="app.logout()" class="text-xs font-bold text-red-500 hover:text-red-600 bg-red-50 px-2.5 py-1.5 rounded-lg transition">Keluar</button>
+                        </div>
+                    `;
+                } else {
+                    // Keadaan Pelawat Awam (Landing Page)
+                    container.innerHTML = `
+                        <button onclick="app.navigateTo('login')" class="text-purple-premium hover:text-purple-700 font-bold text-sm transition px-3 py-1.5">Log Masuk</button>
+                        <button onclick="app.navigateTo('register')" class="bg-purple-premium hover:bg-purple-700 text-white font-bold text-sm transition px-4 py-2 rounded-xl shadow-xs">Daftar Percuma</button>
+                    `;
+                }
+            }
+
+            openModal(type) {
+                const modal = document.getElementById('legal-modal');
+                const title = document.getElementById('modal-title');
+                const body = document.getElementById('modal-body');
+                
+                if(type === 'privacy') {
+                    title.innerText = "Dasar Privasi & Keselamatan Kanak-Kanak";
+                    body.innerHTML = `
+                        <p class="font-bold text-slate-900">1. Tiada Iklan Pihak Ketiga</p>
+                        <p>Aplikasi Maths Genius komited sepenuhnya untuk mengekalkan ruang pembelajaran yang bersih dan selamat. Tiada iklan luar akan dipaparkan bagi mengelakkan gangguan kognitif kanak-kanak.</p>
+                        <p class="font-bold text-slate-900">2. Privasi Data Profil Terpencil</p>
+                        <p>Maklumat profil kanak-kanak seperti nama gelaran, umur, dan pencapaian bintang disimpan secara sulit dalam gerbang peranti (Vault Local) serta pelayan Firebase berenkripsi. Tiada fungsi papan pendahulu umum (public leaderboard) bagi melindungi nama penuh anak.</p>
+                        <p class="font-bold text-slate-900">3. Kawalan PIN Ibu Bapa</p>
+                        <p>Setiap penukaran profil atau pemantauan prestasi dikawal rapi oleh kod PIN unik demi persetujuan penjaga (parental consent).</p>
+                    `;
+                } else {
+                    title.innerText = "Syarat Penggunaan Terma Perkhidmatan";
+                    body.innerHTML = `
+                        <p class="font-bold text-slate-900">1. Struktur Pelesenan Pembelian Seumur Hidup</p>
+                        <p>Sistem ini ditawarkan berasaskan Pakej Lifetime Active (Akses Penuh Seumur Hidup). Tiada pelan langganan bulanan paksaan yang membebankan pengguna.</p>
+                        <p class="font-bold text-slate-900">2. Batasan Penggunaan Akademik</p>
+                        <p>Kandungan bank soalan disusun berpandukan kurikulum asas DSKP KSSR Kementerian Pendidikan Malaysia Tahap 1 untuk kegunaan pengukuhan peribadi dan bukan komersil tanpa izin bertulis.</p>
+                    `;
+                }
+                modal.classList.remove('hidden');
+            }
+
+            closeModal() {
+                document.getElementById('legal-modal').classList.add('hidden');
+            }
+
+            render() {
+                this.renderHeader();
+                const view = this.viewState;
+                const container = document.getElementById('app-viewport');
+                const vault = this.getVault();
+
+                // Perlindungan Laluan (Route Guard System)
+                if ((view === 'parent-dashboard' || view === 'settings') && !vault.currentParent) {
+                    this.viewState = 'login';
+                    this.render();
+                    return;
+                }
+                if ((view === 'child-dashboard' || view === 'quiz-workspace') && !vault.currentChild && !this.targetChildForPin) {
+                    this.viewState = 'landing';
+                    this.render();
+                    return;
+                }
+
+                // PEMILIHAN VIEW DENGAN ENGINE TEMPLATE RENDER NATIVE
+                switch (view) {
+                    case 'landing':
+                        container.innerHTML = this.templateLanding();
+                        break;
+                    case 'login':
+                        container.innerHTML = this.templateLogin();
+                        break;
+                    case 'register':
+                        container.innerHTML = this.templateRegister();
+                        break;
+                    case 'parent-dashboard':
+                        container.innerHTML = this.templateParentDashboard();
+                        break;
+                    case 'child-pin-login':
+                        container.innerHTML = this.templateChildPinLogin();
+                        break;
+                    case 'child-dashboard':
+                        container.innerHTML = this.templateChildDashboard();
+                        break;
+                    case 'quiz-workspace':
+                        this.renderQuestionWorkspace(false);
+                        break;
+                    case 'quiz-results':
+                        container.innerHTML = this.templateQuizResults();
+                        break;
+                    case 'wrong-book':
+                        container.innerHTML = this.templateWrongBook();
+                        break;
+                    case 'parent-report':
+                        container.innerHTML = this.templateParentReport();
+                        break;
+                    case 'settings':
+                        container.innerHTML = this.templateSettings();
+                        break;
+                    default:
+                        container.innerHTML = `<div class="p-10 text-center text-slate-500">Pandangan tidak ditemui.</div>`;
+                }
+            }
+
+            // ==========================================
+            // LOGIK VIEW COMPONENT TEMPLATES
+            // ==========================================
+            templateLanding() {
+                return `
+                    <div class="bg-gradient-to-br from-purple-700 via-indigo-700 to-purple-900 text-white py-16 px-4 text-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-yellow-cheerful/10 via-transparent to-transparent"></div>
+                        <div class="max-w-4xl mx-auto relative z-10">
+                            <span class="bg-yellow-cheerful text-slate-900 text-xs font-bold px-4 py-1.5 rounded-full heading-font tracking-wide uppercase shadow-sm">Khas Untuk Murid Tahun 1, 2 & 3</span>
+                            <h2 class="heading-font text-3xl md:text-5xl font-black mt-6 mb-4 tracking-tight leading-tight">
+                                Bantu Anak Tahap 1 Kuasai Matematik Dengan Mudah, Seronok & Tersusun!
+                            </h2>
+                            <p class="text-base md:text-xl text-purple-100 max-w-2xl mx-auto mb-8 font-medium">
+                                Belajar Matematik Jadi Mudah, Seronok & Genius! Pengukuhan silibus KSSR/DSKP dengan sokongan Cikgu Geni secara interaktif.
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-4">
+                                <button onclick="app.navigateTo('register')" class="bg-yellow-cheerful hover:bg-amber-400 text-slate-950 font-extrabold px-8 py-4 rounded-2xl shadow-lg hover:scale-105 transition transform text-base heading-font">Mula Belajar Sekarang (Demo Percuma)</button>
+                                <button onclick="alert('Gunakan kod GENIUS123 di bahagian akaun selepas daftar masuk untuk mencuba akses Penuh.')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-4 rounded-2xl border border-white/20 backdrop-blur-xs transition text-sm">Lihat Tawaran Pembelian</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="max-w-7xl mx-auto px-4 py-16">
+                        <h3 class="heading-font text-2xl md:text-3xl font-bold text-center text-slate-900 mb-2">Kurikulum Pembelajaran Tersusun</h3>
+                        <p class="text-center text-slate-500 max-w-lg mx-auto mb-12 text-sm">Direka berperingkat eksklusif mengikut standard DSKP tanpa mencampur-adukkan tahap tinggi sekolah rendah.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="bg-white p-6 rounded-3xl shadow-xl border-t-4 border-purple-500 hover:shadow-2xl transition">
+                                <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-premium text-xl font-black heading-font mb-4">1</div>
+                                <h4 class="heading-font font-bold text-lg mb-2 text-slate-900">Tahun 1: Asas Suci</h4>
+                                <ul class="text-sm text-slate-600 space-y-2">
+                                    <li><i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>Tambah Mudah & Visual</li>
+                                    <li><i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>Tolak Asas Nombor Kecil</li>
+                                    <li><i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>Soalan Situasi Ayat Pendek</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-3xl shadow-xl border-t-4 border-yellow-500 hover:shadow-2xl transition">
+                                <div class="w-12 h-12 rounded-2xl bg-yellow-50 flex items-center justify-center text-amber-500 text-xl font-black heading-font mb-4">2</div>
+                                <h4 class="heading-font font-bold text-lg mb-2 text-slate-900">Tahun 2: Operasi Berakar</h4>
+                                <ul class="text-sm text-slate-600 space-y-2">
+                                    <li><i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>Tambah & Tolak Nilai Ratus</li>
+                                    <li><i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>Darab Asas Sifir (2,3,4,5,10)</li>
+                                    <li><i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>Bahagi Mudah Agihan Adil</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-3xl shadow-xl border-t-4 border-indigo-600 hover:shadow-2xl transition">
+                                <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl font-black heading-font mb-4">3</div>
+                                <h4 class="heading-font font-bold text-lg mb-2 text-slate-900">Tahun 3: Penyelesaian Master</h4>
+                                <ul class="text-sm text-slate-600 space-y-2">
+                                    <li><i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>Kira-kira Kuantiti Besar (10,000)</li>
+                                    <li><i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>Darab & Bahagi Kompleks</li>
+                                    <li><i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>KBAT Penyelesaian Masalah Harian</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            templateLogin() {
+                return `
+                    <div class="flex-grow flex items-center justify-center p-4">
+                        <div class="bg-white p-8 rounded-3xl shadow-xl border border-purple-soft max-w-md w-full">
+                            <h3 class="heading-font text-2xl font-bold text-purple-premium text-center mb-2">Log Masuk Ibu Bapa</h3>
+                            <p class="text-xs text-slate-400 text-center mb-6">Urus profil dan lihat laporan kecemerlangan matematik anak anda.</p>
+                            
+                            <form onsubmit="event.preventDefault(); app.loginParent(this.email.value, this.password.value);" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">E-mel Pentadbir</label>
+                                    <input type="email" name="email" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-purple-premium text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Kata Laluan</label>
+                                    <input type="password" name="password" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-purple-premium text-sm">
+                                </div>
+                                <button type="submit" class="w-full py-3 bg-purple-premium hover:bg-purple-700 text-white font-bold rounded-xl transition text-sm heading-font shadow-md">Masuk Ke Dashboard</button>
+                            </form>
+                            <p class="text-xs text-center text-slate-500 mt-4">Belum mempunyai akaun? <a href="#" onclick="app.navigateTo('register')" class="text-purple-premium font-bold hover:underline">Daftar Sini</a></p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            templateRegister() {
+                return `
+                    <div class="flex-grow flex items-center justify-center p-4 my-6">
+                        <div class="bg-white p-8 rounded-3xl shadow-xl border border-purple-soft max-w-md w-full">
+                            <h3 class="heading-font text-2xl font-bold text-purple-premium text-center mb-1">Daftar Akaun Penjaga</h3>
+                            <p class="text-xs text-slate-400 text-center mb-6">Langkah awal melahirkan generasi bijaksana & soleh.</p>
+                            
+                            <form onsubmit="event.preventDefault(); 
+                                if(this.password.value !== this.confirm.value) { alert('Kata laluan pengesahan tidak sepadan!'); return; }
+                                app.registerParent({name: this.name.value, email: this.email.value, phone: this.phone.value, password: this.password.value});" 
+                                class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Penuh Ibu Bapa / Penjaga</label>
+                                    <input type="text" name="name" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-purple-premium text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">E-mel Rasmi</label>
+                                    <input type="email" name="email" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-purple-premium text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Nombor Telefon Bimbit</label>
+                                    <input type="tel" name="phone" required placeholder="Contoh: 0123456789" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-purple-premium text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Kata Laluan Baru</label>
+                                    <input type="password" name="password" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-purple-premium text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Sahkan Kata Laluan</label>
+                                    <input type="password" name="confirm" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-purple-premium text-sm">
+                                </div>
+                                <div class="bg-lavender-soft p-3 rounded-xl text-[11px] text-purple-950 leading-relaxed border border-purple-soft">
+                                    <input type="checkbox" required id="consent" class="mr-1.5 align-middle">
+                                    <label for="consent" class="align-middle">Saya memberikan kebenaran ibu bapa (Parental Consent) untuk memproses data latihan anak secara tertutup.</label>
+                                </div>
+                                <button type="submit" class="w-full py-3 bg-purple-premium hover:bg-purple-700 text-white font-bold rounded-xl transition text-sm heading-font shadow-md">Cipta Akaun & Masuk</button>
+                            </form>
+                            <p class="text-xs text-center text-slate-500 mt-4">Sudah ada akaun? <a href="#" onclick="app.navigateTo('login')" class="text-purple-premium font-bold hover:underline">Log Masuk</a></p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            templateParentDashboard() {
+                const vault = this.getVault();
+                const myChildren = vault.children.filter(c => c.parentId === vault.currentParent.id);
+
+                let childrenCardsHtml = '';
+                if(myChildren.length === 0) {
+                    childrenCardsHtml = `
+                        <div class="col-span-full p-8 text-center bg-lavender-soft rounded-2xl border border-dashed border-purple-soft text-slate-500 text-sm">
+                            <i class="fa-solid fa-children text-3xl text-purple-400 mb-2"></i>
+                            <p>Tiada profil anak dijumpai. Tambah profil anak pertama anda di bawah untuk memula rentak pengembaraan ilmu Matematik!</p>
+                        </div>
+                    `;
+                } else {
+                    myChildren.forEach(child => {
+                        // Cari data kekuatan/kelemahan secara dinamik daripada percubaan
+                        const cProgress = vault.progress.filter(p => p.childId === child.id);
+                        let kuat = "Tiada Data";
+                        let lemah = "Tiada Data";
+                        if(cProgress.length > 0) {
+                            let sorted = [...cProgress].sort((a,b) => b.masteryPercentage - a.masteryPercentage);
+                            kuat = sorted[0].topic + ` (${sorted[0].masteryPercentage}%)`;
+                            if(sorted.length > 1) lemah = sorted[sorted.length-1].topic + ` (${sorted[sorted.length-1].masteryPercentage}%)`;
+                        }
+
+                        childrenCardsHtml += `
+                            <div class="bg-white p-6 rounded-3xl shadow-md border border-purple-soft hover:shadow-xl transition flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <div class="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center text-2xl shadow-inner">${child.avatar}</div>
+                                        <div>
+                                            <h4 class="heading-font font-bold text-lg text-slate-900">${child.name}</h4>
+                                            <p class="text-xs font-semibold text-slate-500">Darjah / Tahun ${child.yearLevel} (Umur ${child.age} Tahun)</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-2 bg-lavender-soft/50 p-3 rounded-xl text-xs mb-4">
+                                        <div><span class="text-slate-400">Peringkat:</span> <p class="font-bold text-purple-premium">${child.currentLevel}</p></div>
+                                        <div><span class="text-slate-400">Bintang Emas:</span> <p class="font-bold text-amber-500">🌟 ${child.totalStars}</p></div>
+                                        <div class="col-span-2 border-t border-purple-soft/40 my-1"></div>
+                                        <div><span class="text-slate-400">Topik Kuat:</span> <p class="font-bold text-emerald-600 truncate">${kuat}</p></div>
+                                        <div><span class="text-slate-400">Perlu Latihan:</span> <p class="font-bold text-red-500 truncate">${lemah}</p></div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 mt-2">
+                                    <button onclick="app.selectChildPortal('${child.id}')" class="py-2 bg-purple-premium hover:bg-purple-700 text-white text-xs font-bold rounded-xl transition shadow-xs heading-font"><i class="fa-solid fa-graduation-cap"></i> Mula Belajar</button>
+                                    <button onclick="app.targetChildReportId='${child.id}'; app.navigateTo('parent-report');" class="py-2 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition heading-font"><i class="fa-solid fa-chart-line"></i> Laporan</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                return `
+                    <div class="max-w-7xl mx-auto px-4 py-8 w-full">
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-purple-soft flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
+                            <div>
+                                <h2 class="heading-font text-xl md:text-2xl font-bold text-slate-900">Selamat Datang, ${vault.currentParent.name}!</h2>
+                                <p class="text-xs text-slate-500 mt-0.5">Pantau dan bimbing pengajian matematik sekolah rendah anak anda di sini.</p>
+                            </div>
+                            <div class="flex items-center gap-3 bg-lavender-soft px-4 py-2.5 rounded-2xl border border-purple-soft text-xs">
+                                <div>
+                                    <span class="text-slate-500">Status Langganan:</span>
+                                    <p class="font-bold text-purple-premium">${vault.currentParent.accessStatus}</p>
+                                </div>
+                                ${vault.currentParent.accessStatus === 'Demo Mode' ? 
+                                `<button onclick="const code = prompt('Masukkan Kod Pengaktifan Pembelian:'); if(code) app.activateCode(code);" class="bg-yellow-cheerful hover:bg-amber-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl transition shadow-xs">Masukkan Kod</button>` : ''}
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="heading-font font-bold text-lg text-slate-900">Profil Anak-Anak Genius</h3>
+                            <button onclick="document.getElementById('add-child-modal').classList.remove('hidden')" class="bg-purple-premium hover:bg-purple-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition shadow-xs"><i class="fa-solid fa-plus"></i> Tambah Profil Anak</button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${childrenCardsHtml}
+                        </div>
+                    </div>
+
+                    <div id="add-child-modal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 hidden backdrop-blur-xs">
+                        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative">
+                            <button onclick="document.getElementById('add-child-modal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                            <h3 class="heading-font font-bold text-lg text-purple-premium mb-4"><i class="fa-solid fa-face-smile"></i> Tambah Profil Baharu</h3>
+                            
+                            <form onsubmit="event.preventDefault(); app.addChild({
+                                name: this.cName.value,
+                                age: this.cAge.value,
+                                yearLevel: this.cYear.value,
+                                avatar: this.cAvatar.value,
+                                pin: this.cPin.value
+                            }); document.getElementById('add-child-modal').classList.add('hidden');" class="space-y-4 text-xs">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Nama Gelaran Anak</label>
+                                    <input type="text" name="cName" required placeholder="Contoh: Aisyah" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-purple-premium">
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Umur (Tahun)</label>
+                                        <input type="number" name="cAge" required min="5" max="10" placeholder="8" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-purple-premium">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Tahun Pembelajaran</label>
+                                        <select name="cYear" required class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-purple-premium bg-white">
+                                            <option value="1">Tahun 1</option>
+                                            <option value="2">Tahun 2</option>
+                                            <option value="3">Tahun 3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Pilih Avatar Emotikon</label>
+                                        <select name="cAvatar" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-purple-premium bg-white">
+                                            <option value="👦">👦 Kanak-Kanak Lelaki</option>
+                                            <option value="👧">👧 Kanak-Kanak Perempuan</option>
+                                            <option value="🦁">🦁 Singa Comel</option>
+                                            <option value="🦄">🦄 Unikorn</option>
+                                            <option value="🚀">🚀 Riket</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">PIN Keselamatan Anak (4 Digit)</label>
+                                        <input type="text" name="cPin" required pattern="[0-9]{4}" maxlength="4" placeholder="1234" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-purple-premium tracking-widest text-center font-bold">
+                                    </div>
+                                </div>
+                                <button type="submit" class="w-full py-2.5 bg-purple-premium hover:bg-purple-700 text-white font-bold rounded-xl transition shadow-md text-sm heading-font">Sahkan Profil</button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+            }
+
+            templateChildPinLogin() {
+                const child = this.targetChildForPin;
+                if(!child) return '';
+                return `
+                    <div class="flex-grow flex items-center justify-center p-4">
+                        <div class="bg-white p-6 rounded-3xl shadow-xl border border-purple-soft max-w-xs w-full text-center">
+                            <div class="w-16 h-16 rounded-full bg-purple-50 flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner">${child.avatar}</div>
+                            <h3 class="heading-font font-bold text-lg text-slate-900">Profil: ${child.name}</h3>
+                            <p class="text-xs text-slate-400 mb-4">Sila masukkan 4 digit PIN log masuk anda.</p>
+                            
+                            <form onsubmit="event.preventDefault(); app.verifyChildPin(this.pin.value);" class="space-y-4">
+                                <input type="password" name="pin" required pattern="[0-9]{4}" maxlength="4" autofocus placeholder="••••" class="w-32 px-4 py-2 text-center text-xl font-bold border-2 border-purple-soft rounded-xl focus:border-purple-premium outline-none tracking-widest bg-lavender-soft">
+                                <button type="submit" class="w-full py-2.5 bg-yellow-cheerful hover:bg-amber-400 text-slate-950 font-extrabold rounded-xl transition shadow-xs text-xs heading-font">Masuk Pembelajaran</button>
+                            </form>
+                            <button onclick="app.navigateTo('parent-dashboard')" class="text-xs text-slate-500 hover:underline mt-4 block mx-auto">Kembali</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            templateChildDashboard() {
+                const vault = this.getVault();
+                const child = vault.currentChild;
+                
+                // Senarai Topik Mengikut Tahun DSKP Malaysia
+                let topicsHtml = '';
+                let avTopics = [];
+                if(child.yearLevel === 1) avTopics = ["Tambah Mudah", "Tolak Mudah", "Soalan Situasi Tambah", "Soalan Situasi Tolak", "Campuran Tambah dan Tolak"];
+                if(child.yearLevel === 2) avTopics = ["Tambah", "Tolak", "Darab 2, 3, 4, 5 dan 10", "Bahagi Mudah", "Campuran Operasi", "Soalan Situasi"];
+                if(child.yearLevel === 3) avTopics = ["Tambah Nombor Besar", "Tolak Nombor Besar", "Darab", "Bahagi", "Operasi Campuran", "Soalan Situasi", "Penyelesaian Masalah"];
+
+                avTopics.forEach(t => {
+                    topicsHtml += `
+                        <div class="bg-white p-4 rounded-2xl border border-purple-soft shadow-xs flex flex-row items-center justify-between hover:border-purple-premium transition">
+                            <div>
+                                <h5 class="font-bold text-sm text-slate-900">${t}</h5>
+                                <span class="text-[10px] text-slate-400">Aras: Mudah | Sederhana | Mencabar</span>
+                            </div>
+                            <button onclick="app.startQuiz(${child.yearLevel}, '${t}', 'all')" class="bg-purple-premium hover:bg-purple-700 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition shadow-xs"><i class="fa-solid fa-play"></i> Mula</button>
+                        </div>
+                    `;
+                });
+
+                return `
+                    <div class="max-w-5xl mx-auto px-4 py-8 w-full">
+                        <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6 rounded-3xl shadow-lg mb-8 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+                            <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl"><i class="fa-solid fa-calculator"></i></div>
+                            <div class="flex items-center gap-4 relative z-10">
+                                <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-3xl shadow-md backdrop-blur-md">${child.avatar}</div>
+                                <div>
+                                    <h2 class="heading-font text-xl md:text-2xl font-bold">Hai, ${child.name}! 👋</h2>
+                                    <p class="text-xs text-purple-100 font-medium">Murid Cemerlang Tahun ${child.yearLevel} | Tahniah atas usaha anda hari ini!</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 bg-white/10 px-4 py-2 rounded-2xl border border-white/10 backdrop-blur-xs relative z-10 text-center">
+                                <div>
+                                    <span class="text-[10px] text-purple-200 block">Streak Harian</span>
+                                    <p class="font-bold text-yellow-cheerful heading-font text-sm"><i class="fa-solid fa-fire"></i> ${child.streak || 1} Hari</p>
+                                </div>
+                                <div class="w-px h-8 bg-white/20"></div>
+                                <div>
+                                    <span class="text-[10px] text-purple-200 block">Misi Hari Ini</span>
+                                    <p class="font-bold text-white text-xs">Jawab 10 Soalan (+1 🌟)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div onclick="app.startQuiz(${child.yearLevel}, 'all', 'all', 'daily')" class="bg-amber-400 text-slate-950 p-5 rounded-3xl shadow-md hover:shadow-xl transition cursor-pointer transform hover:-translate-y-0.5 flex items-center justify-between">
+                                <div>
+                                    <h4 class="heading-font font-black text-base"><i class="fa-solid fa-calendar-star"></i> Latihan Harian</h4>
+                                    <p class="text-xs font-semibold opacity-90 mt-1">10 Soalan gabungan topik hari ini!</p>
+                                </div>
+                                <i class="fa-solid fa-circle-chevron-right text-xl opacity-70"></i>
+                            </div>
+
+                            <div onclick="app.navigateTo('wrong-book')" class="bg-white p-5 rounded-3xl shadow-sm border border-purple-soft hover:shadow-md transition cursor-pointer flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-500"><i class="fa-solid fa-book-skull text-lg"></i></div>
+                                    <div>
+                                        <h4 class="heading-font font-bold text-sm text-slate-900">Buku Salah Saya</h4>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">Ulang kaji soalan yang pernah silap.</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-slate-300 text-sm"></i>
+                            </div>
+
+                            <div onclick="alert('Mod Ganjaran Saya: Kumpul lebih banyak bintang emas untuk menebus hadiah digital eksklusif Cikgu Geni kelak!')" class="bg-white p-5 rounded-3xl shadow-sm border border-purple-soft hover:shadow-md transition cursor-pointer flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500"><i class="fa-solid fa-award text-lg"></i></div>
+                                    <div>
+                                        <h4 class="heading-font font-bold text-sm text-slate-900">Ganjaran Saya</h4>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">Lihat koleksi lencana dan sijil digital.</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-slate-300 text-sm"></i>
+                            </div>
+                        </div>
+
+                        <h3 class="heading-font font-bold text-lg text-slate-900 mb-4"><i class="fa-solid fa-book-open text-purple-premium"></i> Pilih Topik Pembelajaran</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            ${topicsHtml}
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderQuestionWorkspace(showFeedback = false) {
+                const container = document.getElementById('app-viewport');
+                if (!this.activeQuiz || this.activeQuiz.length === 0) return;
+                
+                const q = this.activeQuiz[this.currentQuestionIndex];
+                const progressPercent = Math.round(((this.currentQuestionIndex) / this.activeQuiz.length) * 100);
+
+                let optionsHtml = '';
+                q.options.forEach(opt => {
+                    let btnClass = "bg-white border-2 border-purple-soft text-slate-800 hover:bg-lavender-soft";
+                    if (showFeedback) {
+                        if (opt === q.correctAnswer) {
+                            btnClass = "bg-emerald-100 border-2 border-emerald-500 text-emerald-900 font-bold";
+                        } else if (opt === this.selectedAnswer) {
+                            btnClass = "bg-red-100 border-2 border-red-500 text-red-900 line-through";
+                        } else {
+                            btnClass = "bg-white border border-slate-200 text-slate-400 opacity-60";
+                        }
+                    }
+                    optionsHtml += `
+                        <button onclick="app.submitAnswer('${opt}')" ${showFeedback ? 'disabled' : ''} class="w-full text-left px-5 py-4 rounded-2xl ${btnClass} transition font-bold text-sm sm:text-base shadow-xs flex items-center justify-between">
+                            <span>${opt}</span>
+                            ${showFeedback && opt === q.correctAnswer ? '<i class="fa-solid fa-circle-check text-emerald-600"></i>' : ''}
+                            ${showFeedback && opt === this.selectedAnswer && opt !== q.correctAnswer ? '<i class="fa-solid fa-circle-xmark text-red-600"></i>' : ''}
+                        </button>
+                    `;
+                });
+
+                let tutorFeedbackHtml = '';
+                if (showFeedback) {
+                    const isCorrect = (this.selectedAnswer === q.correctAnswer);
+                    tutorFeedbackHtml = `
+                        <div class="mt-6 bg-purple-premium text-white p-5 rounded-2xl shadow-md border-l-8 border-yellow-cheerful transition animate-fade-in">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl shrink-0">👩‍🏫</div>
+                                <div>
+                                    <h4 class="font-bold text-sm heading-font text-yellow-cheerful">Cikgu Geni Mengulas:</h4>
+                                    <p class="text-xs font-bold mt-1">${isCorrect ? 'Tahniah! Jawapan anda betul. Anda semakin genius!' : 'Tidak mengapa. Jom Cikgu Geni tunjuk cara kira.'}</p>
+                                    <p class="text-xs opacity-90 mt-2 bg-black/10 p-2.5 rounded-lg font-medium leading-relaxed">${q.explanation}</p>
+                                    <button onclick="app.nextQuestion()" class="mt-4 px-5 py-2 bg-yellow-cheerful hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-xl transition shadow-xs heading-font">Teruskan Perjalanan <i class="fa-solid fa-circle-arrow-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = `
+                    <div class="max-w-3xl mx-auto px-4 py-8 w-full flex-grow flex flex-col justify-start">
+                        <div class="flex justify-between items-center text-xs font-bold text-slate-500 mb-2">
+                            <span>Topik: <span class="text-purple-premium">${q.topic}</span> (${q.difficulty})</span>
+                            <span>Soalan ${this.currentQuestionIndex + 1}/${this.activeQuiz.length}</span>
+                        </div>
+                        <div class="w-full bg-slate-200 h-2 rounded-full mb-8 overflow-hidden">
+                            <div class="bg-purple-premium h-full transition-all duration-300" style="width: ${progressPercent}%"></div>
+                        </div>
+
+                        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-purple-soft text-center mb-6">
+                            <span class="bg-purple-50 text-purple-premium text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase">${q.skillTag}</span>
+                            <h3 class="heading-font font-bold text-xl sm:text-2xl text-slate-800 mt-4 leading-relaxed">${q.question}</h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            ${optionsHtml}
+                        </div>
+
+                        ${tutorFeedbackHtml}
+                    </div>
+                `;
+            }
+
+            templateQuizResults() {
+                const vault = this.getVault();
+                const child = vault.currentChild;
+                const starsEarned = Math.floor(this.quizScore / 30) > 0 ? Math.floor(this.quizScore / 30) : 1;
+
+                return `
+                    <div class="max-w-md mx-auto px-4 py-12 w-full text-center flex-grow flex flex-col justify-center">
+                        <div class="bg-white p-8 rounded-3xl shadow-xl border border-purple-soft">
+                            <div class="w-20 h-20 bg-amber-100 text-amber-500 text-4xl rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"><i class="fa-solid fa-trophy"></i></div>
+                            <h2 class="heading-font text-2xl font-black text-purple-premium mb-1">Tugasan Selesai!</h2>
+                            <p class="text-xs text-slate-400 mb-6">Hebat, anda telah menunjukkan kesungguhan yang luar biasa.</p>
+                            
+                            <div class="bg-lavender-soft p-4 rounded-2xl grid grid-cols-2 gap-4 mb-6 text-xs font-bold">
+                                <div>
+                                    <span class="text-slate-400 block">Mata Diperoleh</span>
+                                    <span class="text-xl text-purple-premium font-black heading-font">+${this.quizScore}</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block">Bintang Ditambah</span>
+                                    <span class="text-xl text-amber-500 font-black heading-font">🌟 +${starsEarned}</span>
+                                </div>
+                                ${this.bonusPointsEarned > 0 ? `<div class="col-span-2 bg-emerald-50 text-emerald-800 p-1.5 rounded-lg text-[10px]">🔥 Bonus Kekompatibelan: +25 Mata Berterusan Dijana!</div>` : ''}
+                            </div>
+
+                            <p class="text-sm text-slate-700 font-medium mb-6">"Setiap usaha kecil hari ini adalah permulaan kejayaan besar hari esok."<br><span class="text-xs font-bold text-purple-premium">- Cikgu Geni</span></p>
+
+                            <button onclick="app.navigateTo('child-dashboard')" class="w-full py-3 bg-purple-premium hover:bg-purple-700 text-white font-bold rounded-xl transition text-sm heading-font shadow-md">Kembali ke Dashboard</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            templateWrongBook() {
+                const vault = this.getVault();
+                const child = vault.currentChild;
+                const myWrongs = vault.wrongBook.filter(w => w.childId === child.id && !w.mastered);
+
+                let listHtml = '';
+                if (myWrongs.length === 0) {
+                    listHtml = `
+                        <div class="p-8 text-center bg-emerald-50 text-emerald-800 rounded-2xl border border-emerald-200 text-sm font-medium">
+                            <i class="fa-solid fa-shield-heart text-3xl mb-2"></i>
+                            <p>Tahniah! Buku Salah Saya kosong. Anda telah menguasai semua bentuk pengiraan dengan cemerlang!</p>
+                        </div>
+                    `;
+                } else {
+                    myWrongs.forEach(wb => {
+                        const q = MATHE_QUESTION_BANK.find(quest => quest.id === wb.questionId);
+                        if(!q) return;
+
+                        let optionsBtnHtml = '';
+                        q.options.forEach(opt => {
+                            optionsBtnHtml += `
+                                <button onclick="app.retryWrongQuestion('${wb.id}', '${opt}')" class="px-3 py-2 bg-white border border-purple-soft rounded-lg hover:bg-purple-premium hover:text-white transition font-bold text-xs">
+                                    ${opt}
+                                </button>
+                            `;
+                        });
+
+                        listHtml += `
+                            <div class="bg-white p-4 rounded-2xl border border-red-100 shadow-xs space-y-3">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-[10px] bg-red-50 text-red-600 px-2 py-0.5 rounded-md font-bold">${q.topic}</span>
+                                    <span class="text-[10px] text-slate-400 font-medium">Percubaan Silap: ${wb.wrongCount} kali</span>
+                                </div>
+                                <p class="text-sm font-bold text-slate-800">${q.question}</p>
+                                <div class="bg-lavender-soft/40 p-2 rounded-xl text-xs text-slate-500 leading-relaxed">
+                                    <span class="font-bold text-[10px] text-purple-premium block">Petunjuk Semula:</span>
+                                    Cuba jawab semula daripada pilihan di bawah untuk melupuskan rekod kelemahan (Perlu 3x berturut betul. Progress sekarang: ${wb.correctRetryCount}/3).
+                                </div>
+                                <div class="flex flex-wrap gap-2 pt-1">
+                                    ${optionsBtnHtml}
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                return `
+                    <div class="max-w-3xl mx-auto px-4 py-8 w-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <button onclick="app.navigateTo('child-dashboard')" class="text-slate-400 hover:text-purple-premium"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+                            <h3 class="heading-font font-bold text-lg text-slate-900">Workspace Buku Salah Saya</h3>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-6">Pusat pemulihan automatik. Soalan yang tersilap disimpan di sini supaya anak boleh membaiki kefahaman secara fokus.</p>
+                        
+                        <div class="space-y-4">
+                            ${listHtml}
+                        </div>
+                    </div>
+                `;
+            }
+
+            templateParentReport() {
+                const vault = this.getVault();
+                const child = vault.children.find(c => c.id === app.targetChildReportId);
+                if(!child) return '<div class="p-6">Profil tidak dijumpai.</div>';
+
+                const attempts = vault.attempts.filter(a => a.childId === child.id);
+                const progress = vault.progress.filter(p => p.childId === child.id);
+
+                const totalAnswered = attempts.length;
+                const correctCount = attempts.filter(a => a.isCorrect).length;
+                const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+
+                let progressRows = '';
+                if(progress.length === 0) {
+                    progressRows = `<tr><td colspan="3" class="p-4 text-center text-slate-400 text-xs">Tiada rekod penguasaan topik lagi. Sila jalankan minimum 1 sesi kuiz.</td></tr>`;
+                } else {
+                    progress.forEach(p => {
+                        progressRows += `
+                            <tr class="border-b border-slate-100 text-xs">
+                                <td class="p-3 font-medium text-slate-800">${p.topic} (${p.difficulty})</td>
+                                <td class="p-3 text-center text-slate-500">${p.totalAttempted}</td>
+                                <td class="p-3 text-right font-bold ${p.masteryPercentage >= 70 ? 'text-emerald-600' : 'text-amber-600'}">${p.masteryPercentage}%</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                // Cadangan Automatik Pintar
+                let cadanganText = "Anak anda baru memulakan langkah pengajian. Galakkan anak menjawab modul Latihan Harian 10 minit sehari bagi menjana asas pengiraan awal yang stabil.";
+                if(totalAnswered > 0) {
+                    if(accuracy >= 80) {
+                        cadanganText = `${child.name} menunjukkan penguasaan yang amat cemerlang dengan ketepatan purata ${accuracy}%. Disyorkan mencabar topik sedia ada pada peringkat aras 'Mencabar' bagi merangsang kemahiran KBAT.`;
+                    } else if(accuracy >= 50) {
+                        cadanganText = `${child.name} menunjukkan potensi yang baik namun menghadapi kekeliruan mutakhir. Dicadangkan membuat latihan berfokus di 'Buku Salah Saya' sekurang-kurangnya 10 minit sehari bagi menstabilkan semula kefahaman konseptual.`;
+                    } else {
+                        cadanganText = `Kadar pemahaman semasa ialah ${accuracy}%. Anak memerlukan bimbingan lebih dekat. Mohon tonton langkah pengiraan bersama Cikgu Geni di akhir setiap soalan kuiz dan fokus pada aras 'Mudah' dahulu.`;
+                    }
+                }
+
+                return `
+                    <div class="max-w-4xl mx-auto px-4 py-8 w-full">
+                        <div class="flex items-center gap-2 mb-6">
+                            <button onclick="app.navigateTo('parent-dashboard')" class="text-slate-400 hover:text-purple-premium"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+                            <h3 class="heading-font font-bold text-xl text-slate-900">Laporan Analitis Prestasi: ${child.name}</h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                            <div class="bg-white p-5 rounded-2xl border border-purple-soft shadow-xs">
+                                <span class="text-xs text-slate-400 font-bold block">Soalan Dijawab</span>
+                                <span class="text-2xl font-black heading-font text-purple-premium">${totalAnswered} Soalan</span>
+                            </div>
+                            <div class="bg-white p-5 rounded-2xl border border-purple-soft shadow-xs">
+                                <span class="text-xs text-slate-400 font-bold block">Ketepatan Purata</span>
+                                <span class="text-2xl font-black heading-font text-emerald-600">${accuracy}% Betul</span>
+                            </div>
+                            <div class="bg-white p-5 rounded-2xl border border-purple-soft shadow-xs">
+                                <span class="text-xs text-slate-400 font-bold block">Tahap KSSR Semasa</span>
+                                <span class="text-sm font-black heading-font text-amber-500 bg-amber-50 px-2 py-1 rounded-md mt-1 inline-block">${child.currentLevel}</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-purple-soft shadow-sm overflow-hidden mb-8">
+                            <div class="p-4 bg-lavender-soft border-b border-purple-soft">
+                                <h4 class="heading-font font-bold text-xs text-purple-900">Peratusan Penguasaan Sub-Topik DSKP</h4>
+                            </div>
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-400 font-bold text-[10px] uppercase border-b border-slate-100">
+                                        <th class="p-3">Nama Matriks Topik</th>
+                                        <th class="p-3 text-center">Jumlah Percubaan</th>
+                                        <th class="p-3 text-right">Tahap Penguasaan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${progressRows}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-purple-soft shadow-xs flex gap-4 items-start bg-gradient-to-r from-white to-purple-50/30">
+                            <div class="text-3xl">💡</div>
+                            <div>
+                                <h4 class="font-bold text-xs text-slate-900 mb-1">Nota Cadangan Pendidik Pintar:</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">${cadanganText}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            templateSettings() {
+                const vault = this.getVault();
+                return `
+                    <div class="max-w-2xl mx-auto px-4 py-8 w-full">
+                        <h3 class="heading-font font-bold text-xl text-slate-900 mb-1">Tetapan Sistem & Profil</h3>
+                        <p class="text-xs text-slate-400 mb-6">Urus parameter akaun pentadbir keluarga anda di sini.</p>
+                        
+                        <div class="bg-white rounded-3xl border border-purple-soft shadow-sm p-6 space-y-6 text-xs">
+                            <div>
+                                <h4 class="font-bold text-sm text-purple-premium mb-3 border-b border-slate-100 pb-1">Maklumat Profil Penjaga</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><span class="text-slate-400 block">Nama Pengguna:</span> <p class="font-medium text-sm text-slate-800">${vault.currentParent.name}</p></div>
+                                    <div><span class="text-slate-400 block">Nombor Telefon:</span> <p class="font-medium text-sm text-slate-800">${vault.currentParent.phone}</p></div>
+                                    <div class="col-span-2"><span class="text-slate-400 block">E-mel Pentadbir:</span> <p class="font-medium text-sm text-slate-800">${vault.currentParent.email}</p></div>
+                                </div>
+                            </div>
+
+                            <div class="bg-lavender-soft p-4 rounded-xl border border-purple-soft">
+                                <h4 class="font-bold text-purple-950 mb-1">Status Pengaktifan Aplikasi</h4>
+                                <p class="text-[11px] text-purple-800 mb-3">Sistem sekarang beroperasi dalam: <strong class="text-purple-premium font-black">${vault.currentParent.accessStatus}</strong></p>
+                                ${vault.currentParent.accessStatus === 'Demo Mode' ? `
+                                <div class="flex gap-2">
+                                    <input type="text" id="setting-code-input" placeholder="Masukkan kod (GENIUS123)" class="bg-white px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-purple-premium grow">
+                                    <button onclick="app.activateCode(document.getElementById('setting-code-input').value)" class="bg-purple-premium text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-700 transition">Aktifkan</button>
+                                </div>
+                                ` : '<p class="text-[10px] text-emerald-600 font-bold"><i class="fa-solid fa-circle-check"></i> Akaun anda aktif sepenuhnya dengan Akses Seumur Hidup (Lifetime Active).</p>'}
+                            </div>
+
+                            <div class="pt-2 border-t border-slate-100 flex justify-between">
+                                <button onclick="if(confirm('Adakah anda pasti mahu memadam semua data prestasi lokal?')) { localStorage.clear(); app.initStorage(); alert('Sistem telah di-reset.'); window.location.reload(); }" class="text-red-500 hover:text-red-700 font-bold"><i class="fa-solid fa-trash-can"></i> Padam Semua Data Lokal</button>
+                                <button onclick="app.logout()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition">Log Keluar</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // ==========================================
+        // INITIALIZATION DEPLOYMENT INSTANCE
+        // ==========================================
+        const app = new MathsGeniusApp();
+        
+        // Bootstrapping Pertama Kali Jalankan Aplikasi
+        window.addEventListener('DOMContentLoaded', () => {
+            app.render();
+        });
+    </script>
+</body>
+</html>
