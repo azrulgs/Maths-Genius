@@ -67,64 +67,66 @@
     </footer>
 
     <script>
+        // Inisialisasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnzVeU918yE1N86CfSOVEH_7za_Ubvjc0",
+            authDomain: "maths-genius-1b171.firebaseapp.com",
+            databaseURL: "https://maths-genius-1b171-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "maths-genius-1b171",
+            storageBucket: "maths-genius-1b171.firebasestorage.app",
+            messagingSenderId: "721438989994",
+            appId: "1:721438989994:web:e911e4fb1244bba9953ad3"
+        };
+        firebase.initializeApp(firebaseConfig);
+
         // ALGORITMA PENJANA SOALAN MATEMATIK SEBENAR (TAHAP 1)
         const MATHE_QUESTION_BANK = [];
         function generateQuestionBank() {
             let idCounter = 1;
 
-            // Loop untuk Darjah 1, 2, dan 3
             for(let y = 1; y <= 3; y++) {
-                // Hasilkan 20 variasi soalan berbeza bagi setiap topik untuk setiap darjah
                 for(let i = 0; i < 20; i++) {
                     
-                    // 1. Topik Tambah
                     let a = Math.floor(Math.random() * (10 * Math.pow(10, y-1))) + 1;
                     let b = Math.floor(Math.random() * (10 * Math.pow(10, y-1))) + 1;
                     let ansAdd = a + b;
                     let optAdd = [String(ansAdd), String(ansAdd+1), String(ansAdd-1), String(ansAdd+2)].sort(() => Math.random() - 0.5);
                     MATHE_QUESTION_BANK.push({ id: `add-${y}-${idCounter++}`, year: y, topic: "Tambah", difficulty: "Sederhana", question: `${a} + ${b} = ?`, options: optAdd, correctAnswer: String(ansAdd), explanation: `Bila kita kumpul semuanya, ${a} tambah ${b} menjadi ${ansAdd}.`, skillTag: "Tambah", type: "multiple-choice" });
 
-                    // 2. Topik Tolak
                     let maxNum = Math.max(a, b) + 5;
                     let minNum = Math.min(a, b);
                     let ansSub = maxNum - minNum;
                     let optSub = [String(ansSub), String(ansSub+1), String(Math.abs(ansSub-1)), String(ansSub+2)].sort(() => Math.random() - 0.5);
                     MATHE_QUESTION_BANK.push({ id: `sub-${y}-${idCounter++}`, year: y, topic: "Tolak", difficulty: "Sederhana", question: `${maxNum} - ${minNum} = ?`, options: optSub, correctAnswer: String(ansSub), explanation: `Bila ditolak, bilangannya makin sikit. ${maxNum} buang ${minNum} tinggal ${ansSub}.`, skillTag: "Tolak", type: "multiple-choice" });
 
-                    // 3. Topik Darab Asas
                     let m1 = Math.floor(Math.random() * (y === 1 ? 5 : 9)) + 1;
                     let m2 = Math.floor(Math.random() * 5) + 1;
                     let ansMul = m1 * m2;
                     let optMul = [String(ansMul), String(ansMul+m2), String(Math.abs(ansMul-m2)), String(ansMul+1)].sort(() => Math.random() - 0.5);
                     MATHE_QUESTION_BANK.push({ id: `mul-${y}-${idCounter++}`, year: y, topic: "Darab Asas", difficulty: "Sederhana", question: `${m1} × ${m2} = ?`, options: optMul, correctAnswer: String(ansMul), explanation: `Darab bermaksud tambah berulang kali. ${m1} darab ${m2} ialah ${ansMul}.`, skillTag: "Darab", type: "multiple-choice" });
 
-                    // 4. Topik Bahagi Asas
                     let divAns = Math.floor(Math.random() * 9) + 1;
                     let divisor = Math.floor(Math.random() * (y === 1 ? 3 : 5)) + 1;
                     let dividend = divAns * divisor;
                     let optDiv = [String(divAns), String(divAns+1), String(Math.abs(divAns-1)), String(divAns+2)].sort(() => Math.random() - 0.5);
                     MATHE_QUESTION_BANK.push({ id: `div-${y}-${idCounter++}`, year: y, topic: "Bahagi Asas", difficulty: "Sederhana", question: `${dividend} ÷ ${divisor} = ?`, options: optDiv, correctAnswer: String(divAns), explanation: `Bahagi bermaksud kongsi sama rata. ${dividend} dibahagi kepada ${divisor} orang, setiap seorang dapat ${divAns}.`, skillTag: "Bahagi", type: "multiple-choice" });
 
-                    // 5. Topik Wang
                     let w1 = Math.floor(Math.random() * (10 * y)) + 1;
                     let w2 = Math.floor(Math.random() * (5 * y)) + 1;
                     let ansMoney = `RM${w1 + w2}`;
                     let optMoney = [ansMoney, `RM${w1+w2+1}`, `RM${Math.abs(w1+w2-1)}`, `RM${w1+w2+2}`].sort(() => Math.random() - 0.5);
                     MATHE_QUESTION_BANK.push({ id: `money-${y}-${idCounter++}`, year: y, topic: "Wang", difficulty: "Mudah", question: `RM${w1} + RM${w2} = ?`, options: optMoney, correctAnswer: ansMoney, explanation: `Kira nilai duit. RM${w1} tambah RM${w2} ialah RM${w1+w2}.`, skillTag: "Wang", type: "multiple-choice" });
 
-                    // 6. Topik Masa
                     let h1 = Math.floor(Math.random() * 10) + 1;
                     let ansTime = `${h1 + 2} jam`;
                     let optTime = [ansTime, `${h1+3} jam`, `${h1+1} jam`, `${h1+4} jam`].sort(() => Math.random() - 0.5);
                     MATHE_QUESTION_BANK.push({ id: `time-${y}-${idCounter++}`, year: y, topic: "Masa", difficulty: "Mudah", question: `${h1} jam + 2 jam = ?`, options: optTime, correctAnswer: ansTime, explanation: `Tambahkan nilai nombornya sahaja. ${h1} tambah 2 ialah ${h1+2} jam.`, skillTag: "Masa", type: "multiple-choice" });
 
-                    // 7. Topik Nombor Asas
                     let n = Math.floor(Math.random() * (50 * y)) + 10;
                     let ansNum = String(n + 1);
                     let optNum = [ansNum, String(n+2), String(n-1), String(n+10)].sort(() => Math.random() - 0.5);
                     MATHE_QUESTION_BANK.push({ id: `num-${y}-${idCounter++}`, year: y, topic: "Nombor Asas", difficulty: "Mudah", question: `Apakah nombor selepas ${n}?`, options: optNum, correctAnswer: ansNum, explanation: `Nombor selepas ${n} ialah ditambah 1, iaitu ${n+1}.`, skillTag: "Nombor", type: "multiple-choice" });
 
-                    // 8. Topik Pecahan Mudah (DIKEMASKINI)
                     let senaraiPecahan = [
                         { q: "Separuh daripada sebiji pizza ditulis dalam pecahan sebagai...", a: "1/2", exp: "Separuh bermaksud 1 bahagian daripada 2 bahagian yang sama besar." },
                         { q: "Suku daripada sebiji kek ditulis dalam pecahan sebagai...", a: "1/4", exp: "Suku bermaksud 1 bahagian daripada 4 bahagian yang sama besar." },
@@ -134,10 +136,7 @@
                         { q: "Kawasan berlorek ialah 1 bahagian daripada 4. Apakah pecahannya?", a: "1/4", exp: "1 bahagian daripada 4 bahagian keseluruhan ditulis sebagai 1/4." }
                     ];
                     
-                    // Pilih pecahan secara rawak
                     let pilihanRawak = senaraiPecahan[Math.floor(Math.random() * senaraiPecahan.length)];
-                    
-                    // Sediakan jawapan yang mengelirukan (distractors)
                     let fracOpt = [pilihanRawak.a];
                     let semuaPilihan = ["1/2", "1/4", "3/4", "1/3", "2/5", "1/5", "2/3"];
                     
@@ -148,20 +147,12 @@
                         }
                     }
                     
-                    // Gaulkan kedudukan jawapan A, B, C, D
                     fracOpt = fracOpt.sort(() => Math.random() - 0.5);
 
                     MATHE_QUESTION_BANK.push({ 
-                        id: `frac-${y}-${idCounter++}`, 
-                        year: y, 
-                        topic: "Pecahan Mudah", 
-                        difficulty: "Mencabar", 
-                        question: pilihanRawak.q, 
-                        options: fracOpt, 
-                        correctAnswer: pilihanRawak.a, 
-                        explanation: pilihanRawak.exp, 
-                        skillTag: "Pecahan", 
-                        type: "multiple-choice" 
+                        id: `frac-${y}-${idCounter++}`, year: y, topic: "Pecahan Mudah", difficulty: "Mencabar", 
+                        question: pilihanRawak.q, options: fracOpt, correctAnswer: pilihanRawak.a, 
+                        explanation: pilihanRawak.exp, skillTag: "Pecahan", type: "multiple-choice" 
                     });
                 }
             }
@@ -170,31 +161,71 @@
 
         class GenSoMathsApp {
             constructor() {
-                this.initStorage();
+                this.db = firebase.database();
                 this.viewState = 'landing'; 
                 this.activeQuiz = null;
                 this.currentQuestionIndex = 0;
                 this.quizScore = 0;
+                
+                // Simpan maklumat sesi log masuk pada memori peranti semasa (browser)
+                this.currentParent = JSON.parse(localStorage.getItem('gs_session_parent')) || null;
+                this.currentChild = JSON.parse(localStorage.getItem('gs_session_child')) || null;
+
+                // Data global yang dihubungkan ke Firebase Realtime Database
+                this.parents = [];
+                this.children = [];
+                this.attempts = [];
+
+                this.initDatabaseSync();
             }
 
-            initStorage() {
-                // Vault diubah ke _v3 untuk mereset memori lama yang mempunyai Darjah 4, 5, 6
-                if (!localStorage.getItem('genso_maths_vault_v3')) {
-                    const defaultState = {
-                        currentParent: null, currentChild: null,
-                        parents: [], children: [], attempts: [], progress: [], wrongBook: []
-                    };
-                    localStorage.setItem('genso_maths_vault_v3', JSON.stringify(defaultState));
+            initDatabaseSync() {
+                // Sentiasa mengambil data mutakhir secara real-time dari Firebase
+                this.db.ref('/').on('value', (snapshot) => {
+                    const data = snapshot.val() || {};
+                    this.parents = data.parents ? Object.values(data.parents) : [];
+                    this.children = data.children ? Object.values(data.children) : [];
+                    this.attempts = data.attempts ? Object.values(data.attempts) : [];
+                    
+                    // Kemaskini sesi semasa jika terdapat perubahan dari peranti lain
+                    if (this.currentParent) {
+                        this.currentParent = this.parents.find(p => p.id === this.currentParent.id) || null;
+                        if(this.currentParent) localStorage.setItem('gs_session_parent', JSON.stringify(this.currentParent));
+                    }
+                    if (this.currentChild) {
+                        this.currentChild = this.children.find(c => c.id === this.currentChild.id) || null;
+                        if(this.currentChild) localStorage.setItem('gs_session_child', JSON.stringify(this.currentChild));
+                    }
+                    
+                    this.render();
+                });
+            }
+
+            setSession(type, data) {
+                if(type === 'parent') {
+                    this.currentParent = data;
+                    localStorage.setItem('gs_session_parent', JSON.stringify(data));
+                } else {
+                    this.currentChild = data;
+                    localStorage.setItem('gs_session_child', JSON.stringify(data));
                 }
             }
 
-            getVault() { return JSON.parse(localStorage.getItem('genso_maths_vault_v3')); }
-            updateVault(data) { localStorage.setItem('genso_maths_vault_v3', JSON.stringify(data)); this.renderHeader(); }
-            navigateTo(view) { this.viewState = view; this.render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            clearSession() {
+                this.currentParent = null;
+                this.currentChild = null;
+                localStorage.removeItem('gs_session_parent');
+                localStorage.removeItem('gs_session_child');
+            }
+
+            navigateTo(view) { 
+                this.viewState = view; 
+                this.render(); 
+                window.scrollTo({ top: 0, behavior: 'smooth' }); 
+            }
 
             registerParent(formData) {
-                const vault = this.getVault();
-                if (vault.parents.find(p => p.email === formData.email || p.phone === formData.phone)) {
+                if (this.parents.find(p => p.email === formData.email || p.phone === formData.phone)) {
                     alert('E-mel atau Nombor Telefon ini telah pun didaftarkan!');
                     return false;
                 }
@@ -207,18 +238,17 @@
                     trialEndAt: now + (24 * 60 * 60 * 1000), // 24 Jam Trial
                     trialStatus: 'active'
                 };
-                vault.parents.push(newParent);
-                vault.currentParent = newParent;
-                this.updateVault(vault);
+                
+                // Simpan ke Firebase
+                this.db.ref('parents/' + newParent.id).set(newParent);
+                this.setSession('parent', newParent);
                 this.navigateTo('parent-dashboard');
             }
 
             loginParent(email, password) {
-                const vault = this.getVault();
-                const parent = vault.parents.find(p => (p.email === email || p.phone === email) && p.passwordHash === password);
+                const parent = this.parents.find(p => (p.email === email || p.phone === email) && p.passwordHash === password);
                 if (parent) {
-                    vault.currentParent = parent;
-                    this.updateVault(vault);
+                    this.setSession('parent', parent);
                     this.navigateTo('parent-dashboard');
                 } else {
                     alert('Log masuk gagal! E-mel/No. Telefon atau kata laluan salah.');
@@ -226,9 +256,7 @@
             }
 
             logout() {
-                const vault = this.getVault();
-                vault.currentParent = null; vault.currentChild = null;
-                this.updateVault(vault);
+                this.clearSession();
                 this.navigateTo('landing');
             }
 
@@ -236,58 +264,60 @@
                 if(parentObj.accessStatus === 'Lifetime Active') return true;
                 const now = new Date().getTime();
                 if(now > parentObj.trialEndAt) {
-                    parentObj.trialStatus = 'expired';
-                    parentObj.accessStatus = 'Locked';
+                    if(parentObj.trialStatus !== 'expired') {
+                        // Kemaskini status pendaftaran ke expired di Firebase
+                        this.db.ref('parents/' + parentObj.id).update({
+                            trialStatus: 'expired',
+                            accessStatus: 'Locked'
+                        });
+                    }
                     return false;
                 }
                 return true;
             }
 
             activateLifetimeAccess() {
-                const vault = this.getVault();
-                if(!vault.currentParent) return;
+                if(!this.currentParent) return;
                 
                 let code = prompt("Sila masukkan Kod Pengaktifan (Contoh Demo: GENIUS123)");
                 if(code === "GENIUS123") {
-                    vault.currentParent.accessStatus = 'Lifetime Active';
-                    vault.currentParent.trialStatus = 'active';
-                    const idx = vault.parents.findIndex(p => p.id === vault.currentParent.id);
-                    if(idx !== -1) vault.parents[idx].accessStatus = 'Lifetime Active';
-                    this.updateVault(vault);
+                    this.db.ref('parents/' + this.currentParent.id).update({
+                        accessStatus: 'Lifetime Active',
+                        trialStatus: 'active'
+                    });
                     alert("Tahniah! Akses Penuh GenSo Maths telah berjaya diaktifkan.");
-                    this.render();
                 } else if(code) {
                     alert("Kod pengaktifan tidak sah. Sila hubungi Admin.");
                 }
             }
 
             addChild(childData) {
-                const vault = this.getVault();
-                if (!vault.currentParent) return;
+                if (!this.currentParent) return;
                 const newChild = {
-                    id: 'child-' + Date.now(), parentId: vault.currentParent.id,
+                    id: 'child-' + Date.now(), parentId: this.currentParent.id,
                     childName: childData.name.trim(), age: parseInt(childData.age), schoolYear: parseInt(childData.schoolYear),
-                    level: 'Tahap 1', // Di-hardcode ke Tahap 1 sahaja
+                    level: 'Tahap 1',
                     avatar: childData.avatar || '👦',
                     totalScore: 0, totalStars: 0, currentLevel: 'Genius Beginner', streak: 1,
                     lastAccessAt: new Date().getTime(),
                     weakTopics: [], strongTopics: []
                 };
-                vault.children.push(newChild);
-                this.updateVault(vault);
+                
+                // Simpan rekod anak ke Firebase
+                this.db.ref('children/' + newChild.id).set(newChild);
                 alert(`Profil ${childData.name} berjaya dicipta!`);
-                this.render();
             }
 
             loginChildByName(searchName) {
                 if(!searchName.trim()) return alert("Sila taip nama kamu.");
-                const vault = this.getVault();
-                const child = vault.children.find(c => c.childName.toLowerCase() === searchName.trim().toLowerCase());
+                const child = this.children.find(c => c.childName.toLowerCase() === searchName.trim().toLowerCase());
                 
                 if (child) {
-                    child.lastAccessAt = new Date().getTime();
-                    vault.currentChild = child;
-                    this.updateVault(vault);
+                    const now = new Date().getTime();
+                    this.db.ref('children/' + child.id).update({ lastAccessAt: now });
+                    child.lastAccessAt = now;
+                    
+                    this.setSession('child', child);
                     this.navigateTo('child-dashboard');
                 } else {
                     alert('Nama ini belum didaftarkan. Minta ibu atau ayah tambah profil kamu dahulu.');
@@ -295,25 +325,21 @@
             }
 
             exitChildMode() {
-                const vault = this.getVault();
-                vault.currentChild = null;
-                this.updateVault(vault);
+                this.currentChild = null;
+                localStorage.removeItem('gs_session_child');
                 this.navigateTo('landing');
             }
 
             startQuiz(topic, mode = 'normal') {
-                const vault = this.getVault();
-                const parent = vault.parents.find(p => p.id === vault.currentChild.parentId);
+                const parent = this.parents.find(p => p.id === this.currentChild.parentId);
                 
-                if (!this.checkTrialStatus(parent)) {
+                if (!parent || !this.checkTrialStatus(parent)) {
                     alert("Wah, kamu sudah belajar dengan baik! Minta ibu atau ayah aktifkan akses penuh untuk sambung belajar.");
                     return;
                 }
 
-                // Cari soalan mengikut darjah anak (Darjah 1,2,3)
-                let filtered = MATHE_QUESTION_BANK.filter(q => q.year === vault.currentChild.schoolYear);
+                let filtered = MATHE_QUESTION_BANK.filter(q => q.year === this.currentChild.schoolYear);
                 
-                // Jika topik dipilih (bukan 'all' Latihan Harian), saring ikut topik
                 if (topic !== 'all') {
                     filtered = filtered.filter(q => q.topic === topic);
                 }
@@ -337,9 +363,16 @@
                 
                 if (isCorrect) this.quizScore += 10;
                 
-                const vault = this.getVault();
-                vault.attempts.push({ childId: vault.currentChild.id, topic: q.topic, isCorrect, timeTaken: 30 });
-                this.updateVault(vault);
+                const attempt = { 
+                    id: 'attempt-' + Date.now(),
+                    childId: this.currentChild.id, 
+                    topic: q.topic, 
+                    isCorrect: isCorrect, 
+                    timeTaken: 30 
+                };
+                
+                // Simpan rekod cubaan soalan ke Firebase
+                this.db.ref('attempts/' + attempt.id).set(attempt);
 
                 this.renderQuestionWorkspace(true);
             }
@@ -355,45 +388,48 @@
             }
 
             finishQuiz() {
-                const vault = this.getVault();
-                const child = vault.children.find(c => c.id === vault.currentChild.id);
+                const child = this.children.find(c => c.id === this.currentChild.id);
                 const starsEarned = Math.floor(this.quizScore / 20) || 1;
                 
-                child.totalScore += this.quizScore;
-                child.totalStars += starsEarned;
-                child.streak += 1;
+                let updatedScore = child.totalScore + this.quizScore;
+                let updatedStars = child.totalStars + starsEarned;
+                let updatedStreak = child.streak + 1;
+                let updatedLevel = child.currentLevel;
                 
-                if(child.totalScore > 500) child.currentLevel = "Maths Genius Master";
-                else if(child.totalScore > 300) child.currentLevel = "Genius Champion";
-                else if(child.totalScore > 150) child.currentLevel = "Genius Star";
-                else if(child.totalScore > 50) child.currentLevel = "Genius Explorer";
+                if(updatedScore > 500) updatedLevel = "Maths Genius Master";
+                else if(updatedScore > 300) updatedLevel = "Genius Champion";
+                else if(updatedScore > 150) updatedLevel = "Genius Star";
+                else if(updatedScore > 50) updatedLevel = "Genius Explorer";
                 
-                vault.currentChild = child;
-                const idx = vault.children.findIndex(c => c.id === child.id);
-                if(idx !== -1) vault.children[idx] = child;
-                this.updateVault(vault);
+                // Kemaskini rekod keseluruhan anak di Firebase
+                this.db.ref('children/' + child.id).update({
+                    totalScore: updatedScore,
+                    totalStars: updatedStars,
+                    streak: updatedStreak,
+                    currentLevel: updatedLevel
+                });
+                
                 this.navigateTo('quiz-results');
             }
 
             renderHeader() {
-                const vault = this.getVault();
                 const container = document.getElementById('header-actions');
                 if (!container) return;
 
-                if (vault.currentChild) {
+                if (this.currentChild) {
                     container.innerHTML = `
                         <div class="flex items-center gap-2 bg-lavender-soft px-3 py-1.5 rounded-full border border-purple-soft">
-                            <span class="text-xs font-bold text-purple-premium">🌟 ${vault.currentChild.childName}</span>
-                            <div class="bg-white px-2 py-0.5 rounded-full shadow-xs text-xs font-bold text-amber-500"><i class="fa-solid fa-star"></i> ${vault.currentChild.totalStars}</div>
+                            <span class="text-xs font-bold text-purple-premium">🌟 ${this.currentChild.childName}</span>
+                            <div class="bg-white px-2 py-0.5 rounded-full shadow-xs text-xs font-bold text-amber-500"><i class="fa-solid fa-star"></i> ${this.currentChild.totalStars}</div>
                             <button onclick="app.exitChildMode()" class="text-red-500 hover:text-red-700 ml-2" title="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
                         </div>`;
-                } else if (vault.currentParent) {
-                    const isTrial = vault.currentParent.accessStatus !== 'Lifetime Active';
+                } else if (this.currentParent) {
+                    const isTrial = this.currentParent.accessStatus !== 'Lifetime Active';
                     container.innerHTML = `
                         <div class="flex items-center gap-3">
                             <div class="hidden sm:block text-right">
-                                <p class="text-xs font-bold text-slate-800">${vault.currentParent.name}</p>
-                                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${isTrial ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">${vault.currentParent.accessStatus}</span>
+                                <p class="text-xs font-bold text-slate-800">${this.currentParent.name}</p>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${isTrial ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">${this.currentParent.accessStatus}</span>
                             </div>
                             <button onclick="app.navigateTo('parent-dashboard')" class="text-slate-600 hover:text-purple-premium text-sm font-bold"><i class="fa-solid fa-chart-pie mr-1"></i> Utama</button>
                             <button onclick="app.logout()" class="text-xs font-bold text-red-500 bg-red-50 px-3 py-1.5 rounded-lg ml-2">Keluar</button>
@@ -409,10 +445,9 @@
             render() {
                 this.renderHeader();
                 const container = document.getElementById('app-viewport');
-                const vault = this.getVault();
 
-                if (this.viewState === 'parent-dashboard' && !vault.currentParent) return this.navigateTo('login');
-                if ((this.viewState === 'child-dashboard' || this.viewState === 'quiz-workspace') && !vault.currentChild) return this.navigateTo('child-login');
+                if (this.viewState === 'parent-dashboard' && !this.currentParent) return this.navigateTo('login');
+                if ((this.viewState === 'child-dashboard' || this.viewState === 'quiz-workspace') && !this.currentChild) return this.navigateTo('child-login');
 
                 switch (this.viewState) {
                     case 'landing': container.innerHTML = this.templateLanding(); break;
@@ -526,9 +561,8 @@
             }
 
             templateParentDashboard() {
-                const vault = this.getVault();
-                const parent = vault.currentParent;
-                const myChildren = vault.children.filter(c => c.parentId === parent.id);
+                const parent = this.currentParent;
+                const myChildren = this.children.filter(c => c.parentId === parent.id);
                 
                 this.checkTrialStatus(parent);
                 let trialBanner = '';
@@ -618,7 +652,7 @@
             }
 
             templateChildDashboard() {
-                const child = this.getVault().currentChild;
+                const child = this.currentChild;
                 const topicsTahap1 = ["Nombor Asas", "Tambah", "Tolak", "Darab Asas", "Bahagi Asas", "Wang", "Masa", "Pecahan Mudah"];
                 
                 let badgeStr = child.totalScore > 200 ? 'Hero Tambah 🛡️' : 'Mula Belajar 🌱';
@@ -646,7 +680,6 @@
                             </div>
                         </div>
 
-                        <!-- BUTANG LATIHAN HARIAN TELAH DIBETULKAN -->
                         <div onclick="app.startQuiz('all', 'daily')" class="bg-yellow-cheerful p-5 rounded-3xl shadow-md cursor-pointer flex items-center justify-between mb-6 transform hover:-translate-y-1 transition">
                             <div>
                                 <h4 class="heading-font font-black text-lg text-slate-900"><i class="fa-solid fa-calendar-star mr-1"></i> Latihan Harian Campuran</h4>
@@ -709,9 +742,8 @@
             }
 
             templateParentReport() {
-                const vault = this.getVault();
-                const child = vault.children.find(c => c.id === app.targetChildReportId);
-                const attempts = vault.attempts.filter(a => a.childId === child.id);
+                const child = this.children.find(c => c.id === app.targetChildReportId);
+                const attempts = this.attempts.filter(a => a.childId === child.id);
                 
                 const totalQ = attempts.length;
                 const correctQ = attempts.filter(a => a.isCorrect).length;
