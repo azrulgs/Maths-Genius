@@ -22,9 +22,9 @@
         .heading-font {
             font-family: 'Fredoka', sans-serif;
         }
-        .bg-purple-premium { background-color: #7E22CE; } /* Ungu Premium */
+        .bg-purple-premium { background-color: #7E22CE; }
         .text-purple-premium { color: #7E22CE; }
-        .bg-yellow-cheerful { background-color: #FBBF24; } /* Kuning Ceria */
+        .bg-yellow-cheerful { background-color: #FBBF24; }
         .text-yellow-cheerful { color: #F59E0B; }
         .bg-lavender-soft { background-color: #F3E8FF; }
         .border-purple-soft { border-color: #E9D5FF; }
@@ -45,16 +45,11 @@
                     <p class="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider">by Genius Solihin</p>
                 </div>
             </div>
-
-            <div id="header-actions" class="flex items-center gap-2 md:gap-3">
-                <!-- Dijana oleh Javascript app.renderHeader() -->
-            </div>
+            <div id="header-actions" class="flex items-center gap-2 md:gap-3"></div>
         </div>
     </header>
 
-    <main id="app-viewport" class="flex-grow flex flex-col justify-start">
-        <!-- Render Viewport -->
-    </main>
+    <main id="app-viewport" class="flex-grow flex flex-col justify-start"></main>
 
     <footer class="bg-slate-900 text-slate-400 py-8 px-4 text-center text-sm mt-auto border-t border-slate-800">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
@@ -67,7 +62,7 @@
     </footer>
 
     <script>
-        // Inisialisasi Firebase
+        // Inisialisasi Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyBnzVeU918yE1N86CfSOVEH_7za_Ubvjc0",
             authDomain: "maths-genius-1b171.firebaseapp.com",
@@ -83,10 +78,8 @@
         const MATHE_QUESTION_BANK = [];
         function generateQuestionBank() {
             let idCounter = 1;
-
             for(let y = 1; y <= 3; y++) {
                 for(let i = 0; i < 20; i++) {
-                    
                     let a = Math.floor(Math.random() * (10 * Math.pow(10, y-1))) + 1;
                     let b = Math.floor(Math.random() * (10 * Math.pow(10, y-1))) + 1;
                     let ansAdd = a + b;
@@ -135,25 +128,15 @@
                         { q: "Dua perlima daripada sekeping roti ditulis sebagai...", a: "2/5", exp: "Dua perlima bermaksud 2 bahagian daripada 5 bahagian." },
                         { q: "Kawasan berlorek ialah 1 bahagian daripada 4. Apakah pecahannya?", a: "1/4", exp: "1 bahagian daripada 4 bahagian keseluruhan ditulis sebagai 1/4." }
                     ];
-                    
                     let pilihanRawak = senaraiPecahan[Math.floor(Math.random() * senaraiPecahan.length)];
                     let fracOpt = [pilihanRawak.a];
                     let semuaPilihan = ["1/2", "1/4", "3/4", "1/3", "2/5", "1/5", "2/3"];
-                    
                     while(fracOpt.length < 4) {
                         let jawapanRawak = semuaPilihan[Math.floor(Math.random() * semuaPilihan.length)];
-                        if(!fracOpt.includes(jawapanRawak)) {
-                            fracOpt.push(jawapanRawak);
-                        }
+                        if(!fracOpt.includes(jawapanRawak)) fracOpt.push(jawapanRawak);
                     }
-                    
                     fracOpt = fracOpt.sort(() => Math.random() - 0.5);
-
-                    MATHE_QUESTION_BANK.push({ 
-                        id: `frac-${y}-${idCounter++}`, year: y, topic: "Pecahan Mudah", difficulty: "Mencabar", 
-                        question: pilihanRawak.q, options: fracOpt, correctAnswer: pilihanRawak.a, 
-                        explanation: pilihanRawak.exp, skillTag: "Pecahan", type: "multiple-choice" 
-                    });
+                    MATHE_QUESTION_BANK.push({ id: `frac-${y}-${idCounter++}`, year: y, topic: "Pecahan Mudah", difficulty: "Mencabar", question: pilihanRawak.q, options: fracOpt, correctAnswer: pilihanRawak.a, explanation: pilihanRawak.exp, skillTag: "Pecahan", type: "multiple-choice" });
                 }
             }
         }
@@ -167,11 +150,9 @@
                 this.currentQuestionIndex = 0;
                 this.quizScore = 0;
                 
-                // Simpan maklumat sesi log masuk pada memori peranti semasa (browser)
                 this.currentParent = JSON.parse(localStorage.getItem('gs_session_parent')) || null;
                 this.currentChild = JSON.parse(localStorage.getItem('gs_session_child')) || null;
 
-                // Data global yang dihubungkan ke Firebase Realtime Database
                 this.parents = [];
                 this.children = [];
                 this.attempts = [];
@@ -180,14 +161,14 @@
             }
 
             initDatabaseSync() {
-                // Sentiasa mengambil data mutakhir secara real-time dari Firebase
                 this.db.ref('/').on('value', (snapshot) => {
                     const data = snapshot.val() || {};
+                    
+                    // DIBAIKI: Memastikan struktur data dari Firebase dipetakan dengan selamat sebagai array
                     this.parents = data.parents ? Object.values(data.parents) : [];
                     this.children = data.children ? Object.values(data.children) : [];
                     this.attempts = data.attempts ? Object.values(data.attempts) : [];
                     
-                    // Kemaskini sesi semasa jika terdapat perubahan dari peranti lain
                     if (this.currentParent) {
                         this.currentParent = this.parents.find(p => p.id === this.currentParent.id) || null;
                         if(this.currentParent) localStorage.setItem('gs_session_parent', JSON.stringify(this.currentParent));
@@ -235,11 +216,10 @@
                     name: formData.name, email: formData.email, phone: formData.phone, passwordHash: formData.password,
                     accessStatus: 'Free Trial',
                     trialStartAt: now,
-                    trialEndAt: now + (24 * 60 * 60 * 1000), // 24 Jam Trial
+                    trialEndAt: now + (24 * 60 * 60 * 1000),
                     trialStatus: 'active'
                 };
                 
-                // Simpan ke Firebase
                 this.db.ref('parents/' + newParent.id).set(newParent);
                 this.setSession('parent', newParent);
                 this.navigateTo('parent-dashboard');
@@ -265,7 +245,6 @@
                 const now = new Date().getTime();
                 if(now > parentObj.trialEndAt) {
                     if(parentObj.trialStatus !== 'expired') {
-                        // Kemaskini status pendaftaran ke expired di Firebase
                         this.db.ref('parents/' + parentObj.id).update({
                             trialStatus: 'expired',
                             accessStatus: 'Locked'
@@ -278,7 +257,6 @@
 
             activateLifetimeAccess() {
                 if(!this.currentParent) return;
-                
                 let code = prompt("Sila masukkan Kod Pengaktifan (Contoh Demo: GENIUS123)");
                 if(code === "GENIUS123") {
                     this.db.ref('parents/' + this.currentParent.id).update({
@@ -303,7 +281,6 @@
                     weakTopics: [], strongTopics: []
                 };
                 
-                // Simpan rekod anak ke Firebase
                 this.db.ref('children/' + newChild.id).set(newChild);
                 alert(`Profil ${childData.name} berjaya dicipta!`);
             }
@@ -316,7 +293,6 @@
                     const now = new Date().getTime();
                     this.db.ref('children/' + child.id).update({ lastAccessAt: now });
                     child.lastAccessAt = now;
-                    
                     this.setSession('child', child);
                     this.navigateTo('child-dashboard');
                 } else {
@@ -332,18 +308,13 @@
 
             startQuiz(topic, mode = 'normal') {
                 const parent = this.parents.find(p => p.id === this.currentChild.parentId);
-                
                 if (!parent || !this.checkTrialStatus(parent)) {
                     alert("Wah, kamu sudah belajar dengan baik! Minta ibu atau ayah aktifkan akses penuh untuk sambung belajar.");
                     return;
                 }
 
                 let filtered = MATHE_QUESTION_BANK.filter(q => q.year === this.currentChild.schoolYear);
-                
-                if (topic !== 'all') {
-                    filtered = filtered.filter(q => q.topic === topic);
-                }
-
+                if (topic !== 'all') filtered = filtered.filter(q => q.topic === topic);
                 if(filtered.length === 0) return alert("Modul latihan sedang dikemaskini. Sila cuba topik lain.");
                 
                 filtered.sort(() => 0.5 - Math.random());
@@ -360,20 +331,17 @@
                 this.selectedAnswer = ans;
                 const q = this.activeQuiz[this.currentQuestionIndex];
                 const isCorrect = (ans === q.correctAnswer);
-                
                 if (isCorrect) this.quizScore += 10;
                 
                 const attempt = { 
-                    id: 'attempt-' + Date.now(),
+                    id: 'attempt-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
                     childId: this.currentChild.id, 
                     topic: q.topic, 
                     isCorrect: isCorrect, 
                     timeTaken: 30 
                 };
                 
-                // Simpan rekod cubaan soalan ke Firebase
                 this.db.ref('attempts/' + attempt.id).set(attempt);
-
                 this.renderQuestionWorkspace(true);
             }
 
@@ -401,7 +369,6 @@
                 else if(updatedScore > 150) updatedLevel = "Genius Star";
                 else if(updatedScore > 50) updatedLevel = "Genius Explorer";
                 
-                // Kemaskini rekod keseluruhan anak di Firebase
                 this.db.ref('children/' + child.id).update({
                     totalScore: updatedScore,
                     totalStars: updatedStars,
@@ -469,7 +436,6 @@
                         <div class="max-w-4xl mx-auto">
                             <span class="bg-yellow-cheerful text-slate-900 text-[12px] md:text-xs font-bold px-4 py-1.5 rounded-full heading-font uppercase">Belajar Matematik Jadi Mudah, Seronok & Genius!</span>
                             <h2 class="heading-font text-3xl md:text-5xl font-black mt-6 mb-6 tracking-tight leading-tight">Bantu Anak Darjah 1, 2 & 3 Kuasai Matematik Dengan Mudah & Seronok</h2>
-                            
                             <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto sm:max-w-none w-full">
                                 <button onclick="app.navigateTo('child-login')" class="bg-yellow-cheerful text-slate-900 font-extrabold px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition text-base md:text-lg heading-font flex justify-center items-center gap-2">
                                     <i class="fa-solid fa-graduation-cap"></i> Saya Murid (Mula Belajar)
@@ -502,8 +468,7 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
 
             templateChildNameLogin() {
@@ -513,15 +478,13 @@
                             <div class="w-24 h-24 bg-purple-50 rounded-full flex items-center justify-center text-5xl mx-auto mb-6 shadow-inner animate-bounce">🚀</div>
                             <h3 class="heading-font text-2xl md:text-3xl font-black text-slate-900 mb-2">Hai Genius!</h3>
                             <p class="text-sm font-medium text-slate-500 mb-8">Taip nama kamu untuk sambung belajar.</p>
-                            
                             <form onsubmit="event.preventDefault(); app.loginChildByName(this.childname.value);" class="space-y-4">
                                 <input type="text" name="childname" required autocomplete="off" placeholder="Contoh: Aisyah" class="w-full px-6 py-4 text-center text-xl font-bold border-2 border-purple-soft rounded-2xl focus:border-purple-premium outline-none bg-slate-50 focus:bg-white transition placeholder-slate-300">
                                 <button type="submit" class="w-full py-4 bg-yellow-cheerful hover:bg-amber-400 text-slate-900 font-black rounded-2xl transition shadow-lg text-lg heading-font">Mula Pengembaraan!</button>
                             </form>
                             <button onclick="app.navigateTo('landing')" class="mt-6 text-sm text-slate-400 font-bold hover:text-purple-premium"><i class="fa-solid fa-arrow-left mr-1"></i> Kembali</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
 
             templateRegister() {
@@ -530,7 +493,6 @@
                         <div class="bg-white p-8 rounded-3xl shadow-xl border border-purple-soft max-w-md w-full">
                             <h3 class="heading-font text-2xl font-bold text-purple-premium text-center mb-1">Akaun Ibu Bapa</h3>
                             <p class="text-xs text-slate-500 text-center mb-6 font-bold bg-emerald-50 text-emerald-700 py-1.5 rounded-full mt-2">Daftar sekarang untuk Percubaan Percuma 1 Hari!</p>
-                            
                             <form onsubmit="event.preventDefault(); app.registerParent({name: this.name.value, email: this.email.value, phone: this.phone.value, password: this.password.value});" class="space-y-4">
                                 <div><label class="block text-xs font-bold text-slate-700 mb-1">Nama Penjaga</label><input type="text" name="name" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-purple-premium text-sm"></div>
                                 <div><label class="block text-xs font-bold text-slate-700 mb-1">No. Telefon</label><input type="tel" name="phone" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-purple-premium text-sm"></div>
@@ -540,8 +502,7 @@
                             </form>
                             <p class="text-xs text-center text-slate-500 mt-6 font-medium">Sudah ada akaun? <a href="#" onclick="app.navigateTo('login')" class="text-purple-premium font-bold hover:underline">Log Masuk</a></p>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
 
             templateLogin() {
@@ -556,8 +517,7 @@
                             </form>
                             <p class="text-xs text-center text-slate-500 mt-6">Belum daftar? <a href="#" onclick="app.navigateTo('register')" class="text-purple-premium font-bold">Daftar Percuma</a></p>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
 
             templateParentDashboard() {
@@ -572,7 +532,7 @@
                     const mins = Math.floor((timeLeftMs % (1000 * 60 * 60)) / (1000 * 60));
                     trialBanner = `
                         <div class="bg-amber-100 border-l-4 border-amber-500 p-4 rounded-r-2xl mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center shadow-sm gap-3">
-                            <div><h4 class="font-bold text-amber-900 text-sm">Akaun Percubaan Aktif</h4><p class="text-xs text-amber-700 mt-0.5">Percubaan percuma tamat dalam: <strong>${hours} jam ${mins} minit</strong></p></div>
+                            <div><h4 class="font-bold text-amber-900 text-sm">Akaun Percubaan Aktif</h4><p class="text-xs text-amber-700 mt-0.5">Percubaan percuma tamat dalam: <strong>${hours >= 0 ? hours : 0} jam ${mins >= 0 ? mins : 0} minit</strong></p></div>
                             <button onclick="app.activateLifetimeAccess()" class="bg-amber-500 text-white text-xs font-bold px-4 py-2.5 rounded-lg shadow-sm heading-font w-full sm:w-auto">Aktifkan Penuh</button>
                         </div>`;
                 } else if(parent.accessStatus === 'Locked') {
@@ -581,212 +541,4 @@
                             <h4 class="font-bold text-red-600 text-base mb-1"><i class="fa-solid fa-lock mr-1"></i> Percubaan 1 Hari Telah Tamat</h4>
                             <p class="text-sm text-slate-600 mb-4 font-medium">Aktifkan akses penuh GenSo Maths untuk teruskan pembelajaran anak anda tanpa henti.</p>
                             <div class="flex flex-col sm:flex-row justify-center gap-3">
-                                <button onclick="app.activateLifetimeAccess()" class="bg-purple-premium text-white font-bold px-6 py-2.5 rounded-xl shadow-md heading-font w-full sm:w-auto">Aktifkan Akses Penuh</button>
-                                <a href="https://wa.me/60123456789?text=Saya%20mahu%20aktifkan%20GenSo%20Maths" target="_blank" class="bg-emerald-500 text-white font-bold px-6 py-2.5 rounded-xl shadow-md heading-font w-full sm:w-auto"><i class="fa-brands fa-whatsapp mr-1"></i> Hubungi Admin</a>
-                            </div>
-                        </div>`;
-                }
-
-                const sellingSection = (parent.accessStatus !== 'Lifetime Active') ? `
-                    <div class="bg-gradient-to-r from-purple-800 to-indigo-800 rounded-3xl p-6 text-white shadow-xl mt-8">
-                        <h3 class="heading-font font-black text-xl mb-3 text-yellow-cheerful">Tahukah anda? 💡</h3>
-                        <ul class="text-sm space-y-2 font-medium opacity-90 mb-6">
-                            <li>✨ Anak lebih mudah kuasai Matematik apabila berlatih sedikit setiap hari.</li>
-                            <li>✨ GenSo Maths membantu anak belajar ikut tahap sendiri (Darjah 1 hingga 3).</li>
-                            <li>✨ Ibu bapa boleh pantau topik lemah anak secara terus di telefon.</li>
-                            <li>✨ Anak belajar melalui kuiz, bintang, lencana (badge) dan cabaran minda!</li>
-                        </ul>
-                        <button onclick="app.activateLifetimeAccess()" class="bg-yellow-cheerful text-slate-900 font-extrabold px-6 py-3 rounded-xl w-full text-center heading-font shadow-md">Aktifkan Akses Penuh Hari Ini</button>
-                    </div>` : '';
-
-                let childHtml = myChildren.length ? '' : `<div class="p-8 text-center bg-white rounded-3xl border border-dashed border-purple-300 text-slate-500 text-sm">Tiada profil anak. Tambah sekarang untuk memulakan!</div>`;
-                myChildren.forEach(child => {
-                    childHtml += `
-                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-purple-soft relative">
-                            <div class="flex items-center gap-4 mb-4">
-                                <div class="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center text-2xl">${child.avatar}</div>
-                                <div><h4 class="font-bold text-lg heading-font">${child.childName}</h4><p class="text-xs font-bold text-slate-400">Darjah ${child.schoolYear} • Tahap 1</p></div>
-                            </div>
-                            <div class="flex gap-2">
-                                <button onclick="app.targetChildReportId='${child.id}'; app.navigateTo('parent-report');" class="flex-1 bg-lavender-soft text-purple-900 text-xs font-bold py-2.5 rounded-xl border border-purple-200">Lihat Laporan</button>
-                                <button onclick="alert('Untuk mengedit profil, sila hubungi Admin buat masa ini.')" class="bg-slate-100 text-slate-600 px-3 py-2.5 rounded-xl"><i class="fa-solid fa-pen"></i></button>
-                            </div>
-                        </div>`;
-                });
-
-                return `
-                    <div class="max-w-4xl mx-auto px-4 py-8 w-full">
-                        ${trialBanner}
-                        <div class="flex justify-between items-center mb-6">
-                            <h2 class="heading-font text-2xl font-bold">Profil Anak</h2>
-                            <button onclick="document.getElementById('add-child-modal').classList.remove('hidden')" class="bg-purple-premium text-white font-bold px-4 py-2 rounded-xl text-xs"><i class="fa-solid fa-plus mr-1"></i> Tambah Anak</button>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            ${childHtml}
-                        </div>
-                        ${sellingSection}
-                    </div>
-
-                    <div id="add-child-modal" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
-                        <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative">
-                            <button onclick="document.getElementById('add-child-modal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
-                            <h3 class="heading-font font-bold text-lg text-purple-premium mb-4">Tambah Profil Anak</h3>
-                            <form onsubmit="event.preventDefault(); app.addChild({name: this.cName.value, age: this.cAge.value, schoolYear: this.cYear.value, avatar: this.cAvatar.value}); document.getElementById('add-child-modal').classList.add('hidden');" class="space-y-4 text-xs font-bold">
-                                <div><label class="block text-slate-700 mb-1">Nama Gelaran Anak</label><input type="text" name="cName" required class="w-full p-3 border rounded-xl bg-slate-50"></div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="block text-slate-700 mb-1">Umur</label><input type="number" name="cAge" required class="w-full p-3 border rounded-xl bg-slate-50"></div>
-                                    <div><label class="block text-slate-700 mb-1">Darjah (Tahap 1)</label>
-                                        <select name="cYear" class="w-full p-3 border rounded-xl bg-slate-50">
-                                            <option value="1">Darjah 1</option><option value="2">Darjah 2</option><option value="3">Darjah 3</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div><label class="block text-slate-700 mb-1">Avatar</label>
-                                    <select name="cAvatar" class="w-full p-3 border rounded-xl bg-slate-50 text-lg"><option value="👦">👦</option><option value="👧">👧</option><option value="🦁">🦁</option></select>
-                                </div>
-                                <button type="submit" class="w-full py-3 bg-purple-premium text-white rounded-xl heading-font text-sm mt-2">Simpan Profil</button>
-                            </form>
-                        </div>
-                    </div>
-                `;
-            }
-
-            templateChildDashboard() {
-                const child = this.currentChild;
-                const topicsTahap1 = ["Nombor Asas", "Tambah", "Tolak", "Darab Asas", "Bahagi Asas", "Wang", "Masa", "Pecahan Mudah"];
-                
-                let badgeStr = child.totalScore > 200 ? 'Hero Tambah 🛡️' : 'Mula Belajar 🌱';
-
-                let topicsHtml = '';
-                topicsTahap1.forEach(t => {
-                    topicsHtml += `
-                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-purple-100 flex justify-between items-center">
-                            <span class="font-bold text-sm text-slate-800">${t}</span>
-                            <button onclick="app.startQuiz('${t}')" class="bg-purple-premium text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs">Mula</button>
-                        </div>`;
-                });
-
-                return `
-                    <div class="max-w-5xl mx-auto px-4 py-8 w-full">
-                        <div class="bg-purple-premium text-white p-6 rounded-3xl shadow-lg mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
-                            <div class="flex items-center gap-4">
-                                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-3xl">${child.avatar}</div>
-                                <div><h2 class="heading-font text-2xl font-bold">${child.childName}</h2><p class="text-xs font-bold text-purple-200">${child.currentLevel} • Darjah ${child.schoolYear}</p></div>
-                            </div>
-                            <div class="flex gap-4 text-center bg-white/10 p-3 rounded-2xl w-full md:w-auto justify-center">
-                                <div><span class="text-[10px] uppercase tracking-wide opacity-80 block">Bintang</span><div class="font-black text-yellow-cheerful text-lg">🌟 ${child.totalStars}</div></div>
-                                <div class="w-px bg-white/20"></div>
-                                <div><span class="text-[10px] uppercase tracking-wide opacity-80 block">Lencana</span><div class="font-bold text-white text-sm mt-1">${badgeStr}</div></div>
-                            </div>
-                        </div>
-
-                        <div onclick="app.startQuiz('all', 'daily')" class="bg-yellow-cheerful p-5 rounded-3xl shadow-md cursor-pointer flex items-center justify-between mb-6 transform hover:-translate-y-1 transition">
-                            <div>
-                                <h4 class="heading-font font-black text-lg text-slate-900"><i class="fa-solid fa-calendar-star mr-1"></i> Latihan Harian Campuran</h4>
-                                <p class="text-xs font-bold text-slate-800 mt-1 opacity-80">Soalan rawak untuk ujian kecerdasan minda!</p>
-                            </div>
-                            <i class="fa-solid fa-circle-chevron-right text-2xl opacity-70"></i>
-                        </div>
-
-                        <h3 class="heading-font font-bold text-lg text-slate-900 mb-4">Pilih Modul Berfokus</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                            ${topicsHtml}
-                        </div>
-                    </div>
-                `;
-            }
-
-            renderQuestionWorkspace(showFeedback) {
-                const container = document.getElementById('app-viewport');
-                const q = this.activeQuiz[this.currentQuestionIndex];
-                
-                let optionsHtml = '';
-                q.options.forEach(opt => {
-                    let btnClass = showFeedback 
-                        ? (opt === q.correctAnswer ? "bg-emerald-100 border-emerald-500 text-emerald-900" : (opt === this.selectedAnswer ? "bg-red-100 border-red-500 line-through" : "bg-white opacity-50"))
-                        : "bg-white border-purple-soft hover:bg-lavender-soft";
-                    optionsHtml += `<button onclick="app.submitAnswer('${opt}')" ${showFeedback ? 'disabled' : ''} class="w-full text-left p-5 rounded-2xl border-2 ${btnClass} font-bold text-lg transition shadow-sm">${opt}</button>`;
-                });
-
-                let feedback = showFeedback ? `
-                    <div class="mt-6 bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-r-xl">
-                        <h4 class="font-bold text-yellow-800 text-sm">Cikgu Geni:</h4>
-                        <p class="text-sm font-medium mt-1 text-slate-700">${q.explanation}</p>
-                        <button onclick="app.nextQuestion()" class="mt-3 bg-purple-premium text-white font-bold px-6 py-2 rounded-xl text-sm shadow-md">Teruskan</button>
-                    </div>` : '';
-
-                container.innerHTML = `
-                    <div class="max-w-2xl mx-auto px-4 py-8 w-full">
-                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-purple-soft text-center mb-6">
-                            <span class="text-[10px] font-bold bg-purple-100 text-purple-premium px-3 py-1 rounded-full uppercase">${q.topic}</span>
-                            <h3 class="heading-font font-bold text-2xl md:text-3xl mt-4 leading-relaxed">${q.question}</h3>
-                        </div>
-                        <div class="grid grid-cols-1 gap-3">${optionsHtml}</div>
-                        ${feedback}
-                    </div>
-                `;
-            }
-
-            templateQuizResults() {
-                return `
-                    <div class="max-w-md mx-auto px-4 py-16 w-full text-center">
-                        <div class="bg-white p-8 rounded-3xl shadow-xl border border-purple-soft">
-                            <div class="text-6xl mb-4 animate-bounce">🏆</div>
-                            <h2 class="heading-font text-3xl font-black text-purple-premium mb-2">Hebat!</h2>
-                            <p class="text-slate-500 font-bold mb-6">Kamu telah melengkapkan kuiz ini.</p>
-                            <div class="bg-lavender-soft p-4 rounded-2xl text-xl font-black text-purple-900 mb-8">+${this.quizScore} Mata</div>
-                            <button onclick="app.navigateTo('child-dashboard')" class="w-full py-4 bg-yellow-cheerful text-slate-900 font-black rounded-xl text-lg heading-font shadow-md">Kembali ke Menu Utama</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            templateParentReport() {
-                const child = this.children.find(c => c.id === app.targetChildReportId);
-                const attempts = this.attempts.filter(a => a.childId === child.id);
-                
-                const totalQ = attempts.length;
-                const correctQ = attempts.filter(a => a.isCorrect).length;
-                const acc = totalQ > 0 ? Math.round((correctQ/totalQ)*100) : 0;
-                
-                let topics = {};
-                attempts.forEach(a => {
-                    if(!topics[a.topic]) topics[a.topic] = { total:0, correct:0 };
-                    topics[a.topic].total++;
-                    if(a.isCorrect) topics[a.topic].correct++;
-                });
-                let arr = Object.keys(topics).map(t => ({ name: t, per: Math.round((topics[t].correct/topics[t].total)*100) }));
-                arr.sort((a,b) => b.per - a.per);
-                
-                let kuat = arr.length > 0 ? arr[0].name : 'Belum Ada Data';
-                let lemah = arr.length > 1 ? arr[arr.length-1].name : (arr.length === 1 ? arr[0].name : 'Belum Ada Data');
-                
-                let ulasan = totalQ === 0 ? "Anak anda belum membuat sebarang latihan." :
-                             `Anak anda kuat dalam topik <strong>${kuat}</strong>, tetapi masih memerlukan latihan tambahan dalam topik <strong>${lemah}</strong>.`;
-
-                return `
-                    <div class="max-w-4xl mx-auto px-4 py-8 w-full">
-                        <div class="flex items-center gap-3 mb-6">
-                            <button onclick="app.navigateTo('parent-dashboard')" class="bg-white w-10 h-10 rounded-full shadow-sm"><i class="fa-solid fa-arrow-left"></i></button>
-                            <h3 class="heading-font font-bold text-xl text-slate-900">Laporan Prestasi: ${child.childName}</h3>
-                        </div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                            <div class="bg-white p-4 rounded-2xl shadow-sm border border-purple-100"><span class="text-[10px] font-bold text-slate-400 block uppercase">Soalan Dijawab</span><div class="text-2xl font-black text-purple-premium mt-1">${totalQ}</div></div>
-                            <div class="bg-white p-4 rounded-2xl shadow-sm border border-purple-100"><span class="text-[10px] font-bold text-slate-400 block uppercase">Ketepatan</span><div class="text-2xl font-black text-emerald-500 mt-1">${acc}%</div></div>
-                            <div class="bg-white p-4 rounded-2xl shadow-sm border border-purple-100"><span class="text-[10px] font-bold text-slate-400 block uppercase">Topik Terbaik</span><div class="text-sm font-black text-slate-800 mt-1 truncate">${kuat}</div></div>
-                            <div class="bg-white p-4 rounded-2xl shadow-sm border border-purple-100"><span class="text-[10px] font-bold text-slate-400 block uppercase">Masa Belajar</span><div class="text-sm font-black text-slate-800 mt-1">${Math.round(totalQ*0.5)} Minit</div></div>
-                        </div>
-                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-purple-soft">
-                            <h4 class="font-bold text-sm text-slate-800 mb-2">Ulasan Akademik GenSo</h4>
-                            <p class="text-sm text-slate-600 leading-relaxed bg-lavender-soft/50 p-4 rounded-xl font-medium">${ulasan}</p>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        const app = new GenSoMathsApp();
-        window.addEventListener('DOMContentLoaded', () => { app.render(); });
-    </script>
-</body>
-</html>
+                                <button onclick="app.activateLifetimeAccess()" class="bg-purple-premium text-white font-bold px-6 py-2.5 rounded-xl shadow-md heading-font w-full sm:w-auto">Aktifkan Akses Penuh</button
