@@ -1,49 +1,48 @@
-<!DOCTYPE html>
-<html lang="ms">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GenSo Maths by Genius Solihin</title>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-</head>
-<body>
-    <div id="root"></div>
+let optNum = [ansNum, String(n+2), String(n-1), String(n+10)].sort(() => Math.random() - 0.5);
+MATHE_QUESTION_BANK.push({ id: `num-${y}-${idCounter++}`, year: y, topic: "Nombor Asas", difficulty: "Mudah", question: `Apakah nombor selepas ${n}?`, options: optNum, correctAnswer: ansNum, explanation: `Nombor selepas ${n} ialah ditambah 1, iaitu ${n+1}.`, skillTag: "Nombor", type: "multiple-choice" });
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBnzVeU918yE1N86CfSOVEH_7za_Ubvjc0",
-            authDomain: "maths-genius-1b171.firebaseapp.com",
-            databaseURL: "https://maths-genius-1b171-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "maths-genius-1b171",
-            storageBucket: "maths-genius-1b171.firebasestorage.app",
-            messagingSenderId: "721438989994",
-            appId: "1:721438989994:web:e911e4fb1244bba9953ad3"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+                    // 8. Topik Pecahan Mudah
+                    let fracOpt = ["1/2", "1/4", "1/3", "1/5"].sort(() => Math.random() - 0.5);
+                    MATHE_QUESTION_BANK.push({ id: `frac-${y}-${idCounter++}`, year: y, topic: "Pecahan Mudah", difficulty: "Mencabar", question: `Separuh daripada sebiji pizza ditulis dalam pecahan sebagai...`, options: fracOpt, correctAnswer: "1/2", explanation: `Separuh bermaksud 1 bahagian daripada 2 bahagian yang sama besar, ditulis sebagai 1/2.`, skillTag: "Pecahan", type: "multiple-choice" });
+                    // 8. Topik Pecahan Mudah (DIKEMASKINI)
+                    let senaraiPecahan = [
+                        { q: "Separuh daripada sebiji pizza ditulis dalam pecahan sebagai...", a: "1/2", exp: "Separuh bermaksud 1 bahagian daripada 2 bahagian yang sama besar." },
+                        { q: "Suku daripada sebiji kek ditulis dalam pecahan sebagai...", a: "1/4", exp: "Suku bermaksud 1 bahagian daripada 4 bahagian yang sama besar." },
+                        { q: "Tiga suku daripada sebiji tembikai ditulis sebagai...", a: "3/4", exp: "Tiga suku bermaksud 3 bahagian daripada 4 bahagian." },
+                        { q: "Satu pertiga daripada sebatang coklat ditulis sebagai...", a: "1/3", exp: "Satu pertiga bermaksud 1 bahagian daripada 3 bahagian." },
+                        { q: "Dua perlima daripada sekeping roti ditulis sebagai...", a: "2/5", exp: "Dua perlima bermaksud 2 bahagian daripada 5 bahagian." },
+                        { q: "Kawasan berlorek ialah 1 bahagian daripada 4. Apakah pecahannya?", a: "1/4", exp: "1 bahagian daripada 4 bahagian keseluruhan ditulis sebagai 1/4." }
+                    ];
+                    
+                    // Pilih pecahan secara rawak
+                    let pilihanRawak = senaraiPecahan[Math.floor(Math.random() * senaraiPecahan.length)];
+                    
+                    // Sediakan jawapan yang mengelirukan (distractors)
+                    let fracOpt = [pilihanRawak.a];
+                    let semuaPilihan = ["1/2", "1/4", "3/4", "1/3", "2/5", "1/5", "2/3"];
+                    
+                    while(fracOpt.length < 4) {
+                        let jawapanRawak = semuaPilihan[Math.floor(Math.random() * semuaPilihan.length)];
+                        if(!fracOpt.includes(jawapanRawak)) {
+                            fracOpt.push(jawapanRawak);
+                        }
+                    }
+                    
+                    // Gaulkan kedudukan jawapan A, B, C, D
+                    fracOpt = fracOpt.sort(() => Math.random() - 0.5);
 
-        class GenSoMathsApp {
-            constructor() {
-                this.dbRef = db.ref('users'); // Pangkalan data di awan
-            }
-
-            // Contoh fungsi simpan ke Firebase (Gantikan fungsi simpan lama anda)
-            saveUserData(userId, data) {
-                this.dbRef.child(userId).set(data);
-            }
-
-            // Contoh fungsi ambil data dari Firebase
-            getUserData(userId, callback) {
-                this.dbRef.child(userId).on('value', (snapshot) => {
-                    callback(snapshot.val());
-                });
-            }
-            
-            // ... (Fungsi-fungsi lain aplikasi anda)
-        }
-        
-        const app = new GenSoMathsApp();
-    </script>
-</body>
-</html>
+                    MATHE_QUESTION_BANK.push({ 
+                        id: `frac-${y}-${idCounter++}`, 
+                        year: y, 
+                        topic: "Pecahan Mudah", 
+                        difficulty: "Mencabar", 
+                        question: pilihanRawak.q, 
+                        options: fracOpt, 
+                        correctAnswer: pilihanRawak.a, 
+                        explanation: pilihanRawak.exp, 
+                        skillTag: "Pecahan", 
+                        type: "multiple-choice" 
+                    });
+}
+}
+}
